@@ -1,0 +1,69 @@
+[project]
+name = "be-tcf"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ddtrace>=2.21.0",
+    "environs>=14.1.1",
+    "fastapi>=0.115.8",
+    "httpx>=0.28.1",
+    "loguru>=0.7.3",
+    "orjson>=3.10.15",
+    "polars>=1.22.0",
+    "pydantic>=2.10.6",
+    "pydantic-settings>=2.7.1",
+    "stackprinter>=0.2.12",
+    "uvicorn>=0.34.0",
+]
+
+
+[dependency-groups]
+dev = [
+    "coverage>=7.6.9",
+    "pre-commit>=4.0.1",
+    "pytest-asyncio>=0.25.0",
+    "ruff>=0.8.4",
+]
+
+[tool.uv]
+package = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "app"]
+asyncio_mode = "auto"
+# https://github.com/pytest-dev/pytest-asyncio/issues/924
+asyncio_default_fixture_loop_scope = "session"
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "double"
+
+[tool.ruff.lint]
+extend-select = ["I", "C4", "SIM"]
+ignore = []
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+show-fixes = true
+target-version = "py312"
+exclude = [
+    ".git",
+    ".git-rewrite",
+    ".ipynb_checkpoints",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+

@@ -1,0 +1,67 @@
+# Default values for chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+namespace: dev
+app: be-home-bar
+
+deployment:
+  name: be-home-bar-deployment
+  replicas: 1
+
+image:
+  repository: ghcr.io/utikpuhlik/be-home-bar
+  pullPolicy: Always
+  tag: latest
+
+service:
+  type: ClusterIP
+  name: be-home-bar-svc
+  port: 8080
+
+resources:
+  requests:
+    memory: '384Mi'
+    cpu: '100m'
+  limits:
+    memory: '512Mi'
+    cpu: '200m'
+
+secrets:
+#  aws: aws-secret
+  api_utils: api-utils-secret
+  home_bar: be-home-bar-secret
+
+imagePullSecrets:
+  name: ghcr-secret
+
+ingress:
+  enabled: true
+  name: be-home-bar-ingressroute
+  className: traefik
+  host: api-bar.eucalytics.uk
+  annotations: { }
+
+
+certificate:
+  name: be-home-bar-ingressroute-certificate
+  secretName: be-home-bar-tls-secret
+  clusterIssuer: cloudflare-clusterissuer
+
+replicaCount: 1
+
+#livenessProbe:
+#  httpGet:
+#    path: /
+#    port: http
+#readinessProbe:
+#  httpGet:
+#    path: /
+#    port: http
+
+# autoscaling:
+#   enabled: false
+#   minReplicas: 1
+#   maxReplicas: 5
+#   targetCPUUtilizationPercentage: 50
+  # targetMemoryUtilizationPercentage: 80

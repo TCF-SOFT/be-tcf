@@ -1,0 +1,32 @@
+[
+    {
+        "id": "7bdc87d9-cacf-4c8e-b785-f1e1e142fade",
+        "cocktail_id": "a3e1f79b-6a2f-4e70-8d8a-2f4b3e2f2f7a",
+        "user_id": "f5cf89aa-caf9-42df-bf01-abd9d2b3b49f",
+        "rating": 4.5
+    },
+    {
+        "id": "31ffc43e-d612-4bf8-8e28-a8b065e7b8a4",
+        "cocktail_id": "c7b9f0e7-3e7b-4b1b-9dcb-2f4c6e3e7d4b",
+        "user_id": "d1914d1c-a8ef-439b-8aa1-f7c577f53a90",
+        "rating": 3.8
+    },
+    {
+        "id": "cde468c8-399a-48c5-b581-cfddfa99df2e",
+        "cocktail_id": "d1f1e7e9-4c7a-4e8b-9d7f-1e3f6a4c5b7c",
+        "user_id": "f5cf89aa-caf9-42df-bf01-abd9d2b3b49f",
+        "rating": 4.0
+    },
+    {
+        "id": "3424c107-010b-43c9-9ff7-82907a97d208",
+        "cocktail_id": "e4f7a9b1-5e7b-4c6c-8d8a-2c4b6e3e2f7d",
+        "user_id": "d1914d1c-a8ef-439b-8aa1-f7c577f53a90",
+        "rating": 4.7
+    },
+    {
+        "id": "5b17953f-efa6-4610-a027-1822434038b1",
+        "cocktail_id": "f9a7e6b3-4e9c-4c6e-9b8d-3e4f6c7e2a5d",
+        "user_id": "f5cf89aa-caf9-42df-bf01-abd9d2b3b49f",
+        "rating": 4.2
+    }
+]
