@@ -3,10 +3,10 @@
 # Declare variables to be passed into your templates.
 
 namespace: dev
-app: be-home-bar
+app: your-app-name
 
 deployment:
-  name: be-home-bar-deployment
+  name: ${app}-deployment
   replicas: 1
 
 image:
@@ -16,7 +16,7 @@ image:
 
 service:
   type: ClusterIP
-  name: be-home-bar-svc
+  name: ${app}-svc
   port: 8080
 
 resources:
@@ -30,22 +30,22 @@ resources:
 secrets:
 #  aws: aws-secret
   api_utils: api-utils-secret
-  home_bar: be-home-bar-secret
+  home_bar: ${app}-secret
 
 imagePullSecrets:
   name: ghcr-secret
 
 ingress:
   enabled: true
-  name: be-home-bar-ingressroute
+  name: ${app}-ingressroute
   className: traefik
   host: api-bar.eucalytics.uk
   annotations: { }
 
 
 certificate:
-  name: be-home-bar-ingressroute-certificate
-  secretName: be-home-bar-tls-secret
+  name: ${app}-ingressroute-certificate
+  secretName: ${app}-tls-secret
   clusterIssuer: cloudflare-clusterissuer
 
 replicaCount: 1

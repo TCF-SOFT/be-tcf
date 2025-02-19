@@ -3,19 +3,19 @@ import asyncio
 from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from app.api.models.base import Base
-from app.config.config import settings
-from app.api.models.drinks import (  # noqa
-    User,  # noqa
-    Cocktail,  # noqa
-    Image,  # noqa
-    Label,  # noqa
-    CocktailLabel,  # noqa
-    Order,  # noqa
-    OrderCocktail,  # noqa
+from src.api.models.drinks import (  # noqa
     Cart,  # noqa
     CartItem,  # noqa
+    Cocktail,  # noqa
+    CocktailLabel,  # noqa
+    Image,  # noqa
+    Label,  # noqa
+    Order,  # noqa
+    OrderCocktail,  # noqa
+    User,  # noqa
 )  # noqa
+from src.config.config import settings
+from src.models.base import Base
 
 # TODO: read a guide how to define models in project (several files or just one) and metadata
 target_metadata = Base.metadata

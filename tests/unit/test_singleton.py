@@ -1,7 +1,7 @@
 # import pytest
 #
-# from app.api.di.di import S3Service
-# from app.api.di.di import URM
+# from src.api.di.di import S3Service
+# from src.api.di.di import URM
 #
 #
 # @pytest.mark.parametrize(

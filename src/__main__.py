@@ -3,14 +3,8 @@ from contextlib import asynccontextmanager
 
 import sentry_sdk
 import uvicorn
-from fastapi import Depends
 from fastapi import FastAPI
-from fastapi import Request
-from fastapi import Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.openapi.docs import get_redoc_html
-from fastapi.openapi.docs import get_swagger_ui_html
-from fastapi.openapi.utils import get_openapi
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
@@ -18,33 +12,32 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sqladmin import Admin
 from starlette.middleware.sessions import SessionMiddleware
-from starlette.responses import RedirectResponse
 
-from app.api.admin.auth import authentication_backend_admin
-from app.api.admin.auth import authentik
-from app.api.admin.auth import get_current_user
-from app.api.admin.views import CocktailAdmin
-from app.api.admin.views import ImageAdmin
-from app.api.admin.views import LabelAdmin
-from app.api.admin.views import OrderAdmin
-from app.api.admin.views import OrderCocktailAdmin
-from app.api.admin.views import RatingAdmin
-from app.api.admin.views import UserAdmin
-from app.api.di.database import engine
-from app.api.di.di import get_redis
-from app.api.middleware.logging_middleware import LoggingMiddleware
-from app.api.routes.auth_router import router as auth_router
-from app.api.routes.cart_router import router as cart_router
-from app.api.routes.file_router import router as file_router
-from app.api.routes.image_router import router as image_router
-from app.api.routes.label_router import router as label_router
-from app.api.routes.order_router import router as order_router
-from app.api.routes.product_router import router as product_router
-from app.api.routes.rating_router import router as rating_router
-from app.api.routes.user_router import router as user_router
-from app.api.routes.utils_router import router as utils_router
-from app.config.config import settings
-from app.utils.logging import logger
+from src.api.admin.auth import authentication_backend_admin
+from src.api.admin.views import (
+    CocktailAdmin,
+    ImageAdmin,
+    LabelAdmin,
+    OrderAdmin,
+    OrderCocktailAdmin,
+    RatingAdmin,
+    UserAdmin,
+)
+from src.api.di.database import engine
+from src.api.di.di import get_redis
+from src.api.middleware.logging_middleware import LoggingMiddleware
+from src.api.routes.auth_router import router as auth_router
+from src.api.routes.cart_router import router as cart_router
+from src.api.routes.file_router import router as file_router
+from src.api.routes.image_router import router as image_router
+from src.api.routes.label_router import router as label_router
+from src.api.routes.order_router import router as order_router
+from src.api.routes.product_router import router as product_router
+from src.api.routes.rating_router import router as rating_router
+from src.api.routes.user_router import router as user_router
+from src.api.routes.utils_router import router as utils_router
+from src.config.config import settings
+from src.utils.logging import logger
 
 # from ddtrace import patch, config
 
@@ -185,36 +178,6 @@ admin.add_view(OrderCocktailAdmin)
 admin.add_view(LabelAdmin)
 admin.add_view(RatingAdmin)
 
-
-# Защита документации с помощью зависимости Depends
-@app.get("/docs", include_in_schema=False)
-async def custom_swagger_ui_html(user: dict = Depends(get_current_user)):
-    # Поскольку Depends вызовет get_current_user, если пользователь не авторизован, он выбросит исключение
-    return get_swagger_ui_html(openapi_url="/openapi.json", title="docs")
-
-
-@app.get("/redoc", include_in_schema=False)
-async def custom_swagger_ui_redoc(user: dict = Depends(get_current_user)):
-    # Поскольку Depends вызовет get_current_user, если пользователь не авторизован, он выбросит исключение
-    return get_redoc_html(openapi_url="/openapi.json", title="docs")
-
-
-@app.get("/openapi.json", include_in_schema=False)
-async def openapi(username: str = Depends(get_current_user)):
-    return get_openapi(title="FastAPI", version=app.version, routes=app.routes)
-
-
-async def login_authentik(request: Request) -> Response:
-    token = await authentik.authorize_access_token(request)
-    user = token.get("id_token")
-    print(f"Admin: {user}")
-
-    if user:
-        request.session["user"] = user
-    return RedirectResponse(request.url_for("admin:index"))
-
-
-admin.app.add_route("/auth/authentik", login_authentik)
 
 if __name__ == "__main__":
     uvicorn.run(

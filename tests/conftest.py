@@ -3,14 +3,15 @@ import os
 from unittest import mock
 
 import pytest
-from app.api.di.database import engine
-from app.api.di.di import get_redis
-from app.api.models.base import Base
-from app.api.models.drinks import Cocktail, CocktailLabel, Image, Label, Rating, User
-from app.config.config import settings
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import async_sessionmaker
+
+from src.api.di.database import engine
+from src.api.di.di import get_redis
+from src.config.config import settings
+from src.models.base import Base
+from src.models.models import Cocktail, CocktailLabel, Image, Label, Rating, User
 
 os.environ["MODE"] = "TEST"
 
@@ -96,7 +97,7 @@ mock.patch("fastapi_cache.decorator.cache", lambda *args, **kwargs: lambda f: f)
 @pytest.fixture(scope="session")
 async def client(start_db) -> AsyncClient:
     # need to load app module after mock. otherwise, it would fail
-    from app.__main__ import app
+    from src.__main__ import app
 
     async with AsyncClient(
         transport=ASGITransport(app=app),

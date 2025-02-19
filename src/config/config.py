@@ -34,11 +34,51 @@ class DatabaseConfig(BaseModel):
     }
 
 
+class RedisConfig(BaseModel):
+    """
+    Represents the configuration settings for the Redis database.
+    """
+
+    REDIS_HOST: str = env.str("REDIS_HOST")
+    REDIS_PORT: int = env.int("REDIS_PORT", 6379)
+    REDIS_DB: int = env.int("REDIS_DB", 5)
+    INVALIDATE_CACHES_TIMEOUT: int = env.int("INVALIDATE_CACHES_TIMEOUT", 86400)
+    redis_url: str = env.str("REDIS_URL")
+
+
+class TelemetryConfig(BaseModel):
+    SENTRY_DSN: str = env.str("SENTRY_DSN", "")
+    DD_TRACE_ENABLED: bool = env.str("DD_TRACE_ENABLED", "False").lower() in (
+        "true",
+        "1",
+        "t",
+    )
+
+
+class AWSConfig(BaseModel):
+    """
+    Represents the configuration settings for the AWS Resources.
+    """
+
+    S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY")
+    S3_SECRET_KEY: str = env.str("S3_SECRET_KEY")
+    S3_BUCKET_NAME: str = env.str("S3_BUCKET_NAME", "eag-alpha2-global-models")
+
+
+class SMTPConfig(BaseModel):
+    """
+    Represents the configuration settings for the SMTP.
+    """
+
+    smtp_host: str = env.str("SMTP_HOST", "1")
+    smtp_port: int = env.int("SMTP_PORT", 1)
+    smtp_user: str = env.str("SMTP_USER", "1")
+    smtp_pass: str = env.str("SMTP_PASS", "1")
+
+
 class Settings(BaseSettings):
     """
     Represents the configuration settings for the application.
-
-    Args:
     """
 
     # Application settings
@@ -46,19 +86,14 @@ class Settings(BaseSettings):
 
     # Database settings
     db: DatabaseConfig = DatabaseConfig()
+    REDIS: RedisConfig = RedisConfig()
+    TELEMETRY: TelemetryConfig = TelemetryConfig()
+    AWS: AWSConfig = AWSConfig()
 
-    # Redis settings
-    redis_url: str = env.str("REDIS_URL")
     # jwt_algorithm: str = env.str("JWT_ALGORITHM")
     # jwt_expire: int = env.str("JWT_EXPIRE")
     # jwt_secret: str = env.str("JWT_SECRET")
     password_manager_secret: str = env.str("PASSWORD_MANAGER_SECRET")
-
-    # SMTP settings
-    smtp_host: str = env.str("SMTP_HOST", "1")
-    smtp_port: int = env.int("SMTP_PORT", "1")
-    smtp_user: str = env.str("SMTP_USER", "1")
-    smtp_pass: str = env.str("SMTP_PASS", "1")
 
     # SSO
     AUTHENTIK_CLIENT_ID: str = env.str("AUTHENTIK_CLIENT_ID")
@@ -76,20 +111,9 @@ class Settings(BaseSettings):
     RUN_PROD_WEB_SERVER: int = env.int("RUN_PROD_WEB_SERVER", 0) == 1
     JSON_LOG_FORMAT: bool = env.bool("JSON_LOG_FORMAT", True)
 
-    # Sentry
-    SENTRY_DSN: str = env.str(
-        "SENTRY_DSN",
-        "https://809b2fccf2ef5d042a7a15abec954834@o4506192017424384.ingest.us.sentry.io/4507827438551040",
-    )
-
     # Telegram
     TELEGRAM_BOT_TOKEN: str = env.str("TELEGRAM_BOT_TOKEN")
     TELEGRAM_CHAT_ID: int = env.int("TELEGRAM_CHAT_ID")
-
-    # AWS S3
-    S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY", "")
-    S3_SECRET_KEY: str = env.str("S3_SECRET_KEY", "")
-    S3_BUCKET_NAME: str = env.str("S3_BUCKET_NAME", "")
 
     # Model settings
     ML_USER_MATRIX: str = env.str("ML_USER_MATRIX", "")

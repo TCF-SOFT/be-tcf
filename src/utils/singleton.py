@@ -1,3 +1,4 @@
+from abc import ABCMeta
 from threading import Lock
 
 
@@ -16,3 +17,11 @@ class SingletonMeta(type):
                 instance = super().__call__(*args, **kwargs)
                 cls._instances[cls] = instance
         return cls._instances[cls]
+
+
+class ABCSingletonMeta(SingletonMeta, ABCMeta):
+    """
+    Combined metaclass to resolve conflicts between SingletonMeta and ABCMeta.
+    """
+
+    pass

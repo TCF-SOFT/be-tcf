@@ -9,8 +9,8 @@ from typing import cast
 import loguru
 import stackprinter
 
-from app.config.config import settings
-from app.schemas.json_logs import BaseJsonLogSchema
+from src.config.config import settings
+from src.schemas.json_logs import BaseJsonLogSchema
 
 # Set stackprinter as the default exception printer
 stackprinter.set_excepthook(style="darkbg2")
@@ -80,6 +80,7 @@ class JSONLogFormatter(logging.Formatter):
             duration=duration,
             app_name=settings.PROJECT_NAME,
             app_version=settings.VERSION,
+            app_env=settings.SERVICE_ENVIRONMENT,
         )
 
         if hasattr(record, "props"):
