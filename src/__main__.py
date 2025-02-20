@@ -3,188 +3,130 @@ from contextlib import asynccontextmanager
 
 import sentry_sdk
 import uvicorn
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from ddtrace import patch_all
+from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import ORJSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
-from fastapi_pagination import add_pagination
-from prometheus_fastapi_instrumentator import Instrumentator
 from sentry_sdk.integrations.fastapi import FastApiIntegration
-from sqladmin import Admin
-from starlette.middleware.sessions import SessionMiddleware
 
-from src.api.admin.auth import authentication_backend_admin
-from src.api.admin.views import (
-    CocktailAdmin,
-    ImageAdmin,
-    LabelAdmin,
-    OrderAdmin,
-    OrderCocktailAdmin,
-    RatingAdmin,
-    UserAdmin,
-)
-from src.api.di.database import engine
-from src.api.di.di import get_redis
+from src.api.common.currency import fetch_conversion
+from src.api.controllers.api_microservice_version import get_microservice_version
+from src.api.di.di import PricingService, ResourceModule
+from src.api.di.redis_service import RedisService
 from src.api.middleware.logging_middleware import LoggingMiddleware
-from src.api.routes.auth_router import router as auth_router
-from src.api.routes.cart_router import router as cart_router
-from src.api.routes.file_router import router as file_router
-from src.api.routes.image_router import router as image_router
-from src.api.routes.label_router import router as label_router
-from src.api.routes.order_router import router as order_router
-from src.api.routes.product_router import router as product_router
-from src.api.routes.rating_router import router as rating_router
-from src.api.routes.user_router import router as user_router
-from src.api.routes.utils_router import router as utils_router
+from src.api.routes.available_make_model_router import (
+    router as available_make_model_router,
+)
+from src.api.routes.get_countries_router import router as get_countries_router
+from src.api.routes.health_check_router import router as health_check_router
+from src.api.routes.pricing_router import router as pricing_router
+from src.api.routes.support_files_router import router as support_files_router
+from src.api.routes.version_router import router as version_router
 from src.config.config import settings
+from src.docs import docs
 from src.utils.logging import logger
-
-# from ddtrace import patch, config
 
 
 async def check_health(app: FastAPI):
     logger.info("[!] Performing health-check of services...")
     # Check Redis health
-    if reddis_check := await app.state.redis.ping():
-        logger.info(f"[+] Redis connection established: {reddis_check=}")
-    else:
-        logger.error("[X] Redis connection failed")
+    if not await app.state.resources.get_redis().ping():
+        logger.error("[X] Health-check failed: Unable to ping Redis")
         sys.exit(1)
+    logger.info("[+] Redis connection established")
 
 
-# --------------------------------------------------
-#  FastAPI Services Lifespan (Startup and Shutdown)
-#  - logger
-#  - redis caching
-#  - health-check
-# --------------------------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Load the redis connection
-    app.state.redis = await get_redis()
-
-    # Check health of services
-    await check_health(app)
-    logger.info("[+] Health-check of services was successful")
-
-    # FastAPI Cache (https://github.com/long2ice/fastapi-cache)
-    FastAPICache.init(RedisBackend(app.state.redis), prefix="be-home-bar")
-
-    # Sentry
     if settings.RUN_PROD_WEB_SERVER:
+        logger.info("[!] Checking Rates Service...")
+        await fetch_conversion("CZK", currency_to="USD", value=100)
+        logger.info("[+] Rates Service is ready")
+
         logger.info("[!] Starting the application in production mode")
         logger.info("[!] Starting sentry")
         sentry_sdk.init(
-            dsn=settings.SENTRY_DSN,
+            dsn=settings.TELEMETRY.SENTRY_DSN,
+            environment=settings.SERVICE_ENVIRONMENT,
+            release=await get_microservice_version(),
             integrations=[FastApiIntegration()],
-            # TODO: utils, Get microserver version
-            release=settings.VERSION,
+            attach_stacktrace=True,
             traces_sample_rate=1.0,
-            profiles_sample_rate=1.0,
         )
 
-        # Datadog
-        # logger.info("[!] Starting Datadog")
-        # patch(sqlalchemy=True)
-        # patch(redis=True)
-        # patch(fastapi=True)
-        # patch(psygopg=True)
-        # config.service = "be-home-bar"
+    # Resources initialization
+    logger.info("[!] Initializing resources...")
+    app.state.resources = ResourceModule(redis=RedisService())
+    logger.info("[+] Resources initialized successfully")
+
+    # Redis Cache
+    FastAPICache.init(
+        RedisBackend(app.state.resources.get_redis()), prefix="pricing_v2"
+    )
+
+    # Loading models
+    logger.info("[!] Loading pricing service...")
+    app.state.pricing_service = PricingService()
+    logger.info("[+] Pricing service loaded successfully")
+
+    # Check health of services
+    await check_health(app)
 
     try:
         yield
     finally:
-        # close redis connection and release the resources
-
-        await app.state.redis.close()
         logger.info("[!] Shutting down the application...")
 
 
+# Datadog tracing (should be initialized before the src creation)
+if settings.TELEMETRY.DD_TRACE_ENABLED:
+    patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
+
 app = FastAPI(
-    title="Home Cocktail Bar",
-    version="1.0.0",
-    docs_url=None,
-    openapi_url=None,
-    redoc_url=None,
+    title=docs.title,
+    description=docs.description,
+    summary=docs.summary,
+    servers=docs.servers,
+    version="1.2.0",
+    contact=docs.contact,
+    openapi_url="/docs/pricing-v2/openapi.json",
+    # docs_url=docs.DOCS_URL,
+    # redoc_url=docs.REDOC_URL,
     lifespan=lifespan,
 )
 
-# --------------------------------------------------
-# Instrumentator (monitoring Prometheus - Grafana)
-# --------------------------------------------------
-instrumentator = Instrumentator(
-    should_group_status_codes=False,
-    excluded_handlers=["/metrics"],
-)
-instrumentator.instrument(app).expose(app)
-
-# --------------------------------------------------
-#            FastAPI Middleware (FE)
-# --------------------------------------------------
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8080",
-        "https://api-bar.eucalytics.uk",
-        "https://bar.eucalytics.uk",
-        "http://localhost:3000",
-    ],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allow_headers=[
-        "Content-Type",
-        "Set-Cookie",
-        "Authorization",
-        "Access-Control-Allow-Headers",
-        "Access-Control-Allow-Origin",
-    ],
-)
-
+# Middleware
 app.middleware("http")(LoggingMiddleware())
 
-# Cookie-based session middleware
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=settings.SECRET_KEY,
-    session_cookie="session",
-)
-# --------------------------------------------------
-#               FastAPI Routers
-# --------------------------------------------------
-app.include_router(user_router)
-app.include_router(product_router)
-app.include_router(label_router)
-app.include_router(auth_router)
-app.include_router(image_router)
-app.include_router(utils_router)
-app.include_router(order_router)
-app.include_router(cart_router)
-app.include_router(rating_router)
-app.include_router(file_router)
 
-# should be after the routers (https://stackoverflow.com/a/76894187)
-add_pagination(app)
+@app.exception_handler(RequestValidationError)
+def validation_exception_handler(
+    _: Request, exc: RequestValidationError
+) -> ORJSONResponse:
+    """
+    Handles validation errors.
+    Aim: handle NaN values in the request body, they can't be serialized to JSON and be returned to client.
+    Library: ORJSONResponse is used to serialize NaN values to null (None).
+    Source: https://github.com/tiangolo/fastapi/discussions/10141#discussioncomment-6842857
+    :param _:
+    :param exc:
+    :return:
+    """
+    return ORJSONResponse(
+        status_code=422,
+        content=jsonable_encoder({"detail": exc.errors()}),
+    )
 
-# --------------------------------------------------
-#               FastAPI Admin Panel
-# --------------------------------------------------
-admin = Admin(app, engine, authentication_backend=authentication_backend_admin)
-# admin = Admin(app, engine)
-admin.add_view(UserAdmin)
-admin.add_view(CocktailAdmin)
-admin.add_view(ImageAdmin)
-admin.add_view(OrderAdmin)
-admin.add_view(OrderCocktailAdmin)
-admin.add_view(LabelAdmin)
-admin.add_view(RatingAdmin)
 
+app.include_router(pricing_router)
+app.include_router(available_make_model_router)
+app.include_router(get_countries_router)
+app.include_router(health_check_router)
+app.include_router(version_router)
+app.include_router(support_files_router)
 
 if __name__ == "__main__":
-    uvicorn.run(
-        app,
-        host="0.0.0.0",
-        port=8080,
-        log_config=None,
-        proxy_headers=True,
-        forwarded_allow_ips="*",
-    )
+    uvicorn.run(app, host="0.0.0.0", port=8080, log_config=None)

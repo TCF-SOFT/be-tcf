@@ -79,7 +79,6 @@ class JSONLogFormatter(logging.Formatter):
             source_log=record.name,
             duration=duration,
             app_name=settings.PROJECT_NAME,
-            app_version=settings.VERSION,
             app_env=settings.SERVICE_ENVIRONMENT,
         )
 

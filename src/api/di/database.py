@@ -7,10 +7,10 @@ from src.config.config import settings
 
 if settings.MODE == "TEST":
     # Use the test database
-    DATABASE_URL = settings.db.TEST_PSQL_URL
+    DATABASE_URL = settings.DB.TEST_PSQL_URL
     DATABASE_PARAMS = {"poolclass": NullPool}
 else:
-    DATABASE_URL = settings.db.PSQL_URL
+    DATABASE_URL = settings.DB.PSQL_URL
     DATABASE_PARAMS = {}
 
 engine = create_async_engine(

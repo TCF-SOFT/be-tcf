@@ -37,7 +37,7 @@ class Base(DeclarativeBase):
     id: Any
     __name__: str
 
-    metadata = MetaData(naming_convention=settings.db.naming_convention)
+    metadata = MetaData(naming_convention=settings.DB.naming_convention)
 
     @declared_attr
     def __tablename__(self) -> str:

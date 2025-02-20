@@ -40,9 +40,9 @@ class DatabaseHelper:
 
 
 # db_helper = DatabaseHelper(
-#     url=str(settings.db.PSQL_URL),
-#     echo=settings.db.echo,
-#     echo_pool=settings.db.echo_pool,
-#     pool_size=settings.db.pool_size,
-#     max_overflow=settings.db.max_overflow,
+#     url=str(settings.DB.PSQL_URL),
+#     echo=settings.DB.echo,
+#     echo_pool=settings.DB.echo_pool,
+#     pool_size=settings.DB.pool_size,
+#     max_overflow=settings.DB.max_overflow,
 # )

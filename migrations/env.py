@@ -3,17 +3,7 @@ import asyncio
 from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
-from src.api.models.drinks import (  # noqa
-    Cart,  # noqa
-    CartItem,  # noqa
-    Cocktail,  # noqa
-    CocktailLabel,  # noqa
-    Image,  # noqa
-    Label,  # noqa
-    Order,  # noqa
-    OrderCocktail,  # noqa
-    User,  # noqa
-)  # noqa
+from src.models.models import *
 from src.config.config import settings
 from src.models.base import Base
 
@@ -43,7 +33,7 @@ async def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = create_async_engine(settings.db.PSQL_URL, future=True)
+    connectable = create_async_engine(settings.DB.PSQL_URL, future=True)
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
