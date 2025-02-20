@@ -12,18 +12,11 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 
-from src.api.common.currency import fetch_conversion
 from src.api.controllers.api_microservice_version import get_microservice_version
-from src.api.di.di import PricingService, ResourceModule
+from src.api.di.di import ResourceModule
 from src.api.di.redis_service import RedisService
 from src.api.middleware.logging_middleware import LoggingMiddleware
-from src.api.routes.available_make_model_router import (
-    router as available_make_model_router,
-)
-from src.api.routes.get_countries_router import router as get_countries_router
 from src.api.routes.health_check_router import router as health_check_router
-from src.api.routes.pricing_router import router as pricing_router
-from src.api.routes.support_files_router import router as support_files_router
 from src.api.routes.version_router import router as version_router
 from src.config.config import settings
 from src.docs import docs
@@ -42,10 +35,6 @@ async def check_health(app: FastAPI):
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if settings.RUN_PROD_WEB_SERVER:
-        logger.info("[!] Checking Rates Service...")
-        await fetch_conversion("CZK", currency_to="USD", value=100)
-        logger.info("[+] Rates Service is ready")
-
         logger.info("[!] Starting the application in production mode")
         logger.info("[!] Starting sentry")
         sentry_sdk.init(
@@ -66,11 +55,6 @@ async def lifespan(app: FastAPI):
     FastAPICache.init(
         RedisBackend(app.state.resources.get_redis()), prefix="pricing_v2"
     )
-
-    # Loading models
-    logger.info("[!] Loading pricing service...")
-    app.state.pricing_service = PricingService()
-    logger.info("[+] Pricing service loaded successfully")
 
     # Check health of services
     await check_health(app)
@@ -121,12 +105,8 @@ def validation_exception_handler(
     )
 
 
-app.include_router(pricing_router)
-app.include_router(available_make_model_router)
-app.include_router(get_countries_router)
 app.include_router(health_check_router)
 app.include_router(version_router)
-app.include_router(support_files_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080, log_config=None)
