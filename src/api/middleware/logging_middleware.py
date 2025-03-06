@@ -3,10 +3,10 @@ import http
 import logging
 import math
 import time
+from fnmatch import fnmatch
 from typing import ClassVar
 
-from fastapi import Request
-from fastapi import Response
+from fastapi import Request, Response
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.types import Receive
 
@@ -15,13 +15,7 @@ from src.utils.logging import logger
 
 EMPTY_VALUE = ""
 PORT = "8080"
-PASS_ROUTES = [
-    "/openapi.json",
-    "/docs/equipment_score/openapi.json",
-    "/docs",
-    "/health-check/*",
-    "/metrics",
-]
+PASS_ROUTES = ["/openapi.json", "/docs", "/metrics", "/-/health-checks/*"]
 
 
 @dataclasses.dataclass
@@ -105,8 +99,8 @@ class LoggingMiddleware:
                 media_type=response.media_type,
             )
 
-        # pass /openapi.json /docs
-        if request.url.path in PASS_ROUTES:
+        # Ignoring some routes
+        if any(fnmatch(request.url.path, pattern) for pattern in PASS_ROUTES):
             return response
 
         duration: int = math.ceil((time.time() - start_time) * 1000)
@@ -131,6 +125,7 @@ class LoggingMiddleware:
             response_body=response_body,
             duration=duration,
         ).model_dump()
+
         message = (
             f'{"Error" if exception_object else "Answer"} '
             f'code: {response.status_code} '
