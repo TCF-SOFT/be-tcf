@@ -45,10 +45,18 @@ class RedisConfig(BaseModel):
     """
     REDIS_HOST: str = env.str("REDIS_HOST")
     REDIS_PORT: int = env.int("REDIS_PORT", 6379)
-    REDIS_DB: int = env.int("REDIS_DB", 5)
+    REDIS_DB: int = env.int("REDIS_DB", 0)
     INVALIDATE_CACHES_TIMEOUT: int = env.int("INVALIDATE_CACHES_TIMEOUT", 86400)
-    redis_url: str = env.str("REDIS_URL")
 
+class ElasticSearchConfig(BaseModel):
+    """
+    Represents the configuration settings for the ElasticSearch.
+    """
+    ELASTIC_HOST: str = env.str("ELASTIC_HOST")
+    ELASTIC_PORT: int = env.int("ELASTIC_PORT", 9200)
+    ELASTIC_USER: str = env.str("ELASTIC_USER")
+    ELASTIC_API_KEY: str = env.str("ELASTIC_API_KEY")
+    ELASTIC_INDEX: str = env.str("ELASTIC_INDEX", "stat_agg")
 
 class TelemetryConfig(BaseModel):
     """
@@ -107,6 +115,7 @@ class Settings(BaseSettings):
     MODE: str = env.str("MODE", "DEV")
 
     # Database settings
+    ES: ElasticSearchConfig = ElasticSearchConfig()
     DB: DatabaseConfig = DatabaseConfig()
     REDIS: RedisConfig = RedisConfig()
     TELEMETRY: TelemetryConfig = TelemetryConfig()

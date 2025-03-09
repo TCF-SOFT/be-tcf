@@ -16,7 +16,7 @@ servers = [
     },
 ]
 
-title = "title"
+title = "TCF API"
 description = """
 ## How to use this API
 lore ipsum dolor sit amet consectetur adipiscing elit
@@ -28,7 +28,7 @@ summary = "API to calculate the predicted price for a vehicle with given feature
 
 contact = {
     "name": "Vadym Tatarinov",
-    "url": "",
+    "url": "https://ford-parts.com.ru",
     "email": "utikpuhlik@protonmail.ch",
 }
 

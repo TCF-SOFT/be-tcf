@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 import sentry_sdk
 import uvicorn
-from ddtrace import patch_all
+# from ddtrace import patch_all
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -18,6 +18,7 @@ from src.api.di.redis_service import RedisService
 from src.api.middleware.logging_middleware import LoggingMiddleware
 from src.api.routes.health_check_router import router as health_check_router
 from src.api.routes.version_router import router as version_router
+from src.api.routes.product_router import router as product_router
 from src.config.config import settings
 from src.docs import docs
 from src.utils.logging import logger
@@ -66,8 +67,8 @@ async def lifespan(app: FastAPI):
 
 
 # Datadog tracing (should be initialized before the src creation)
-if settings.TELEMETRY.DD_TRACE_ENABLED:
-    patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
+# if settings.TELEMETRY.DD_TRACE_ENABLED:
+    # patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
 
 app = FastAPI(
     title=docs.title,
@@ -107,6 +108,7 @@ def validation_exception_handler(
 
 app.include_router(health_check_router)
 app.include_router(version_router)
+app.include_router(product_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080, log_config=None)
