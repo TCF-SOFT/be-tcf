@@ -2,7 +2,8 @@ import uuid
 from typing import Literal, Optional
 
 import sqlalchemy.sql
-from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Column, Float, ForeignKey, Integer, String, Text, Numeric, Index
+from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, str_uniq, uuid_pk
@@ -19,64 +20,37 @@ class User(Base):
         String, nullable=False, default="user"
     )
 
-    # Ассоциация с таблицей Order (1 user -> M orders)
-    orders = relationship(
-        "Order", back_populates="user", cascade="all, delete-orphan", lazy="selectin"
-    )
-
-    # Ассоциация с таблицей Cart (1 user -> 1 cart)
-    cart = relationship(
-        "Cart", back_populates="user", cascade="all, delete-orphan", lazy="selectin"
-    )
-
-    # Ассоциация с таблицей Rating (1 user -> M ratings)
-    ratings = relationship(
-        "Rating", back_populates="user", cascade="all, delete-orphan", lazy="selectin"
-    )
-
     def __str__(self):
         return f"User: {self.email}"
 
 
-class Order(Base):
-    id: Mapped[uuid_pk]
-    user_id: Mapped[Optional[uuid.UUID]] = mapped_column(
-        ForeignKey("users.id"), nullable=True
-    )
-    user_name: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-    status: Mapped[str] = mapped_column(String, nullable=False, default="pending")
-
-    # Associations
-    user = relationship("User", back_populates="orders", lazy="selectin")
-    order_products = relationship(
-        "Product",
-        secondary="order_products",
-        back_populates="product_orders",
-        lazy="selectin",
-    )
-
-    def __str__(self):
-        return f"Order: {self.id}"
-
-
-class OrderCocktail(Base):
-    __tablename__ = "order_products"
-    order_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("orders.id"), primary_key=True
-    )
-    product_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("products.id"), primary_key=True
-    )
-    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
-
 
 class Product(Base):
     id: Mapped[uuid_pk]
-    name = Column(String(100), nullable=False)
-    description = Column(Text)
-    price = Column(Float)
-    quantity = Column(Integer)
-    category = Column(String(100))
+    bitrix_id: Mapped[str] = mapped_column(String, nullable=True)
+    address_id:  Mapped[str] = mapped_column(String, nullable=True)
+
+    category: Mapped[str] = mapped_column(String, nullable=False)
+    sub_category: Mapped[str] = mapped_column(String, nullable=False)
+
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    brand: Mapped[str] = mapped_column(String, nullable=False)
+    manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
+    cross_number: Mapped[str] = mapped_column(String, nullable=True)
+    description: Mapped[str] = mapped_column(Text, nullable=True)
+    thumbnail_url: Mapped[str] = mapped_column(String, nullable=True)
+
+    price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
+    super_wholesale_price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=True)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    search_vector: Mapped[str] = mapped_column(
+        TSVECTOR
+    )
+
+    __table_args__ = (
+        Index('search_vector_idx', 'search_vector', postgresql_using='gin'),
+    )
 
     # Ассоциация с таблицей Image (1 product -> M images)
     # Using 'selectin' loading to efficiently load images in a separate query immediately after the main query
@@ -86,27 +60,6 @@ class Product(Base):
         back_populates="product",
         cascade="all, delete-orphan",
         lazy="selectin",
-    )
-    # Ассоциация с таблицей Rating (1 product -> M ratings)
-    ratings = relationship(
-        "Rating",
-        back_populates="product",
-        cascade="all, delete-orphan",
-        lazy="selectin",
-    )
-    # Ассоциация с таблицей Label через `product_labels` (M products -> M labels)
-    labels = relationship(
-        "Label",
-        secondary="product_labels",
-        back_populates="products",
-        lazy="selectin",
-    )
-    # Ассоциация с таблицей Order через `order_products` (M products -> M orders)
-    product_orders = relationship(
-        "Order",
-        secondary="order_products",
-        back_populates="order_products",
-        lazy="select",
     )
 
     def __str__(self):
@@ -126,73 +79,3 @@ class Image(Base):
     def __str__(self):
         return f"Image: {self.image_url}"
 
-
-class Label(Base):
-    id: Mapped[uuid_pk]
-    name = Column(String(100), nullable=False)
-
-    products = relationship(
-        "Product",
-        secondary="product_labels",
-        back_populates="labels",
-        lazy="select",
-    )
-
-    def __str__(self):
-        return f"Label: {self.name}"
-
-
-class CocktailLabel(Base):
-    __tablename__ = "product_labels"
-    product_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("products.id"), primary_key=True
-    )
-    label_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("labels.id"), primary_key=True
-    )
-
-
-class Cart(Base):
-    id: Mapped[uuid_pk]
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-
-    # Ассоциация с таблицей User (1 cart -> 1 user)
-    user = relationship("User", back_populates="cart", lazy="selectin")
-    # Ассоциация с таблицей Product через `cart_items` (M carts -> M products)
-    cart_items = relationship("CartItem", back_populates="cart", lazy="selectin")
-
-    def to_dict(self):
-        return {"id": self.id, "user_id": self.user, "products": self.cart_items}
-
-
-class CartItem(Base):
-    __tablename__ = "cart_items"
-    cart_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("carts.id"), primary_key=True)
-    product_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("products.id"), primary_key=True
-    )
-    quantity: Mapped[int] = mapped_column(Integer, nullable=False, default=1)
-
-    # Relationship with Cart (M cart_items -> 1 cart)
-    cart = relationship("Cart", back_populates="cart_items")
-
-    # Relationship with Product (M cart_items -> 1 product)
-    product = relationship("Product", lazy="selectin")
-
-
-class Rating(Base):
-    id: Mapped[uuid_pk]
-    product_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("products.id"), nullable=False
-    )
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-    rating: Mapped[float] = mapped_column(Float, nullable=False)
-
-    # Relationship with User
-    user = relationship("User", back_populates="ratings", lazy="selectin")
-
-    # Relationship with Product
-    product = relationship("Product", back_populates="ratings", lazy="select")
-
-    def __str__(self):
-        return f"Rating: {self.rating}"
