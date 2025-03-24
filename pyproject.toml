@@ -26,6 +26,8 @@ dependencies = [
     "sqlalchemy>=2.0.38",
     "alembic>=1.14.1",
     "elasticsearch[async]>=8.17.2",
+    "pandas>=2.2.3",
+    "gspread>=6.2.0",
 ]
 
 
