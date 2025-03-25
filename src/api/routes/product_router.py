@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from api.dao.product_dao import ProductDAO
 from api.di.database import get_db
 from schemas.schemas import ProductSchema
+from schemas.enums import Categories
 
 # Create the router
 router = APIRouter(tags=["Products"])
@@ -17,8 +18,13 @@ router = APIRouter(tags=["Products"])
 )
 async def search_products(
     db_session: AsyncSession = Depends(get_db),
+    category: Categories = None,
 ):
-    return await ProductDAO.find_all(db_session, filter_by={})
+    filters = {}
+    if category:
+        filters["category"] = category
+
+    return await ProductDAO.find_all(db_session, filter_by=filters)
 
 
 @router.get("/products/categories", response_model=list[str])

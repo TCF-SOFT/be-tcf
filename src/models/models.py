@@ -1,7 +1,8 @@
-from typing import Literal
+import uuid
+from typing import Literal, Optional
 
-from sqlalchemy import Boolean, Integer, Numeric, String, Text
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import Boolean, Integer, Numeric, String, Text, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, str_uniq, uuid_pk
 
@@ -42,37 +43,52 @@ class Product(Base):
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    # search_vector: Mapped[str] = mapped_column(
-    #     TSVECTOR
-    # )
-    #
-    # __table_args__ = (
-    #     Index('search_vector_idx', 'search_vector', postgresql_using='gin'),
-    # )
-
     # Ассоциация с таблицей Image (1 product -> M images)
     # Using 'selectin' loading to efficiently load images in a separate query immediately after the main query
     # check readme for more info
-    # images = relationship(
-    #     "Image",
-    #     back_populates="product",
-    #     cascade="all, delete-orphan",
-    #     lazy="selectin",
-    # )
+    images = relationship(
+        "Image",
+        back_populates="product",
+        cascade="all, delete-orphan",
+        lazy="selectin",
+    )
 
     def __str__(self):
         return f"Product: {self.name}"
 
 
-# class Image(Base):
-#     id: Mapped[uuid_pk]
-#     product_id: Mapped[uuid.UUID] = mapped_column(
-#         ForeignKey("products.id"), nullable=False
-#     )
-#     image_url: Mapped[str] = mapped_column(String, nullable=True)
-#     is_thumbnail: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-#
-#     product = relationship("Product", back_populates="images", lazy="select")
-#
-#     def __str__(self):
-#         return f"Image: {self.image_url}"
+class Category(Base):
+    id: Mapped[uuid_pk]
+    name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    sub_categories = relationship(
+        "SubCategory", back_populates="category", cascade="all, delete-orphan"
+    )
+
+    def __str__(self):
+        return f"Category: {self.name}"
+
+
+class SubCategory(Base):
+    id: Mapped[uuid_pk]
+    name: Mapped[str] = mapped_column(String, nullable=False)
+    category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("categories.id"))
+
+    category = relationship("Category", back_populates="sub_categories")
+    products = relationship("Product", back_populates="sub_category")
+
+    def __str__(self):
+        return f"SubCategory: {self.name}"
+
+
+class Image(Base):
+    id: Mapped[uuid_pk]
+    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
+    image_url: Mapped[str] = mapped_column(String, nullable=False)
+    is_thumbnail: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    product = relationship("Product", back_populates="images", lazy="select")
+
+    def __str__(self):
+        return f"Image: {self.image_url}"
