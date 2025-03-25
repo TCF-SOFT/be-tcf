@@ -1,0 +1,112 @@
+from typing import Any
+from uuid import UUID
+
+from sqlalchemy import select
+from sqlalchemy import update as sqlalchemy_update
+from sqlalchemy.exc import SQLAlchemyError
+
+
+class BaseDAO:
+    """
+    Создается базовый класс для всех сервисов, который содержит общие методы для всех сервисов.
+    В сервисах используем нужную модель, чтобы не дублировать код.
+    Унаследованные классы используем в роутерах.
+    """
+
+    model = None
+
+    # self.model (in instance method)
+    # cls.model (in classmethod)
+    @classmethod
+    async def find_all(cls, db_session, filter_by: dict, count: bool = False):
+        # TODO: implement order_by and count
+        query = select(cls.model).filter_by(**filter_by)
+        result = await db_session.execute(query)
+        res = result.scalars().all()
+        return res
+
+    @classmethod
+    async def find_one_or_none(cls, db_session, filter_by: dict) -> list or None:
+        query = select(cls.model).filter_by(**filter_by)
+        result = await db_session.execute(query)
+        return result.scalar_one_or_none()
+
+    @classmethod
+    async def find_by_id(cls, db_session, _id: UUID) -> list or None:
+        query = select(cls.model).filter_by(id=_id)
+        result = await db_session.execute(query)
+        res = result.scalar_one_or_none()
+        return res
+
+    @classmethod
+    async def add_enum(cls, db_session, model) -> Any:
+        db_session.add(model)
+        await db_session.commit()
+        await db_session.refresh(model)
+        return model
+
+    # ---------------------------------------
+    #            POST Methods
+    # ---------------------------------------
+    @classmethod
+    async def add(cls, db_session, **values) -> Any:
+        """
+        More: https://habr.com/ru/articles/828328/, 'Управление транзакциями'
+        :param db_session:
+        :param values:
+        :return:
+        """
+        async with db_session.begin():
+            new_instance = cls.model(**values)
+            db_session.add(new_instance)
+            try:
+                await db_session.commit()
+            except SQLAlchemyError as e:
+                await db_session.rollback()
+                raise e
+            return new_instance
+
+    # ---------------------------------------
+    #            PUT Methods
+    # ---------------------------------------
+    @classmethod
+    async def update(cls, db_session, filter_by, **values):
+        async with db_session.begin():
+            query = (
+                sqlalchemy_update(cls.model)
+                .where(*[getattr(cls.model, k) == v for k, v in filter_by.items()])
+                .values(**values)
+                .execution_options(synchronize_db_session="fetch")
+            )
+            result = await db_session.execute(query)
+            try:
+                await db_session.commit()
+            except SQLAlchemyError as e:
+                await db_session.rollback()
+                raise e
+            return result.rowcount
+
+    # ---------------------------------------
+    #            Delete Methods
+    # ---------------------------------------
+    @classmethod
+    async def delete_by_id(cls, db_session, _id: UUID) -> bool:
+        """
+        Delete an object by id
+        :param db_session:
+        :param _id:
+        :return:
+        """
+        query = select(cls.model).filter_by(id=_id)
+        result = await db_session.execute(query)
+        enum = result.scalar_one_or_none()
+
+        if enum:
+            await db_session.delete(enum)
+            await db_session.commit()
+
+            # Проверяем, что объект удален
+            result = await db_session.execute(query)
+            return result.scalar_one_or_none() is None
+
+        return False

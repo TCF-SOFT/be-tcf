@@ -1,15 +1,13 @@
-import sys
+import uuid
 
 import gspread
 import pandas as pd
-import uuid
-from sqlalchemy import create_engine
 from loguru import logger
+from sqlalchemy import create_engine
 
 from src.config.config import settings
 
-
-TABLE = "price_all"
+TABLE = "new_price_ford"
 SHEET = "main"
 
 # --- Setup Logging ---
@@ -29,18 +27,17 @@ try:
     logger.info(f"Loaded {len(df)} rows from Google Sheet")
 
     # --- Generate UUIDs for each row ---
-    df['id'] = [str(uuid.uuid4()) for _ in range(len(df))]
+    df["id"] = [str(uuid.uuid4()) for _ in range(len(df))]
     logger.debug("UUIDs added to each row")
 
-    sys.exit(0)
     # --- Connect to PostgreSQL ---
     db_url = settings.DB.PSQL_URL.replace("asyncpg", "psycopg2")  # for SQLAlchemy sync
     engine = create_engine(db_url)
     logger.info("Connected to PostgreSQL")
 
-    # --- Overwrite Table ---
-    df.to_sql("your_table_name", engine, if_exists='replace', index=False)
-    logger.success("Data written to PostgreSQL (overwritten)")
+    # --- Append to Table ---
+    df.to_sql("products", engine, if_exists="append", index=False)
+    logger.success("Data written to PostgreSQL (appended to table)")
 
 except Exception as e:
     logger.exception(f"Pipeline failed: {e}")

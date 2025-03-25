@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 import sentry_sdk
 import uvicorn
+
 # from ddtrace import patch_all
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
@@ -10,6 +11,7 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import ORJSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
+from fastapi_pagination import add_pagination
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 
 from src.api.controllers.api_microservice_version import get_microservice_version
@@ -17,8 +19,8 @@ from src.api.di.di import ResourceModule
 from src.api.di.redis_service import RedisService
 from src.api.middleware.logging_middleware import LoggingMiddleware
 from src.api.routes.health_check_router import router as health_check_router
-from src.api.routes.version_router import router as version_router
 from src.api.routes.product_router import router as product_router
+from src.api.routes.version_router import router as version_router
 from src.config.config import settings
 from src.docs import docs
 from src.utils.logging import logger
@@ -68,7 +70,7 @@ async def lifespan(app: FastAPI):
 
 # Datadog tracing (should be initialized before the src creation)
 # if settings.TELEMETRY.DD_TRACE_ENABLED:
-    # patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
+# patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
 
 app = FastAPI(
     title=docs.title,
@@ -82,6 +84,8 @@ app = FastAPI(
     # redoc_url=docs.REDOC_URL,
     lifespan=lifespan,
 )
+
+add_pagination(app)
 
 # Middleware
 app.middleware("http")(LoggingMiddleware())
