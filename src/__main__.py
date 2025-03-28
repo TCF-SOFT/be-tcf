@@ -13,13 +13,16 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
 from sentry_sdk.integrations.fastapi import FastApiIntegration
+from starlette.middleware.cors import CORSMiddleware
 
 from src.api.controllers.api_microservice_version import get_microservice_version
 from src.api.di.di import ResourceModule
 from src.api.di.redis_service import RedisService
 from src.api.middleware.logging_middleware import LoggingMiddleware
+from src.api.routes.category_router import router as category_router
 from src.api.routes.health_check_router import router as health_check_router
 from src.api.routes.product_router import router as product_router
+from src.api.routes.sub_category_router import router as sub_category_router
 from src.api.routes.version_router import router as version_router
 from src.config.config import settings
 from src.docs import docs
@@ -88,6 +91,25 @@ app = FastAPI(
 add_pagination(app)
 
 # Middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8080",
+        "https://api-bar.eucalytics.uk",
+        "https://bar.eucalytics.uk",
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=[
+        "Content-Type",
+        "Set-Cookie",
+        "Authorization",
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Origin",
+    ],
+)
+
 app.middleware("http")(LoggingMiddleware())
 
 
@@ -110,9 +132,12 @@ def validation_exception_handler(
     )
 
 
+app.include_router(product_router)
+app.include_router(category_router)
+app.include_router(sub_category_router)
+
 app.include_router(health_check_router)
 app.include_router(version_router)
-app.include_router(product_router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080, log_config=None)

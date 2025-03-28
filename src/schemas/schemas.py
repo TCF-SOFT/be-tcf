@@ -22,6 +22,7 @@ class SubCategorySchema(BaseModel):
     id: UUID
     name: str
     category_id: UUID
+    image_url: Optional[HttpUrl] = None
 
 
 class ProductSchema(BaseModel):
@@ -34,14 +35,14 @@ class ProductSchema(BaseModel):
     manufacturer_number: Optional[str] = None
     cross_number: Optional[str] = None
     description: Optional[str] = None
-    thumbnail_url: Optional[str] = None
+    image_url: Optional[str] = None
 
     price_rub: Decimal
     super_wholesale_price_rub: Optional[Decimal] = None
     quantity: int
 
     sub_category_id: UUID
-    image: Optional[ImageSchema] = None
+    # images: list[ImageSchema] = []
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -55,7 +56,7 @@ class ProductCreateSchema(BaseModel):
     manufacturer_number: Optional[str] = None
     cross_number: Optional[str] = None
     description: Optional[str] = None
-    thumbnail_url: Optional[str] = None
+    image_url: Optional[str] = None
 
     price_rub: Decimal
     super_wholesale_price_rub: Optional[Decimal] = None

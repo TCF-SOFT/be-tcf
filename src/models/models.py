@@ -1,7 +1,7 @@
 import uuid
 from typing import Literal, Optional
 
-from sqlalchemy import Boolean, Integer, Numeric, String, Text, ForeignKey
+from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, str_uniq, uuid_pk
@@ -27,15 +27,17 @@ class Product(Base):
     bitrix_id: Mapped[str] = mapped_column(String, nullable=True)
     address_id: Mapped[str] = mapped_column(String, nullable=True)
 
-    category: Mapped[str] = mapped_column(String, nullable=False)
-    sub_category: Mapped[str] = mapped_column(String, nullable=False)
+    sub_category_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("sub_categories.id"), nullable=False
+    )
 
     name: Mapped[str] = mapped_column(String, nullable=False)
+    seo_name: Mapped[str] = mapped_column(String, nullable=False)
     brand: Mapped[str] = mapped_column(String, nullable=False)
     manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
     cross_number: Mapped[str] = mapped_column(String, nullable=True)
     description: Mapped[str] = mapped_column(Text, nullable=True)
-    thumbnail_url: Mapped[str] = mapped_column(String, nullable=True)
+    image_url: Mapped[str] = mapped_column(String, nullable=True)
 
     price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
     super_wholesale_price_rub: Mapped[float] = mapped_column(
@@ -43,23 +45,26 @@ class Product(Base):
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    # Ассоциация с таблицей Image (1 product -> M images)
-    # Using 'selectin' loading to efficiently load images in a separate query immediately after the main query
-    # check readme for more info
-    images = relationship(
-        "Image",
-        back_populates="product",
-        cascade="all, delete-orphan",
-        lazy="selectin",
-    )
+    # Relationships
+    sub_category = relationship("SubCategory", back_populates="products", lazy="joined")
+
+    # images = relationship(
+    #     "Image",
+    #     back_populates="product",
+    #     cascade="all, delete-orphan",
+    #     lazy="selectin",
+    # )
 
     def __str__(self):
         return f"Product: {self.name}"
 
 
 class Category(Base):
+    __tablename__ = "categories"
+
     id: Mapped[uuid_pk]
     name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    seo_name: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     sub_categories = relationship(
@@ -71,8 +76,13 @@ class Category(Base):
 
 
 class SubCategory(Base):
+    __tablename__ = "sub_categories"
+
     id: Mapped[uuid_pk]
     name: Mapped[str] = mapped_column(String, nullable=False)
+    seo_name: Mapped[str] = mapped_column(String, nullable=False)
+    image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
     category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("categories.id"))
 
     category = relationship("Category", back_populates="sub_categories")
@@ -82,13 +92,13 @@ class SubCategory(Base):
         return f"SubCategory: {self.name}"
 
 
-class Image(Base):
-    id: Mapped[uuid_pk]
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
-    image_url: Mapped[str] = mapped_column(String, nullable=False)
-    is_thumbnail: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-
-    product = relationship("Product", back_populates="images", lazy="select")
-
-    def __str__(self):
-        return f"Image: {self.image_url}"
+# class Image(Base):
+#     id: Mapped[uuid_pk]
+#     product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
+#     image_url: Mapped[str] = mapped_column(String, nullable=False)
+#     is_thumbnail: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+#
+#     product = relationship("Product", back_populates="images", lazy="select")
+#
+#     def __str__(self):
+#         return f"Image: {self.image_url}"
