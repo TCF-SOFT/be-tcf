@@ -18,7 +18,10 @@ router = APIRouter(tags=["Sub-Category"])
 )
 async def get_sub_categories(
     db_session: AsyncSession = Depends(get_db),
-    category_id: UUID = None,
+    slug: str = None,
 ):
-    filters = {"category_id": category_id}
+    filters = {}
+    if slug:
+        filters = {"slug": slug}
+
     return await SubCategoryDAO.find_all(db_session, filter_by=filters)

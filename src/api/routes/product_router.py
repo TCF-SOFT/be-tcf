@@ -23,6 +23,6 @@ async def search_products(
 ):
     filters = {}
     if sub_category_id:
-        filters["sub_category_id"] = sub_category_id  # <- correct field name
+        filters["sub_category_id"] = sub_category_id
 
     return await ProductDAO.find_all(db_session, filter_by=filters)

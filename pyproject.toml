@@ -29,6 +29,7 @@ dependencies = [
     "gspread>=6.2.0",
     "psycopg2>=2.9.10",
     "sqlalchemy[asyncio]>=2.0.38",
+    "email-validator>=2.2.0",
 ]
 
 

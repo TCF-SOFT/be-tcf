@@ -1,7 +1,7 @@
 import uuid
 from typing import Literal, Optional
 
-from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String, Text
+from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, str_uniq, uuid_pk
@@ -33,6 +33,7 @@ class Product(Base):
 
     name: Mapped[str] = mapped_column(String, nullable=False)
     seo_name: Mapped[str] = mapped_column(String, nullable=False)
+    slug: Mapped[str] = mapped_column(String, nullable=True)
     brand: Mapped[str] = mapped_column(String, nullable=False)
     manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
     cross_number: Mapped[str] = mapped_column(String, nullable=True)
@@ -47,6 +48,7 @@ class Product(Base):
 
     # Relationships
     sub_category = relationship("SubCategory", back_populates="products", lazy="joined")
+    sub_category_slug: Mapped[str] = mapped_column(String, nullable=False)
 
     # images = relationship(
     #     "Image",
@@ -54,6 +56,9 @@ class Product(Base):
     #     cascade="all, delete-orphan",
     #     lazy="selectin",
     # )
+
+    # Constraints
+    __table_args__ = (UniqueConstraint("slug", name="products_slug_key"),)
 
     def __str__(self):
         return f"Product: {self.name}"
@@ -65,11 +70,15 @@ class Category(Base):
     id: Mapped[uuid_pk]
     name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
     seo_name: Mapped[str] = mapped_column(String, nullable=False)
+    slug: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     sub_categories = relationship(
         "SubCategory", back_populates="category", cascade="all, delete-orphan"
     )
+
+    # Constraints
+    __table_args__ = (UniqueConstraint("slug", name="categories_slug_key"),)
 
     def __str__(self):
         return f"Category: {self.name}"
@@ -81,12 +90,17 @@ class SubCategory(Base):
     id: Mapped[uuid_pk]
     name: Mapped[str] = mapped_column(String, nullable=False)
     seo_name: Mapped[str] = mapped_column(String, nullable=False)
+    slug: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("categories.id"))
+    category_slug: Mapped[str] = mapped_column(String, nullable=False)
 
     category = relationship("Category", back_populates="sub_categories")
     products = relationship("Product", back_populates="sub_category")
+
+    # Constraints
+    __table_args__ = (UniqueConstraint("slug", name="sub_categories_slug_key"),)
 
     def __str__(self):
         return f"SubCategory: {self.name}"

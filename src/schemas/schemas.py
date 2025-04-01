@@ -15,13 +15,16 @@ class ImageSchema(BaseModel):
 class CategorySchema(BaseModel):
     id: UUID
     name: str
+    slug: str
     image_url: Optional[HttpUrl] = None
 
 
 class SubCategorySchema(BaseModel):
     id: UUID
     name: str
+    slug: str
     category_id: UUID
+    category_slug: str
     image_url: Optional[HttpUrl] = None
 
 
@@ -42,6 +45,7 @@ class ProductSchema(BaseModel):
     quantity: int
 
     sub_category_id: UUID
+    sub_category_slug: str
     # images: list[ImageSchema] = []
 
     model_config = ConfigDict(from_attributes=True)
