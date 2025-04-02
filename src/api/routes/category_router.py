@@ -16,6 +16,9 @@ router = APIRouter(tags=["Category"])
 )
 async def get_categories(
     db_session: AsyncSession = Depends(get_db),
+    slug: str = None,
 ):
     filters = {}
+    if slug:
+        filters["slug"] = slug
     return await CategoryDAO.find_all(db_session, filter_by=filters)

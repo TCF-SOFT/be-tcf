@@ -32,4 +32,4 @@ ENV PATH="/src/.venv/bin:$PATH"
 ENTRYPOINT []
 
 # Run the application (VENV is activated by the entrypoint)
-CMD ["uv", "run", "python", "-m", "src"]
+CMD ["uv", "run", "--quiet", "python", "-m", "src"]
