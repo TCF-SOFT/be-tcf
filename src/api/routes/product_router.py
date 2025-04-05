@@ -42,6 +42,30 @@ async def search_products_by_name(
 ):
     return await ProductDAO.wildcard_search(db_session, search_term)
 
+
+@router.get(
+    "/products/text_search",
+    response_model=Page[ProductSchema],
+    summary="Search products by name",
+)
+async def full_text_search_products(
+    search_term: str,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await ProductDAO.full_text_search(db_session, search_term)
+
+
+@router.get(
+    "/products/vector_search",
+    response_model=Page[ProductSchema],
+    summary="Search products by name",
+)
+async def semantic_search_products(
+    search_term: str,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await ProductDAO.vector_search(db_session, search_term)
+
 @router.get(
     "/products/{product_id}",
     response_model=ProductSchema,
