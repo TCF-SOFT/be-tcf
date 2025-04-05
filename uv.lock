@@ -134,6 +134,7 @@ dependencies = [
     { name = "loguru" },
     { name = "orjson" },
     { name = "pandas" },
+    { name = "pgvector" },
     { name = "polars" },
     { name = "prometheus-fastapi-instrumentator" },
     { name = "psycopg2" },
@@ -168,6 +169,7 @@ requires-dist = [
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "orjson", specifier = ">=3.10.15" },
     { name = "pandas", specifier = ">=2.2.3" },
+    { name = "pgvector", specifier = ">=0.4.0" },
     { name = "polars", specifier = ">=1.22.0" },
     { name = "prometheus-fastapi-instrumentator", specifier = ">=7.0.2" },
     { name = "psycopg2", specifier = ">=2.9.10" },
@@ -770,6 +772,18 @@ dependencies = [
     { name = "tzdata" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b8/fe/27c7438c6ac8b8f8bef3c6e571855602ee784b85d072efddfff0ceb1cd77/pendulum-3.0.0.tar.gz", hash = "sha256:5d034998dea404ec31fae27af6b22cff1708f830a1ed7353be4d1019bb9f584e", size = 84524 }
+
+[[package]]
+name = "pgvector"
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/e2/40/296ffb7f97fc7ec7b7c34f46861a519c576d561fd31455fc75c5ce2fa8db/pgvector-0.4.0.tar.gz", hash = "sha256:f909f8e8081b57fb8a2442c36c3a1e521228d0d4ad66100c28c674806ff62688", size = 30688 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/90/fb/77d29e98b36f1a0c6f770157001d3747557cae46f0e6f6d282461e554b80/pgvector-0.4.0-py3-none-any.whl", hash = "sha256:9d3e0c27f676c61d2fd4270ac1bc520d39b947b199200babe4a56d6d00c74a07", size = 27027 },
+]
 
 [[package]]
 name = "platformdirs"

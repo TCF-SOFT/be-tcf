@@ -5,6 +5,7 @@ from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String, Text, Uniq
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, str_uniq, uuid_pk
+from pgvector.sqlalchemy import Vector
 
 
 class User(Base):
@@ -49,6 +50,9 @@ class Product(Base):
     # Relationships
     sub_category = relationship("SubCategory", back_populates="products", lazy="joined")
     sub_category_slug: Mapped[str] = mapped_column(String, nullable=False)
+
+    # Vector search
+    embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)
 
     # images = relationship(
     #     "Image",
