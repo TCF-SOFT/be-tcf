@@ -1,11 +1,20 @@
 import uuid
 from typing import Literal, Optional
 
-from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String, Text, UniqueConstraint
+from pgvector.sqlalchemy import Vector
+from sqlalchemy import (
+    Boolean,
+    ForeignKey,
+    Index,
+    Integer,
+    Numeric,
+    String,
+    Text,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, str_uniq, uuid_pk
-from pgvector.sqlalchemy import Vector
 
 
 class User(Base):
@@ -62,7 +71,16 @@ class Product(Base):
     # )
 
     # Constraints
-    __table_args__ = (UniqueConstraint("slug", name="products_slug_key"),)
+    __table_args__ = (
+        UniqueConstraint("slug", name="products_slug_key"),
+        Index(
+            "idx_products_embedding",
+            "embedding",
+            postgresql_using="hnsw",
+            postgresql_with={"m": 16, "ef_construction": 64},
+            postgresql_ops={"embedding": "vector_l2_ops"},
+        ),
+    )
 
     def __str__(self):
         return f"Product: {self.name}"

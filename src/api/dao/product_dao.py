@@ -1,8 +1,9 @@
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import select, func, or_
+from sqlalchemy import func, or_, select
 
 from api.dao.base import BaseDAO
+from common.microservices.open_ai_service import get_embedding
 from models.models import Product
 from schemas.schemas import ProductSchema
 
@@ -17,9 +18,9 @@ class ProductDAO(BaseDAO):
 
     @classmethod
     async def wildcard_search(
-            cls,
-            db_session,
-            search_term: str,
+        cls,
+        db_session,
+        search_term: str,
     ) -> Page[ProductSchema]:
         search_term = f"%{search_term.replace('.', '')}%"
 
@@ -33,13 +34,11 @@ class ProductDAO(BaseDAO):
 
         return await paginate(db_session, query)
 
-
-
     @classmethod
     async def full_text_search(
-            cls,
-            db_session,
-            search_term: str,
+        cls,
+        db_session,
+        search_term: str,
     ) -> Page[ProductSchema]:
         """
         Perform a full-text search on the product.
@@ -51,21 +50,18 @@ class ProductDAO(BaseDAO):
         Мы можем измерить схожесть двух строк, подсчитав число триграмм, которые есть в обеих.
         Эта простая идея оказывается очень эффективной для измерения схожести слов на многих естественных языках.
         """
-        query = select(cls.model).where(
-            func.similarity(
-                cls.model.name, search_term
-            ) > 0.1
-        ).order_by(
-            func.similarity(cls.model.name, search_term).desc()
+        query = (
+            select(cls.model)
+            .where(func.similarity(cls.model.name, search_term) > 0.1)
+            .order_by(func.similarity(cls.model.name, search_term).desc())
         )
         return await paginate(db_session, query)
 
-
     @classmethod
     async def vector_search(
-            cls,
-            db_session,
-            search_term: str,
+        cls,
+        db_session,
+        search_term: str,
     ) -> Page[ProductSchema]:
         """
         Perform a vector search on the product.
@@ -73,4 +69,20 @@ class ProductDAO(BaseDAO):
 
         library: https://github.com/pgvector/pgvector-python?tab=readme-ov-file#sqlalchemy
         """
-        pass
+        # TODO:
+        # - добавить индекс на вектор
+        # - использование собственного векторизатора (размер векторов)
+        # - автоматическое обновление векторов при изменении товара
+        # - install extension pgvector в postgres при тестах
+
+        # 1. Получить embedding поискового запроса
+        query_vector: list[float] = await get_embedding(search_term)
+
+        # 2. Построить запрос
+        query = (
+            select(cls.model)
+            .order_by(cls.model.embedding.l2_distance(query_vector))
+            .limit(5)
+        )
+
+        return await paginate(db_session, query)

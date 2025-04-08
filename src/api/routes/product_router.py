@@ -18,9 +18,9 @@ router = APIRouter(tags=["Products"])
     summary="Return all products with pagination or filter them",
 )
 async def search_products(
-        db_session: AsyncSession = Depends(get_db),
-        sub_category_id: UUID | None = None,
-        sub_category_slug: str | None = None,
+    db_session: AsyncSession = Depends(get_db),
+    sub_category_id: UUID | None = None,
+    sub_category_slug: str | None = None,
 ):
     filters = {}
     if sub_category_id:
@@ -30,6 +30,7 @@ async def search_products(
         filters["sub_category_slug"] = sub_category_slug
 
     return await ProductDAO.find_all(db_session, filter_by=filters)
+
 
 @router.get(
     "/products/search",
@@ -66,6 +67,7 @@ async def semantic_search_products(
 ):
     return await ProductDAO.vector_search(db_session, search_term)
 
+
 @router.get(
     "/products/{product_id}",
     response_model=ProductSchema,
@@ -76,6 +78,3 @@ async def get_product(
     db_session: AsyncSession = Depends(get_db),
 ):
     return await ProductDAO.find_by_id(db_session, product_id)
-
-
-

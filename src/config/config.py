@@ -139,11 +139,8 @@ class Settings(BaseSettings):
     TELEGRAM_BOT_TOKEN: str = env.str("TELEGRAM_BOT_TOKEN")
     TELEGRAM_CHAT_ID: int = env.int("TELEGRAM_CHAT_ID")
 
-    # Model settings
-    ML_USER_MATRIX: str = env.str("ML_USER_MATRIX", "")
-
-    # Chibisafe (CDN)
-    CHIBISAFE_API_KEY: str = env.str("CHIBISAFE_API_KEY")
+    # OpenAI
+    OPENAI_API_KEY: str = env.str("OPENAI_API_KEY")
 
 
 settings = Settings()

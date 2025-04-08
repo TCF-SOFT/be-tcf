@@ -9,6 +9,7 @@ from src.config.config import settings
 TABLE = "new_price_ford"
 SHEETS = ["categories", "sub_categories", "products"]
 
+
 # handle '' with None before export
 def load_sheet_to_db():
     # --- Подключение к Google Sheets ---
@@ -27,7 +28,7 @@ def load_sheet_to_db():
         df = pd.DataFrame(data)
         df.columns = df.iloc[0]  # первая строка — заголовки
         df = df.drop(0).reset_index(drop=True)
-        df.replace(r'^\s*$', np.nan, regex=True, inplace=True)
+        df.replace(r"^\s*$", np.nan, regex=True, inplace=True)
 
         logger.info(f"📥 Загружено {len(df)} строк в таблицу {sheet_name}")
         df.to_sql(sheet_name, engine, if_exists="append", index=False)
