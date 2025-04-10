@@ -5,6 +5,8 @@ from sqlalchemy import select
 from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import SQLAlchemyError
 
+from schemas.schemas import CountSchema
+
 
 class BaseDAO:
     """
@@ -39,11 +41,17 @@ class BaseDAO:
         return res
 
     @classmethod
-    async def add_enum(cls, db_session, model) -> Any:
-        db_session.add(model)
-        await db_session.commit()
-        await db_session.refresh(model)
-        return model
+    async def count_all(cls, db_session, filter_by: dict) -> dict[str: int]:
+        """
+        Count all objects in the database
+        :param db_session:
+        :param filter_by:
+        :return:
+        """
+        query = select(cls.model).filter_by(**filter_by)
+        result = await db_session.execute(query)
+        res = result.scalars().all()
+        return {"count": len(res)}
 
     # ---------------------------------------
     #            POST Methods
@@ -65,6 +73,13 @@ class BaseDAO:
                 await db_session.rollback()
                 raise e
             return new_instance
+
+    @classmethod
+    async def add_enum(cls, db_session, model) -> Any:
+        db_session.add(model)
+        await db_session.commit()
+        await db_session.refresh(model)
+        return model
 
     # ---------------------------------------
     #            PUT Methods

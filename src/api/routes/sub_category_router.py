@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
-from schemas.schemas import SubCategorySchema
+from schemas.schemas import SubCategorySchema, CountSchema
 
 # Create the router
 router = APIRouter(tags=["Sub-Category"])
@@ -13,7 +13,7 @@ router = APIRouter(tags=["Sub-Category"])
 
 @router.get(
     "/sub-categories",
-    response_model=list[SubCategorySchema],
+    response_model=list[SubCategorySchema] | CountSchema,
     summary="",
 )
 async def get_sub_categories(
@@ -21,6 +21,7 @@ async def get_sub_categories(
     slug: str = None,
     category_id: UUID | None = None,
     category_slug: str = None,
+    count_only: bool = False,
 ):
     filters = {}
     if slug:
@@ -29,5 +30,8 @@ async def get_sub_categories(
         filters["category_id"] = category_id
     if category_slug:
         filters["category_slug"] = category_slug
+
+    if count_only:
+        return await SubCategoryDAO.count_all(db_session, filter_by=filters)
 
     return await SubCategoryDAO.find_all(db_session, filter_by=filters)
