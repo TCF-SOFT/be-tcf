@@ -17,7 +17,7 @@ class DatabaseConfig(BaseModel):
     PSQL_HOST: str = env.str("PSQL_HOST")
     PSQL_DB: str = env.str("PSQL_DB")
     PSQL_PORT: int = env.int("PSQL_PORT", 5432)
-    TEST_PSQL_DB: str = env.str("TEST_PSQL_DB", "homebar_test")
+    TEST_PSQL_DB: str = env.str("TEST_PSQL_DB", "tcf_test")
 
     PSQL_URL: str = f"postgresql+asyncpg://{PSQL_USER}:{PSQL_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"
     TEST_PSQL_URL: str = f"postgresql+asyncpg://{PSQL_USER}:{PSQL_PASS}@{PSQL_HOST}:{PSQL_PORT}/{TEST_PSQL_DB}"
@@ -52,11 +52,12 @@ class ElasticSearchConfig(BaseModel):
     Represents the configuration settings for the ElasticSearch.
     """
 
-    ELASTIC_HOST: str = env.str("ELASTIC_HOST")
-    ELASTIC_PORT: int = env.int("ELASTIC_PORT", 9200)
-    ELASTIC_USER: str = env.str("ELASTIC_USER")
-    ELASTIC_API_KEY: str = env.str("ELASTIC_API_KEY")
-    ELASTIC_INDEX: str = env.str("ELASTIC_INDEX", "stat_agg")
+    # ELASTIC_HOST: str = env.str("ELASTIC_HOST")
+    # ELASTIC_PORT: int = env.int("ELASTIC_PORT", 9200)
+    # ELASTIC_USER: str = env.str("ELASTIC_USER")
+    # ELASTIC_API_KEY: str = env.str("ELASTIC_API_KEY")
+    # ELASTIC_INDEX: str = env.str("ELASTIC_INDEX", "stat_agg")
+    pass
 
 
 class TelemetryConfig(BaseModel):
@@ -77,9 +78,10 @@ class AWSConfig(BaseModel):
     Represents the configuration settings for the AWS Resources.
     """
 
-    S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY")
-    S3_SECRET_KEY: str = env.str("S3_SECRET_KEY")
-    S3_BUCKET_NAME: str = env.str("S3_BUCKET_NAME", "eag-alpha2-global-models")
+    # S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY")
+    # S3_SECRET_KEY: str = env.str("S3_SECRET_KEY")
+    # S3_BUCKET_NAME: str = env.str("S3_BUCKET_NAME", "eag-alpha2-global-models")
+    pass
 
 
 class SMTPConfig(BaseModel):
@@ -87,10 +89,11 @@ class SMTPConfig(BaseModel):
     Represents the configuration settings for the SMTP.
     """
 
-    SMTP_HOST: str = env.str("SMTP_HOST")
-    SMTP_PORT: int = env.int("SMTP_PORT")
-    SMTP_USER: str = env.str("SMTP_USER")
-    SMTP_PASS: str = env.str("SMTP_PASS")
+    # SMTP_HOST: str = env.str("SMTP_HOST")
+    # SMTP_PORT: int = env.int("SMTP_PORT")
+    # SMTP_USER: str = env.str("SMTP_USER")
+    # SMTP_PASS: str = env.str("SMTP_PASS")
+    pass
 
 
 class SecurityConfig(BaseModel):
@@ -98,17 +101,14 @@ class SecurityConfig(BaseModel):
     Represents the configuration settings for the security.
     """
 
-    JWT_ALGORITHM: str = env.str("JWT_ALGORITHM")
-    JWT_EXPIRE: int = env.str("JWT_EXPIRE")
-    JWT_SECRET: str = env.str("JWT_SECRET")
-    PASSWORD_MANAGER_SECRET: str = env.str("PASSWORD_MANAGER_SECRET")
-
-    AUTHENTIK_CLIENT_ID: str = env.str("AUTHENTIK_CLIENT_ID")
-    AUTHENTIK_CLIENT_SECRET: str = env.str("AUTHENTIK_CLIENT_SECRET")
-
-    GITHUB_CLIENT_ID: str = env.str("GITHUB_CLIENT_ID")
-    GITHUB_CLIENT_SECRET: str = env.str("GITHUB_CLIENT_SECRET")
-    SECRET_KEY: str = env.str("SECRET_KEY")
+    # JWT_ALGORITHM: str = env.str("JWT_ALGORITHM")
+    # JWT_EXPIRE: int = env.str("JWT_EXPIRE")
+    # JWT_SECRET: str = env.str("JWT_SECRET")
+    # PASSWORD_MANAGER_SECRET: str = env.str("PASSWORD_MANAGER_SECRET")
+    #
+    # AUTHENTIK_CLIENT_ID: str = env.str("AUTHENTIK_CLIENT_ID")
+    # AUTHENTIK_CLIENT_SECRET: str = env.str("AUTHENTIK_CLIENT_SECRET")
+    pass
 
 
 class Settings(BaseSettings):
@@ -134,10 +134,6 @@ class Settings(BaseSettings):
     SAVE_LOGS_TO_FILE: bool = env.bool("SAVE_LOGS_TO_FILE", False)
     RUN_PROD_WEB_SERVER: int = env.int("RUN_PROD_WEB_SERVER", 0)
     JSON_LOG_FORMAT: bool = env.bool("JSON_LOG_FORMAT", True)
-
-    # Telegram
-    TELEGRAM_BOT_TOKEN: str = env.str("TELEGRAM_BOT_TOKEN")
-    TELEGRAM_CHAT_ID: int = env.int("TELEGRAM_CHAT_ID")
 
     # OpenAI
     OPENAI_API_KEY: str = env.str("OPENAI_API_KEY")

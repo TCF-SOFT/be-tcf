@@ -3,14 +3,15 @@
 # Declare variables to be passed into your templates.
 
 namespace: dev
-app: your-app-name
+app: be-tcf
+host: api-tcf.eucalytics.uk
 
 deployment:
   name: ${app}-deployment
   replicas: 1
 
 image:
-  repository: ghcr.io/utikpuhlik/be-home-bar
+  repository: ghcr.io/utikpuhlik/be-tcf
   pullPolicy: Always
   tag: latest
 
@@ -39,7 +40,7 @@ ingress:
   enabled: true
   name: ${app}-ingressroute
   className: traefik
-  host: api-bar.eucalytics.uk
+  host: ${host}
   annotations: { }
 
 

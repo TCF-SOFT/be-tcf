@@ -1,16 +1,19 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
-from schemas.schemas import SubCategorySchema, CountSchema
+from schemas.schemas import CountSchema, SubCategorySchema
+from utils.cache_coder import ORJsonCoder
 
 # Create the router
 router = APIRouter(tags=["Sub-Category"])
 
 
+@cache(expire=60 * 10, coder=ORJsonCoder)
 @router.get(
     "/sub-categories",
     response_model=list[SubCategorySchema] | CountSchema,

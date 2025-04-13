@@ -1,14 +1,17 @@
 from fastapi import APIRouter, Depends
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.category_dao import CategoryDAO
 from api.di.database import get_db
 from schemas.schemas import CategorySchema, CountSchema
+from utils.cache_coder import ORJsonCoder
 
 # Create the router
 router = APIRouter(tags=["Category"])
 
 
+@cache(expire=60 * 10, coder=ORJsonCoder)
 @router.get(
     "/categories",
     response_model=list[CategorySchema] | CountSchema,

@@ -58,9 +58,7 @@ async def lifespan(app: FastAPI):
     logger.info("[+] Resources initialized successfully")
 
     # Redis Cache
-    FastAPICache.init(
-        RedisBackend(app.state.resources.get_redis()), prefix="pricing_v2"
-    )
+    FastAPICache.init(RedisBackend(app.state.resources.get_redis()), prefix="be-tcf")
 
     # Check health of services
     await check_health(app)
@@ -95,9 +93,14 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:8080",
-        "https://api-bar.eucalytics.uk",
-        "https://bar.eucalytics.uk",
+        "https://api-tcf.eucalytics.uk",
+        "https://tcf.eucalytics.uk",
         "http://localhost:5173",
+        "http://localhost:3000",
+        # Vercel TMP
+        "https://nextjs-dashboard-git-main-utikpuhliks-projects.vercel.app/",
+        "https://nextjs-dashboard-xi-rouge-64.vercel.app/",
+        "https://nextjs-dashboard-utikpuhliks-projects.vercel.app/",
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],

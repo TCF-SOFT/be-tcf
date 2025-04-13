@@ -4,8 +4,10 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, HttpUrl
 
+
 class CountSchema(BaseModel):
     count: int
+
 
 class ImageSchema(BaseModel):
     id: UUID

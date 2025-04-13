@@ -1,17 +1,20 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.product_dao import ProductDAO
 from api.di.database import get_db
 from schemas.schemas import ProductSchema
+from utils.cache_coder import ORJsonCoder
 
 # Create the router
 router = APIRouter(tags=["Products"])
 
 
+@cache(expire=60, coder=ORJsonCoder)
 @router.get(
     "/products",
     response_model=Page[ProductSchema],
