@@ -4,6 +4,10 @@ FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 # Install the project into `/src`
 WORKDIR /src
 
+# Install Rust and cargo
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    cargo
+
 # Copy dependencies and lockfile to the image
 COPY pyproject.toml uv.lock ./
 
@@ -12,6 +16,7 @@ ENV UV_COMPILE_BYTECODE=1
 
 # Copy from the cache instead of linking since it's a mounted volume
 ENV UV_LINK_MODE=copy
+
 
 # Install the project's dependencies using the lockfile and settings
 RUN --mount=type=cache,target=/root/.cache/uv \
