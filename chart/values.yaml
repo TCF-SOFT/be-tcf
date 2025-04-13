@@ -7,7 +7,7 @@ app: be-tcf
 host: api-tcf.eucalytics.uk
 
 deployment:
-  name: ${app}-deployment
+  name: be-tcf-deployment
   replicas: 1
 
 image:
@@ -17,7 +17,7 @@ image:
 
 service:
   type: ClusterIP
-  name: ${app}-svc
+  name: be-tcf-svc
   port: 8080
 
 resources:
@@ -31,22 +31,22 @@ resources:
 secrets:
 #  aws: aws-secret
   api_utils: api-utils-secret
-  home_bar: ${app}-secret
+  home_bar: be-tcf-secret
 
 imagePullSecrets:
   name: ghcr-secret
 
 ingress:
   enabled: true
-  name: ${app}-ingressroute
+  name: be-tcf-ingressroute
   className: traefik
   host: ${host}
   annotations: { }
 
 
 certificate:
-  name: ${app}-ingressroute-certificate
-  secretName: ${app}-tls-secret
+  name: be-tcf-ingressroute-certificate
+  secretName: be-tcf-tls-secret
   clusterIssuer: cloudflare-clusterissuer
 
 replicaCount: 1
