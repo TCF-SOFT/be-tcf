@@ -45,7 +45,7 @@ async def lifespan(app: FastAPI):
         logger.info("[!] Starting sentry")
         sentry_sdk.init(
             dsn=settings.TELEMETRY.SENTRY_DSN,
-            environment=settings.SERVICE_ENVIRONMENT,
+            environment=settings.MODE,
             release=await get_microservice_version(),
             integrations=[FastApiIntegration()],
             attach_stacktrace=True,

@@ -79,7 +79,7 @@ class JSONLogFormatter(logging.Formatter):
             source_log=record.name,
             duration=duration,
             app_name=settings.PROJECT_NAME,
-            app_env=settings.SERVICE_ENVIRONMENT,
+            app_env=settings.MODE,
         )
 
         if hasattr(record, "props"):
