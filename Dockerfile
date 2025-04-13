@@ -1,12 +1,8 @@
 # Use a Python image with uv pre-installed
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
+FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
 # Install the project into `/src`
 WORKDIR /src
-
-# Install Rust and cargo
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    cargo
 
 # Copy dependencies and lockfile to the image
 COPY pyproject.toml uv.lock ./
