@@ -14,12 +14,12 @@ from utils.cache_coder import ORJsonCoder
 router = APIRouter(tags=["Products"])
 
 
-@cache(expire=60, coder=ORJsonCoder)
 @router.get(
     "/products",
     response_model=Page[ProductSchema],
     summary="Return all products with pagination or filter them",
 )
+@cache(expire=60, coder=ORJsonCoder)
 async def search_products(
     db_session: AsyncSession = Depends(get_db),
     sub_category_id: UUID | None = None,
@@ -40,6 +40,7 @@ async def search_products(
     response_model=Page[ProductSchema],
     summary="Search products by name",
 )
+@cache(expire=60, coder=ORJsonCoder)
 async def search_products_by_name(
     search_term: str,
     db_session: AsyncSession = Depends(get_db),
@@ -52,6 +53,7 @@ async def search_products_by_name(
     response_model=Page[ProductSchema],
     summary="Search products by name",
 )
+@cache(expire=60, coder=ORJsonCoder)
 async def full_text_search_products(
     search_term: str,
     db_session: AsyncSession = Depends(get_db),
@@ -64,6 +66,7 @@ async def full_text_search_products(
     response_model=Page[ProductSchema],
     summary="Search products by name",
 )
+@cache(expire=60, coder=ORJsonCoder)
 async def semantic_search_products(
     search_term: str,
     db_session: AsyncSession = Depends(get_db),
@@ -76,6 +79,7 @@ async def semantic_search_products(
     response_model=ProductSchema,
     summary="Return product by id",
 )
+@cache(expire=60, coder=ORJsonCoder)
 async def get_product(
     product_id: UUID,
     db_session: AsyncSession = Depends(get_db),

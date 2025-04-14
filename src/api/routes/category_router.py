@@ -11,12 +11,12 @@ from utils.cache_coder import ORJsonCoder
 router = APIRouter(tags=["Category"])
 
 
-@cache(expire=60 * 10, coder=ORJsonCoder)
 @router.get(
     "/categories",
     response_model=list[CategorySchema] | CountSchema,
     summary="",
 )
+@cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_categories(
     db_session: AsyncSession = Depends(get_db),
     slug: str = None,

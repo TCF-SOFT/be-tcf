@@ -40,7 +40,7 @@ ingress:
   enabled: true
   name: be-tcf-ingressroute
   className: traefik
-  host: ${host}
+  host: api-tcf.eucalytics.uk
   annotations: { }
 
 
