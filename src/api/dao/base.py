@@ -32,7 +32,7 @@ class BaseDAO:
         return result.scalar_one_or_none()
 
     @classmethod
-    async def find_by_id(cls, db_session, _id: UUID) -> list or None:
+    async def find_by_id(cls, db_session, _id: UUID) -> Any:
         query = select(cls.model).filter_by(id=_id)
         result = await db_session.execute(query)
         res = result.scalar_one_or_none()

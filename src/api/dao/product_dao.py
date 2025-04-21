@@ -1,3 +1,6 @@
+from typing import Any
+from uuid import UUID
+
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
@@ -12,9 +15,20 @@ class ProductDAO(BaseDAO):
     model = Product
 
     @classmethod
-    async def find_all(cls, db_session, filter_by: dict, count: bool = False):
+    async def find_all(cls, db_session, filter_by: dict, count: bool = False) -> Page[ProductSchema]:
         query = select(cls.model).filter_by(**filter_by)
         return await paginate(db_session, query)
+
+    @classmethod
+    async def find_by_id(cls, db_session, _id: UUID) -> ProductSchema:
+        """
+        Базовый метод DAO должен проходить через model_validate()
+         для преобразования в нужную схему с последующей сериализацией.
+        """
+        query = select(cls.model).filter_by(id=_id)
+        result = await db_session.execute(query)
+        res = result.scalar_one_or_none()
+        return ProductSchema.model_validate(res)
 
     @classmethod
     async def wildcard_search(
@@ -70,7 +84,6 @@ class ProductDAO(BaseDAO):
         library: https://github.com/pgvector/pgvector-python?tab=readme-ov-file#sqlalchemy
         """
         # TODO:
-        # - добавить индекс на вектор
         # - использование собственного векторизатора (размер векторов)
         # - автоматическое обновление векторов при изменении товара
         # - install extension pgvector в postgres при тестах
@@ -82,7 +95,7 @@ class ProductDAO(BaseDAO):
         query = (
             select(cls.model)
             .order_by(cls.model.embedding.l2_distance(query_vector))
-            .limit(5)
+            # .limit(100)
         )
 
         return await paginate(db_session, query)

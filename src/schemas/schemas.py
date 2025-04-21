@@ -44,7 +44,7 @@ class ProductSchema(BaseModel):
     description: Optional[str] = None
     image_url: Optional[str] = None
 
-    price_rub: Decimal
+    price_rub: float
     super_wholesale_price_rub: Optional[Decimal] = None
     quantity: int
 
