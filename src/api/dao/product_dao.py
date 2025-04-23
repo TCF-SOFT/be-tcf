@@ -1,4 +1,3 @@
-from typing import Any
 from uuid import UUID
 
 from fastapi_pagination import Page
@@ -15,7 +14,9 @@ class ProductDAO(BaseDAO):
     model = Product
 
     @classmethod
-    async def find_all(cls, db_session, filter_by: dict, count: bool = False) -> Page[ProductSchema]:
+    async def find_all(
+        cls, db_session, filter_by: dict, count: bool = False
+    ) -> Page[ProductSchema]:
         query = select(cls.model).filter_by(**filter_by)
         return await paginate(db_session, query)
 
@@ -93,8 +94,7 @@ class ProductDAO(BaseDAO):
 
         # 2. Построить запрос
         query = (
-            select(cls.model)
-            .order_by(cls.model.embedding.l2_distance(query_vector))
+            select(cls.model).order_by(cls.model.embedding.l2_distance(query_vector))
             # .limit(100)
         )
 

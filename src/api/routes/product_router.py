@@ -1,13 +1,13 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.product_dao import ProductDAO
 from api.di.database import get_db
-from schemas.schemas import ProductSchema
+from schemas.schemas import ProductSchema, ProductPostSchema
 from utils.cache_coder import ORJsonCoder
 
 # Create the router
@@ -85,3 +85,25 @@ async def get_product(
     db_session: AsyncSession = Depends(get_db),
 ):
     return await ProductDAO.find_by_id(db_session, product_id)
+
+
+
+@router.post("/product", response_model=ProductSchema, status_code=201)
+async def post_product(
+    product: ProductPostSchema,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await ProductDAO.add(db_session, **product.model_dump())
+
+
+
+@router.delete(
+    "/products/{product_id}", status_code=204
+)
+async def delete_product(
+    product_id: UUID,
+    db_session: AsyncSession = Depends(get_db),
+):
+    success = await ProductDAO.delete_by_id(db_session, product_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Product not found")
