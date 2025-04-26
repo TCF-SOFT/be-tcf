@@ -92,10 +92,16 @@ class ProductDAO(BaseDAO):
         # 1. Получить embedding поискового запроса
         query_vector: list[float] = await get_embedding(search_term)
 
-        # 2. Построить запрос
+        # 2. order_by method - all results (vol. 1)
+        # query = (
+        #     select(cls.model).order_by(cls.model.embedding.l2_distance(query_vector))
+        #     .limit(100)
+        # )
+        # filter method - limited (vol. 2)
         query = (
-            select(cls.model).order_by(cls.model.embedding.l2_distance(query_vector))
-            # .limit(100)
+            select(cls.model)
+            .filter(cls.model.embedding.l2_distance(query_vector) < 1.1)
+            .order_by(cls.model.embedding.l2_distance(query_vector))
         )
 
         return await paginate(db_session, query)

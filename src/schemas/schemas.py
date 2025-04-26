@@ -64,7 +64,7 @@ class ProductSchema(BaseModel):
     image_url: Optional[str] = None
 
     price_rub: float
-    super_wholesale_price_rub: Optional[Decimal] = None
+    super_wholesale_price_rub: float | None = None
     quantity: int
 
     sub_category_id: UUID
