@@ -38,3 +38,14 @@ async def get_sub_categories(
         return await SubCategoryDAO.count_all(db_session, filter_by=filters)
 
     return await SubCategoryDAO.find_all(db_session, filter_by=filters)
+
+
+@router.get(
+    "/sub-categories/{slug}",
+    response_model=SubCategorySchema
+)
+async def get_category_by_slug(
+    slug: str,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await SubCategoryDAO.find_by_slug(db_session, slug)
