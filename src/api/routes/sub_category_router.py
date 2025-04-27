@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
@@ -17,6 +18,7 @@ router = APIRouter(tags=["Sub-Category"])
     "/sub-categories",
     response_model=list[SubCategorySchema] | CountSchema,
     summary="",
+    status_code=status.HTTP_200_OK
 )
 @cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_sub_categories(
@@ -41,8 +43,9 @@ async def get_sub_categories(
 
 
 @router.get(
-    "/sub-categories/{slug}",
-    response_model=SubCategorySchema
+    "/sub-category/{slug}",
+    response_model=SubCategorySchema,
+    status_code=status.HTTP_200_OK
 )
 async def get_category_by_slug(
     slug: str,

@@ -83,7 +83,7 @@ class BaseDAO:
     #            PUT Methods
     # ---------------------------------------
     @classmethod
-    async def update(cls, db_session, filter_by, **values):
+    async def update(cls, db_session, filter_by: dict, **values) -> int:
         async with db_session.begin():
             query = (
                 sqlalchemy_update(cls.model)

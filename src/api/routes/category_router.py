@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from api.dao.category_dao import CategoryDAO
 from api.di.database import get_db
@@ -15,6 +16,7 @@ router = APIRouter(tags=["Category"])
     "/categories",
     response_model=list[CategorySchema] | CountSchema,
     summary="",
+    status_code=status.HTTP_200_OK
 )
 @cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_categories(
@@ -33,8 +35,9 @@ async def get_categories(
 
 
 @router.get(
-    "/categories/{slug}",
-    response_model=CategorySchema
+    "/category/{slug}",
+    response_model=CategorySchema,
+    status_code=status.HTTP_200_OK
 )
 async def get_category_by_slug(
     slug: str,

@@ -1,13 +1,15 @@
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import status
 
 from api.dao.product_dao import ProductDAO
 from api.di.database import get_db
-from schemas.schemas import ProductSchema, ProductPostSchema
+from schemas.schemas import ProductSchema, ProductPostSchema, ProductPutSchema
 from utils.cache_coder import ORJsonCoder
 
 # Create the router
@@ -18,6 +20,7 @@ router = APIRouter(tags=["Products"])
     "/products",
     response_model=Page[ProductSchema],
     summary="Return all products with pagination or filter them",
+    status_code=status.HTTP_200_OK
 )
 @cache(expire=60, coder=ORJsonCoder)
 async def search_products(
@@ -39,6 +42,7 @@ async def search_products(
     "/products/search",
     response_model=Page[ProductSchema],
     summary="Search products by name",
+    status_code=status.HTTP_200_OK
 )
 @cache(expire=60, coder=ORJsonCoder)
 async def search_products_by_name(
@@ -51,7 +55,8 @@ async def search_products_by_name(
 @router.get(
     "/products/text_search",
     response_model=Page[ProductSchema],
-    summary="Search products by name",
+    summary="Full text search products",
+    status_code=status.HTTP_200_OK
 )
 @cache(expire=60, coder=ORJsonCoder)
 async def full_text_search_products(
@@ -64,7 +69,8 @@ async def full_text_search_products(
 @router.get(
     "/products/vector_search",
     response_model=Page[ProductSchema],
-    summary="Search products by name",
+    summary="Semantic/Vector search products by name",
+    status_code=status.HTTP_200_OK
 )
 @cache(expire=60, coder=ORJsonCoder)
 async def semantic_search_products(
@@ -75,11 +81,11 @@ async def semantic_search_products(
 
 
 @router.get(
-    "/products/{product_id}",
+    "/product/{product_id}",
     response_model=ProductSchema,
     summary="Return product by id",
+    status_code=status.HTTP_200_OK
 )
-@cache(expire=60, coder=ORJsonCoder)
 async def get_product(
     product_id: UUID,
     db_session: AsyncSession = Depends(get_db),
@@ -88,7 +94,10 @@ async def get_product(
 
 
 
-@router.post("/product", response_model=ProductSchema, status_code=201)
+@router.post("/product",
+             response_model=ProductSchema,
+             summary="Create new product",
+             status_code=status.HTTP_201_CREATED)
 async def post_product(
     product: ProductPostSchema,
     db_session: AsyncSession = Depends(get_db),
@@ -96,9 +105,26 @@ async def post_product(
     return await ProductDAO.add(db_session, **product.model_dump())
 
 
+@router.put("/product/{product_id}",
+            response_model=int,
+            summary="Update product by id",
+            status_code=status.HTTP_200_OK)
+async def put_product(
+    product_id: UUID,
+    product: ProductPutSchema,
+    db_session: AsyncSession = Depends(get_db),
+):
+    filters = {"id": product_id}
+
+    res: Annotated[int, "affected rows"]  = await ProductDAO.update(db_session, filters, **product.model_dump())
+
+    if not res:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    return res
 
 @router.delete(
-    "/products/{product_id}", status_code=204
+    "/products/{product_id}", summary="Delete product by id", status_code=status.HTTP_204_NO_CONTENT
 )
 async def delete_product(
     product_id: UUID,
