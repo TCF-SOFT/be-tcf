@@ -128,7 +128,7 @@ async def put_product(
 
 
 @router.delete(
-    "/products/{product_id}",
+    "/product/{product_id}",
     summary="Delete product by id",
     status_code=status.HTTP_204_NO_CONTENT,
 )
