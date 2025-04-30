@@ -101,7 +101,6 @@ class Category(Base):
 
     id: Mapped[uuid_pk]
     name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
-    seo_name: Mapped[str] = mapped_column(String, nullable=False)
     slug: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
@@ -121,7 +120,6 @@ class SubCategory(Base):
 
     id: Mapped[uuid_pk]
     name: Mapped[str] = mapped_column(String, nullable=False)
-    seo_name: Mapped[str] = mapped_column(String, nullable=False)
     slug: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 

@@ -2,13 +2,11 @@ from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
-from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.user_dao import UserDAO
 from api.di.database import get_db
-from schemas.schemas import CountSchema, SubCategorySchema, UserSchema
-from utils.cache_coder import ORJsonCoder
+from schemas.schemas import UserSchema
 
 # Create the router
 router = APIRouter(tags=["Users"])
@@ -29,6 +27,7 @@ async def get_users(
         filters["role"] = role
 
     return await UserDAO.find_all(db_session, filters)
+
 
 @router.get(
     "/users/{user_id}",

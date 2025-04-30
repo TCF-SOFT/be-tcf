@@ -7,7 +7,6 @@ from models.models import Category
 class CategoryDAO(BaseDAO):
     model = Category
 
-
     @classmethod
     async def find_by_slug(cls, db_session, slug: str):
         """
