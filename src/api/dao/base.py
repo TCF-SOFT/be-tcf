@@ -18,9 +18,9 @@ class BaseDAO:
     # self.model (in instance method)
     # cls.model (in classmethod)
     @classmethod
-    async def find_all(cls, db_session, filter_by: dict, count: bool = False):
+    async def find_all(cls, db_session, filter_by: dict, count: bool = False, order_by: str = None) -> list:
         # TODO: implement order_by and count
-        query = select(cls.model).filter_by(**filter_by)
+        query = select(cls.model).filter_by(**filter_by).order_by(order_by)
         result = await db_session.execute(query)
         res = result.scalars().all()
         return res

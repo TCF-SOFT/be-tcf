@@ -48,7 +48,7 @@ async def get_sub_categories(
     response_model=SubCategorySchema,
     status_code=status.HTTP_200_OK,
 )
-async def get_category_by_slug(
+async def get_sub_category_by_slug(
     slug: str,
     db_session: AsyncSession = Depends(get_db),
 ):
@@ -70,7 +70,7 @@ async def create_sub_category(
 @router.put(
     "/sub-category/{sub_category_id}",
     response_model=int,
-    summary="Update a category by id",
+    summary="Update a sub_category by id",
     status_code=status.HTTP_200_OK,
 )
 async def put_sub_category(

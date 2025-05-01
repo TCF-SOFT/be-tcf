@@ -1,7 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
@@ -24,17 +24,18 @@ router = APIRouter(tags=["Category"])
     summary="",
     status_code=status.HTTP_200_OK,
 )
-@cache(expire=60 * 10, coder=ORJsonCoder)
+# @cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_categories(
     db_session: AsyncSession = Depends(get_db),
     slug: str = None,
     count_only: bool = False,
+    order_by: str = None,
 ):
     filters = {}
     if slug:
         filters["slug"] = slug
 
-    return await CategoryDAO.find_all(db_session, filter_by=filters)
+    return await CategoryDAO.find_all(db_session, filter_by=filters, order_by=order_by)
 
 
 @router.get(
@@ -52,6 +53,7 @@ async def get_category_by_slug(
 )
 async def post_category(
     category: CategoryPostSchema,
+    image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(get_db),
 ):
     return await CategoryDAO.add(db_session, **category.model_dump())

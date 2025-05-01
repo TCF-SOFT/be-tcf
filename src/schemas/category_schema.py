@@ -1,6 +1,7 @@
 from typing import Optional
 from uuid import UUID
 
+from fastapi import UploadFile, File
 from pydantic import (
     BaseModel,
     Field,
