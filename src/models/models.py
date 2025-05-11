@@ -41,6 +41,26 @@ class User(Base):
     def __str__(self):
         return f"User: {self.email}"
 
+class Offer(Base):
+    id: Mapped[uuid_pk]
+    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"), nullable=False)
+    offer_bitrix_id: Mapped[str] = mapped_column(String, nullable=True)
+
+    brand: Mapped[str] = mapped_column(String, nullable=False)
+    manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
+    internal_description: Mapped[str] = mapped_column(Text, nullable=True)
+
+    # Some offers are only available by request, so nullable is set to True
+    price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=True)
+    super_wholesale_price_rub: Mapped[float] = mapped_column(
+        Numeric(12, 4), nullable=True
+    )
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    is_available_by_request: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    # Relationships
+    product = relationship("Product", back_populates="offers", lazy="joined")
+
 
 class Product(Base):
     id: Mapped[uuid_pk]
@@ -50,35 +70,20 @@ class Product(Base):
     sub_category_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("sub_categories.id"), nullable=False
     )
+    sub_category_slug: Mapped[str] = mapped_column(String, nullable=False)
 
     name: Mapped[str] = mapped_column(String, nullable=False)
-    seo_name: Mapped[str] = mapped_column(String, nullable=False)
     slug: Mapped[str] = mapped_column(String, nullable=True)
-    brand: Mapped[str] = mapped_column(String, nullable=False)
-    manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
     cross_number: Mapped[str] = mapped_column(String, nullable=True)
     description: Mapped[str] = mapped_column(Text, nullable=True)
     image_url: Mapped[str] = mapped_column(String, nullable=True)
 
-    price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
-    super_wholesale_price_rub: Mapped[float] = mapped_column(
-        Numeric(12, 4), nullable=True
-    )
-    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-
     # Relationships
     sub_category = relationship("SubCategory", back_populates="products", lazy="joined")
-    sub_category_slug: Mapped[str] = mapped_column(String, nullable=False)
+    offers = relationship("Offer", back_populates="product", lazy="select")
 
     # Vector search
     embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)
-
-    # images = relationship(
-    #     "Image",
-    #     back_populates="product",
-    #     cascade="all, delete-orphan",
-    #     lazy="selectin",
-    # )
 
     # Constraints
     __table_args__ = (
@@ -104,6 +109,7 @@ class Category(Base):
     slug: Mapped[str] = mapped_column(String, nullable=False)
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
+    # Relationships
     sub_categories = relationship(
         "SubCategory", back_populates="category", cascade="all, delete-orphan"
     )
@@ -126,6 +132,7 @@ class SubCategory(Base):
     category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("categories.id"))
     category_slug: Mapped[str] = mapped_column(String, nullable=False)
 
+    # Relationships
     category = relationship("Category", back_populates="sub_categories")
     products = relationship("Product", back_populates="sub_category")
 
