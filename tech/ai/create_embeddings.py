@@ -85,7 +85,7 @@ def main():
             ORDER BY id
         """,
             conn,
-        ).head(100)
+        )
 
     logger.info(f"🔢 Загружено товаров: {len(df)}")
     df["text"] = df.apply(build_product_text, axis=1)
