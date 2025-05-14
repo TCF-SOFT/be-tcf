@@ -50,13 +50,11 @@ class Offer(Base):
     manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
     internal_description: Mapped[str] = mapped_column(Text, nullable=True)
 
-    # Some offers are only available by request, so nullable is set to True
-    price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=True)
+    price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
     super_wholesale_price_rub: Mapped[float] = mapped_column(
-        Numeric(12, 4), nullable=True
+        Numeric(12, 4), nullable=False
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-    is_available_by_request: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     # Relationships
     product = relationship("Product", back_populates="offers", lazy="joined")
@@ -83,18 +81,18 @@ class Product(Base):
     offers = relationship("Offer", back_populates="product", lazy="select")
 
     # Vector search
-    embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)
+    # embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)
 
     # Constraints
     __table_args__ = (
         UniqueConstraint("slug", name="products_slug_key"),
-        Index(
-            "idx_products_embedding",
-            "embedding",
-            postgresql_using="hnsw",
-            postgresql_with={"m": 16, "ef_construction": 64},
-            postgresql_ops={"embedding": "vector_l2_ops"},
-        ),
+        # Index(
+        #     "idx_products_embedding",
+        #     "embedding",
+        #     postgresql_using="hnsw",
+        #     postgresql_with={"m": 16, "ef_construction": 64},
+        #     postgresql_ops={"embedding": "vector_l2_ops"},
+        # ),
     )
 
     def __str__(self):
