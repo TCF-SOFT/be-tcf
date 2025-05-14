@@ -5,8 +5,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
 
 from api.dao.base import BaseDAO
-from common.microservices.open_ai_service import get_embedding
-from models.models import Product, Offer
+from models.models import Offer
 from schemas.offer_schema import OfferSchema
 
 

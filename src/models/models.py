@@ -1,11 +1,9 @@
 import uuid
 from typing import Literal, Optional
 
-from pgvector.sqlalchemy import Vector
 from sqlalchemy import (
     Boolean,
     ForeignKey,
-    Index,
     Integer,
     Numeric,
     String,
@@ -41,9 +39,12 @@ class User(Base):
     def __str__(self):
         return f"User: {self.email}"
 
+
 class Offer(Base):
     id: Mapped[uuid_pk]
-    product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"), nullable=False)
+    product_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("products.id"), nullable=False
+    )
     offer_bitrix_id: Mapped[str] = mapped_column(String, nullable=True)
 
     brand: Mapped[str] = mapped_column(String, nullable=False)
