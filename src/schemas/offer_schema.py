@@ -30,13 +30,12 @@ class OfferSchema(_OfferBase):
     product_id: UUID
     offer_bitrix_id: Optional[str] = Field(None, examples=["278495"])
 
-    product_id: UUID = Field(
-        ..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"]
-    )
+    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
+
 
 
 class OfferPostSchema(_OfferBase):
-    pass
+    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
 
 
 class OfferPutSchema(_OfferBase):
