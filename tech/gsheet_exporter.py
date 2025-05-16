@@ -7,7 +7,7 @@ from sqlalchemy import create_engine
 from src.config.config import settings
 
 TABLE = "new_price_ford"
-SHEETS = ["categories", "sub_categories", "products"]
+SHEETS = ["offers"]
 
 
 # handle '' with None before export

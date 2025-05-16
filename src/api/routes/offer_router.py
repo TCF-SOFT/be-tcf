@@ -1,0 +1,109 @@
+from typing import Annotated
+from uuid import UUID
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_cache.decorator import cache
+from fastapi_pagination import Page
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from api.dao.offer_dao import OfferDAO
+from api.di.database import get_db
+from schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
+from utils.cache_coder import ORJsonCoder
+
+router = APIRouter(tags=["Offers"])
+
+
+@router.get(
+    "/offers",
+    response_model=Page[OfferSchema],
+    summary="Return all offers with pagination or filter them",
+    status_code=status.HTTP_200_OK,
+)
+@cache(expire=60, coder=ORJsonCoder)
+async def search_offers(
+    db_session: AsyncSession = Depends(get_db),
+    product_id: UUID | None = None,
+):
+    filters = {}
+    if product_id:
+        filters["product_id"] = product_id
+
+    return await OfferDAO.find_all(db_session, filter_by=filters)
+
+
+@router.get(
+    "/offers/search",
+    response_model=Page[OfferSchema],
+    summary="Search offers by name",
+    status_code=status.HTTP_200_OK,
+)
+@cache(expire=60, coder=ORJsonCoder)
+async def search_offers_by_name(
+    search_term: str,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await OfferDAO.wildcard_search(db_session, search_term)
+
+
+@router.get(
+    "/offer/{offer_id}",
+    response_model=OfferSchema,
+    summary="Return offer by id",
+    status_code=status.HTTP_200_OK,
+)
+async def get_offer(
+    offer_id: UUID,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await OfferDAO.find_by_id(db_session, offer_id)
+
+
+@router.post(
+    "/offer",
+    response_model=OfferSchema,
+    summary="Create new offer",
+    status_code=status.HTTP_201_CREATED,
+)
+async def post_offer(
+    offer: OfferPostSchema,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await OfferDAO.add(db_session, **offer.model_dump())
+
+
+@router.put(
+    "/offer/{offer_id}",
+    response_model=int,
+    summary="Update offer by id",
+    status_code=status.HTTP_200_OK,
+)
+async def put_offer(
+    offer_id: UUID,
+    offer: OfferPutSchema,
+    db_session: AsyncSession = Depends(get_db),
+):
+    filters = {"id": offer_id}
+
+    res: Annotated[int, "affected rows"] = await OfferDAO.update(
+        db_session, filters, **offer.model_dump()
+    )
+
+    if not res:
+        raise HTTPException(status_code=404, detail="Offer not found")
+
+    return res
+
+
+@router.delete(
+    "/offer/{offer_id}",
+    summary="Delete offer by id",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_offer(
+    offer_id: UUID,
+    db_session: AsyncSession = Depends(get_db),
+):
+    success = await OfferDAO.delete_by_id(db_session, offer_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Offer not found")

@@ -1,8 +1,7 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from fastapi_cache.decorator import cache
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -13,7 +12,6 @@ from schemas.category_schema import (
     CategoryPutSchema,
     CategorySchema,
 )
-from utils.cache_coder import ORJsonCoder
 
 router = APIRouter(tags=["Category"])
 
