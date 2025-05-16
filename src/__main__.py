@@ -12,6 +12,7 @@ from fastapi.responses import ORJSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
+from prometheus_fastapi_instrumentator import Instrumentator
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.middleware.cors import CORSMiddleware
 
@@ -47,11 +48,21 @@ async def lifespan(app: FastAPI):
         logger.info("[!] Starting sentry")
         sentry_sdk.init(
             dsn=settings.TELEMETRY.SENTRY_DSN,
-            environment=settings.MODE,
-            release=await get_microservice_version(),
-            integrations=[FastApiIntegration()],
-            attach_stacktrace=True,
+            # Add data like request headers and IP for users,
+            # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
+            send_default_pii=True,
+            # Set traces_sample_rate to 1.0 to capture 100%
+            # of transactions for tracing.
             traces_sample_rate=1.0,
+            # Set profile_session_sample_rate to 1.0 to profile 100%
+            # of profile sessions.
+            profile_session_sample_rate=1.0,
+            # Set profile_lifecycle to "trace" to automatically
+            # run the profiler on when there is an active transaction
+            profile_lifecycle="trace",
+            integrations=[FastApiIntegration()],
+            release=await get_microservice_version(),
+            environment=settings.MODE,
         )
 
     # Resources initialization
@@ -88,9 +99,21 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# --------------------------------------------------
+# Instrumentator (monitoring Prometheus - Grafana)
+# --------------------------------------------------
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    excluded_handlers=["/metrics"],
+
+)
+instrumentator.instrument(app).expose(app)
+
 add_pagination(app)
 
-# Middleware
+# --------------------------------------------------
+#            FastAPI Middleware (FE)
+# --------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
