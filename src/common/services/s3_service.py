@@ -4,7 +4,6 @@ from typing import Any, BinaryIO
 
 from aioboto3 import Session
 from aiohttp import ClientError
-from fastapi import Request
 
 from src.config.config import settings
 from utils.logging import logger
@@ -15,6 +14,7 @@ class S3Service:
     """
     Wrapper around the aioboto3 S3 client.
     Methods are async.
+    Compatible with FastAPI, AWS S3 and Yandex Cloud Storage.
     """
 
     def __init__(self):
@@ -93,7 +93,3 @@ class S3Service:
         Get the public URL of a file in S3.
         """
         return f"{self._endpoint}/{self._bucket}/{key}"
-
-
-def get_s3_service(request: Request) -> S3Service:
-    return request.app.state.s3

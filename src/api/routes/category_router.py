@@ -7,7 +7,8 @@ from starlette import status
 
 from api.dao.category_dao import CategoryDAO
 from api.di.database import get_db
-from common.services.s3_service import S3Service, get_s3_service
+from common.deps.s3_service import get_s3_service
+from common.services.s3_service import S3Service
 from schemas.category_schema import (
     CategoryPostSchema,
     CategoryPutSchema,
