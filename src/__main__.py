@@ -16,6 +16,7 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.middleware.cors import CORSMiddleware
 
+from common.services.s3_service import S3Service
 from src.api.controllers.api_microservice_version import get_microservice_version
 from src.api.di.di import ResourceModule
 from src.api.di.redis_service import RedisService
@@ -68,6 +69,7 @@ async def lifespan(app: FastAPI):
     # Resources initialization
     logger.info("[!] Initializing resources...")
     app.state.resources = ResourceModule(redis=RedisService())
+    app.state.s3 = S3Service()
     logger.info("[+] Resources initialized successfully")
 
     # Redis Cache
@@ -105,7 +107,6 @@ app = FastAPI(
 instrumentator = Instrumentator(
     should_group_status_codes=False,
     excluded_handlers=["/metrics"],
-
 )
 instrumentator.instrument(app).expose(app)
 

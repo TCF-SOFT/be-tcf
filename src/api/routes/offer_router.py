@@ -20,7 +20,7 @@ router = APIRouter(tags=["Offers"])
     summary="Return all offers with pagination or filter them",
     status_code=status.HTTP_200_OK,
 )
-@cache(expire=60, coder=ORJsonCoder)
+# @cache(expire=60, coder=ORJsonCoder)
 async def search_offers(
     db_session: AsyncSession = Depends(get_db),
     product_id: UUID | None = None,

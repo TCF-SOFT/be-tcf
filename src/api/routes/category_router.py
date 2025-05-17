@@ -7,6 +7,7 @@ from starlette import status
 
 from api.dao.category_dao import CategoryDAO
 from api.di.database import get_db
+from common.services.s3_service import S3Service, get_s3_service
 from schemas.category_schema import (
     CategoryPostSchema,
     CategoryPutSchema,
@@ -53,8 +54,21 @@ async def post_category(
     category: CategoryPostSchema,
     image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(get_db),
+    s3: S3Service = Depends(get_s3_service),
 ):
-    return await CategoryDAO.add(db_session, **category.model_dump())
+    image_key = await s3.upload_file(
+        image_blob.file,
+        image_blob.filename,
+        remote_path="images/categories",
+        extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+    )
+
+    return await CategoryDAO.add(
+        db_session,
+        name=category.name,
+        image_url=s3.get_file_url(key=image_key),
+        slug=category.slug,
+    )
 
 
 @router.put(

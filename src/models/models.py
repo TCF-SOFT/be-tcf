@@ -60,6 +60,14 @@ class Offer(Base):
     # Relationships
     product = relationship("Product", back_populates="offers", lazy="joined")
 
+    # <-- Pydantic tiny helper ------------------------------
+    @property
+    def image_url(self) -> Optional[str]:
+        """Proxy `product.image_url` so Pydantic can see it."""
+        return self.product.image_url if self.product else None
+
+    # --------------------------------------------------------
+
 
 class Product(Base):
     id: Mapped[uuid_pk]

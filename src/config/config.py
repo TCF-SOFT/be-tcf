@@ -78,10 +78,12 @@ class AWSConfig(BaseModel):
     Represents the configuration settings for the AWS Resources.
     """
 
-    # S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY")
-    # S3_SECRET_KEY: str = env.str("S3_SECRET_KEY")
-    # S3_BUCKET_NAME: str = env.str("S3_BUCKET_NAME", "eag-alpha2-global-models")
-    pass
+    S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY")
+    S3_SECRET_KEY: str = env.str("S3_SECRET_KEY")
+    S3_DEFAULT_REGION: str = env.str("S3_DEFAULT_REGION", "storage")
+
+    S3_BUCKET_NAME: str = env.str("S3_BUCKET_NAME", "tcf-images")
+    S3_ENDPOINT_URL: str = env.str("S3_ENDPOINT_URL", "https://storage.yandexcloud.net")
 
 
 class SMTPConfig(BaseModel):
