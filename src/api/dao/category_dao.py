@@ -1,8 +1,9 @@
 from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.base import BaseDAO
+from common.exceptions.exceptions import DuplicateSlugError
 from models.models import Category
 
 
@@ -33,6 +34,9 @@ class CategoryDAO(BaseDAO):
             await db_session.refresh(obj)  # ← populate PK, defaults
             return obj
 
-        except SQLAlchemyError:
-            # `begin()` already rolled back; simply propagate for your 500 handler
-            raise
+        except IntegrityError as e:
+            slug_value = values.get("slug", "N/A")
+            raise DuplicateSlugError(slug=slug_value) from e
+
+        except SQLAlchemyError as e:
+            raise e
