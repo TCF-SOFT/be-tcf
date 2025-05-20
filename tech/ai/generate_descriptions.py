@@ -1,14 +1,11 @@
-import numpy as np
+import asyncio
+
 import pandas as pd
-import psycopg2
 from loguru import logger
 from openai import AsyncClient
-from pgvector.psycopg2 import register_vector
-from psycopg2.extras import execute_values
+from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import make_url
-import asyncio
-from pydantic import BaseModel
 
 from src.config.config import settings
 
@@ -31,8 +28,8 @@ engine = create_engine(settings.DB.PSQL_URL.replace("asyncpg", "psycopg2"))
 PROMPT_TEMPLATE = """
 # Generate a description for auto spare part
 ## Task
-Create a professional, engaging vehicle spare part (primary Ford) advertisement in Russian for ford-parts.com.ru 
-based on the provided vehicle spare part information. 
+Create a professional, engaging vehicle spare part (primary Ford) advertisement in Russian for ford-parts.com.ru
+based on the provided vehicle spare part information.
 The text should be 5-35 words long and focus on the spare part and where it probably used in car.
 ## Structure
 1. **Spare part Overview**: Brief description of the spare part, its function, and its importance
@@ -42,7 +39,7 @@ The text should be 5-35 words long and focus on the spare part and where it prob
 - Create engaging descriptions that highlight practical benefits
 - Translate spare parts names to Russian where appropriate (industry standard terms can remain)
 - Describe equipment in terms of user benefits and real-world applications
-- Vary your opening approaches - NEVER start with "Найдите" or "Откройте" or "Ищете", consider starting with driving 
+- Vary your opening approaches - NEVER start with "Найдите" or "Откройте" or "Ищете", consider starting with driving
 experience, spare part importance and reliability or standout feature
 - Use diverse sentence structures and paragraph organization
 ## Important Restrictions
@@ -61,9 +58,9 @@ experience, spare part importance and reliability or standout feature
   * Superlatives and unverifiable claims
   * Technical jargon without explanation
   * Inappropriate translations or double meanings
-  
+
 ## Input data context:
-1. Title is the name of the spare part. (if name doesn't make, e.g "1" - ignore it and try to use a cross_number 
+1. Title is the name of the spare part. (if name doesn't make, e.g "1" - ignore it and try to use a cross_number
 instead.)
 2. Cross number is a unique identifier for the spare part.
 3. Subcategory is given in English but it is a transliteration of Russian word.

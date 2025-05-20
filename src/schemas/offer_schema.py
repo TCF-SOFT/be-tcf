@@ -20,7 +20,7 @@ class _OfferBase(BaseModel):
     super_wholesale_price_rub: float | None = Field(None, examples=[579.00])
     quantity: int = Field(..., examples=[2])
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
 class OfferSchema(_OfferBase):
@@ -29,6 +29,10 @@ class OfferSchema(_OfferBase):
     offer_bitrix_id: Optional[str] = Field(None, examples=["278495"])
 
     product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
+
+    image_url: Optional[str] = Field(
+        None, examples=["https://chibisafe.eucalytics.uk//REXA2bZVWeZT.webp"]
+    )
 
 
 class OfferPostSchema(_OfferBase):

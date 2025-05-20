@@ -7,11 +7,16 @@ from starlette import status
 
 from api.dao.category_dao import CategoryDAO
 from api.di.database import get_db
+from common.deps.s3_service import get_s3_service
+from common.exceptions.exceptions import DuplicateSlugError
+from common.functions.check_file_mime_type import is_file_mime_type_correct
+from common.services.s3_service import S3Service
 from schemas.category_schema import (
     CategoryPostSchema,
     CategoryPutSchema,
     CategorySchema,
 )
+from utils.logging import logger
 
 router = APIRouter(tags=["Category"])
 
@@ -51,10 +56,39 @@ async def get_category_by_slug(
 )
 async def post_category(
     category: CategoryPostSchema,
-    image_blob: UploadFile = File(...),
+    image: UploadFile = File(...),
     db_session: AsyncSession = Depends(get_db),
+    s3: S3Service = Depends(get_s3_service),
 ):
-    return await CategoryDAO.add(db_session, **category.model_dump())
+    try:
+        tmp_file_content: bytes = await image.read(2048)
+        await image.seek(0)
+        is_file_mime_type_correct(tmp_file_content, image.filename)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail=f"File contents don’t match the file extension: {e}",
+        )
+
+    image_key = await s3.upload_file(
+        image.file,
+        image.filename,
+        remote_path="images/categories",
+        extra_args={"ACL": "public-read", "ContentType": image.content_type},
+    )
+    try:
+        return await CategoryDAO.add(
+            db_session,
+            name=category.name,
+            image_url=s3.get_file_url(key=image_key),
+            slug=category.slug,
+        )
+
+    except DuplicateSlugError as e:
+        logger.warning(
+            f"Attempt to create a category with existing slug: {category.slug}"
+        )
+        raise e
 
 
 @router.put(

@@ -1,4 +1,5 @@
-from typing import Optional
+import json
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import (
@@ -7,6 +8,7 @@ from pydantic import (
     HttpUrl,
     computed_field,
     field_serializer,
+    model_validator,
 )
 from slugify import slugify
 
@@ -32,6 +34,14 @@ class CategoryPostSchema(_CategoryBaseSchema):
     @property
     def slug(self) -> str:
         return slugify(self.name, word_boundary=True, lowercase=True)
+
+    @model_validator(mode="before")
+    @classmethod
+    def to_py_dict(cls, data: Any):
+        """
+        Transform the input data to a dictionary.
+        """
+        return json.loads(data)
 
 
 class CategoryPutSchema(_CategoryBaseSchema):
