@@ -35,6 +35,7 @@ dependencies = [
     "python-slugify>=8.0.4",
     "python-multipart>=0.0.20",
     "aioboto3>=14.3.0",
+    "python-magic-bin>=0.4.14",
 ]
 
 
