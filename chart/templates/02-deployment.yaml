@@ -6,6 +6,9 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     app: {{ .Values.app }}
+    tags.datadoghq.com/env: {{ .Values.datadog.env }}
+    tags.datadoghq.com/service: {{ .Values.datadog.service }}
+    tags.datadoghq.com/version: {{ .Values.datadog.version }}
 
 spec:
   replicas: {{ .Values.deployment.replicas }}
@@ -16,6 +19,12 @@ spec:
     metadata:
       labels:
         app: {{ .Values.app }}
+        tags.datadoghq.com/env: {{ .Values.datadog.env }}
+        tags.datadoghq.com/service: {{ .Values.datadog.service }}
+        tags.datadoghq.com/version: {{ .Values.datadog.version }}
+        admission.datadoghq.com/enabled: "true"
+      annotations:
+        admission.datadoghq.com/python-lib.version: v3.7.1
     spec:
       containers:
         - name: {{ .Values.app }}
@@ -30,7 +39,13 @@ spec:
             limits:
               memory: {{ .Values.resources.limits.memory }}
               cpu: {{ .Values.resources.limits.cpu }}
-
+          env:
+            - name: DD_PROFILING_ENABLED
+              value: "true"
+            - name: DD_LOGS_INJECTION
+              value: "true"
+            - name: DD_GIT_REPOSITORY_URL
+              value: github.com/tcf-soft/be-tcf
           envFrom:
           - secretRef:
               name: {{ .Values.secrets.api_utils }}
