@@ -9,7 +9,6 @@ WORKDIR /src
 
 # Copy dependencies and lockfile to the image
 COPY pyproject.toml uv.lock ./
-COPY .env ./
 
 # Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
