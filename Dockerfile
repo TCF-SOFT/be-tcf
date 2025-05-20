@@ -1,11 +1,15 @@
 # Use a Python image with uv pre-installed
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
+RUN apt-get update && apt-get install -y \
+    libmagic-dev
+
 # Install the project into `/src`
 WORKDIR /src
 
 # Copy dependencies and lockfile to the image
 COPY pyproject.toml uv.lock ./
+COPY .env ./
 
 # Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
