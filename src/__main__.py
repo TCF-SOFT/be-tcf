@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 
 import sentry_sdk
 import uvicorn
+from ddtrace import patch_all
 
 # from ddtrace import patch_all
 from fastapi import FastAPI, Request
@@ -84,9 +85,9 @@ async def lifespan(app: FastAPI):
         logger.info("[!] Shutting down the application...")
 
 
-# Datadog tracing (should be initialized before the src creation)
-# if settings.TELEMETRY.DD_TRACE_ENABLED:
-# patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
+# Datadog tracing (should be initialized before the app creation)
+if settings.TELEMETRY.DD_TRACE_ENABLED:
+    patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
 
 app = FastAPI(
     title=docs.title,

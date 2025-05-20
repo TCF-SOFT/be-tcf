@@ -8,7 +8,6 @@ metadata:
     app: {{ .Values.app }}
     tags.datadoghq.com/env: {{ .Values.datadog.env }}
     tags.datadoghq.com/service: {{ .Values.datadog.service }}
-    tags.datadoghq.com/version: {{ .Values.datadog.version }}
 
 spec:
   replicas: {{ .Values.deployment.replicas }}
@@ -21,7 +20,6 @@ spec:
         app: {{ .Values.app }}
         tags.datadoghq.com/env: {{ .Values.datadog.env }}
         tags.datadoghq.com/service: {{ .Values.datadog.service }}
-        tags.datadoghq.com/version: {{ .Values.datadog.version }}
         admission.datadoghq.com/enabled: "true"
       annotations:
         admission.datadoghq.com/python-lib.version: v3.7.1
@@ -40,6 +38,10 @@ spec:
               memory: {{ .Values.resources.limits.memory }}
               cpu: {{ .Values.resources.limits.cpu }}
           env:
+            - name: DD_TRACE_ENABLED
+              value: "true"
+            - name: DD_AGENT_HOST
+              value: datadog-agent.datadog.svc.cluster.local
             - name: DD_PROFILING_ENABLED
               value: "true"
             - name: DD_LOGS_INJECTION
