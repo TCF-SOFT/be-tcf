@@ -6,6 +6,11 @@ namespace: dev
 app: be-tcf
 host: api-tcf.eucalytics.uk
 
+datadog:
+  env: prod
+  service: be-tcf
+  version: 1.5.0
+
 deployment:
   name: be-tcf-deployment
   replicas: 1
