@@ -42,7 +42,7 @@ class ProductDAO(BaseDAO):
         query = select(cls.model).where(
             or_(
                 func.replace(cls.model.name, ".", "").ilike(search_term),
-                func.replace(cls.model.manufacturer_number, ".", "").ilike(search_term),
+                func.replace(cls.model.cross_number, ".", "").ilike(search_term),
                 func.replace(cls.model.address_id, ".", "").ilike(search_term),
             )
         )

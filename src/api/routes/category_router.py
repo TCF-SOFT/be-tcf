@@ -56,25 +56,23 @@ async def get_category_by_slug(
 )
 async def post_category(
     category: CategoryPostSchema,
-    image: UploadFile = File(...),
+    image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(get_db),
     s3: S3Service = Depends(get_s3_service),
 ):
     try:
-        tmp_file_content: bytes = await image.read(2048)
-        await image.seek(0)
-        is_file_mime_type_correct(tmp_file_content, image.filename)
+        await is_file_mime_type_correct(image_blob)
     except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
             detail=f"File contents don’t match the file extension: {e}",
         )
 
-    image_key = await s3.upload_file(
-        image.file,
-        image.filename,
+    image_key: Annotated[str, "folder/<uuid>.ext"] = await s3.upload_file(
+        image_blob.file,
+        image_blob.filename,
         remote_path="images/categories",
-        extra_args={"ACL": "public-read", "ContentType": image.content_type},
+        extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
     )
     try:
         return await CategoryDAO.add(
@@ -88,6 +86,7 @@ async def post_category(
         logger.warning(
             f"Attempt to create a category with existing slug: {category.slug}"
         )
+        await s3.remove_file(image_key)
         raise e
 
 

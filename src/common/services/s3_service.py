@@ -88,6 +88,24 @@ class S3Service:
 
         return key
 
+    async def remove_file(
+        self,
+        key: str,
+        bucket_name: str | None = None,
+    ) -> None:
+        """
+        Remove a file from S3.
+        """
+        async with self._client() as s3:
+            try:
+                await s3.delete_object(
+                    Bucket=bucket_name or self._bucket,
+                    Key=key,
+                )
+            except ClientError as exc:
+                logger.exception("S3 delete failed: %s", exc)
+                raise
+
     def get_file_url(self, key: str) -> str:
         """
         Get the public URL of a file in S3.

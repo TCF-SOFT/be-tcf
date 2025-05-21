@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from sqlalchemy.exc import SQLAlchemyError, IntegrityError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.base import BaseDAO
