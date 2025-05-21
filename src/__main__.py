@@ -87,7 +87,17 @@ async def lifespan(app: FastAPI):
 
 # Datadog tracing (should be initialized before the app creation)
 if settings.TELEMETRY.DD_TRACE_ENABLED:
-    patch_all(fastapi=True, loguru=True, redis=True, botocore=True, httpx=True)
+    patch_all(
+        fastapi=True,
+        loguru=True,
+        redis=True,
+        aiobotocore=True,
+        botocore=True,
+        httpx=True,
+        asyncpg=True,
+        openai=True,
+        aiohttp=True,
+    )
 
 app = FastAPI(
     title=docs.title,
