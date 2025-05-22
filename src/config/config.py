@@ -90,11 +90,10 @@ class SMTPConfig(BaseModel):
     """
     Represents the configuration settings for the SMTP.
     """
-
-    # SMTP_HOST: str = env.str("SMTP_HOST")
-    # SMTP_PORT: int = env.int("SMTP_PORT")
-    # SMTP_USER: str = env.str("SMTP_USER")
-    # SMTP_PASS: str = env.str("SMTP_PASS")
+    SMTP_HOST: str = env.str("SMTP_HOST")
+    SMTP_PORT: int = env.int("SMTP_PORT")
+    SMTP_USER: str = env.str("SMTP_USER")
+    SMTP_PASS: str = env.str("SMTP_PASS")
     pass
 
 
