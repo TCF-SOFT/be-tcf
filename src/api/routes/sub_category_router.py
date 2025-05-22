@@ -9,7 +9,7 @@ from starlette import status
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
 from common.deps.s3_service import get_s3_service
-from common.exceptions.exceptions import DuplicateSlugError
+from common.exceptions.exceptions import DuplicateNameError
 from common.functions.check_file_mime_type import is_file_mime_type_correct
 from common.services.s3_service import S3Service
 from schemas.sub_category_schema import (
@@ -94,7 +94,7 @@ async def post_sub_category(
             slug=sub_category.slug,
         )
 
-    except DuplicateSlugError as e:
+    except DuplicateNameError as e:
         logger.warning(
             f"Attempt to create a sub_category with existing slug: {sub_category.slug}"
         )

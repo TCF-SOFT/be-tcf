@@ -45,4 +45,10 @@ class CategoryPostSchema(_CategoryBaseSchema):
 
 
 class CategoryPutSchema(_CategoryBaseSchema):
-    pass
+    @model_validator(mode="before")
+    @classmethod
+    def to_py_dict(cls, data: Any):
+        """
+        Transform the input data to a dictionary.
+        """
+        return json.loads(data)

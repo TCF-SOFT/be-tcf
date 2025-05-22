@@ -3,7 +3,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.dao.base import BaseDAO
-from common.exceptions.exceptions import DuplicateSlugError
+from common.exceptions.exceptions import DuplicateNameError
 from models.models import SubCategory
 
 
@@ -36,7 +36,7 @@ class SubCategoryDAO(BaseDAO):
 
         except IntegrityError as e:
             slug_value = values.get("slug", "N/A")
-            raise DuplicateSlugError(slug=slug_value) from e
+            raise DuplicateNameError(slug=slug_value) from e
 
         except SQLAlchemyError as e:
             raise e

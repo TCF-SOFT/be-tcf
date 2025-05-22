@@ -77,3 +77,5 @@ class CartItem(Base):
     # Relationship with Cocktail (M cart_items -> 1 cocktail)
     cocktail = relationship("Cocktail", lazy="selectin")
 ```
+
+## TCF

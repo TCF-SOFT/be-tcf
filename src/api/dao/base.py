@@ -3,7 +3,9 @@ from uuid import UUID
 
 from sqlalchemy import select
 from sqlalchemy import update as sqlalchemy_update
-from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+
+from common.exceptions.exceptions import DuplicateNameError
 
 
 class BaseDAO:
@@ -18,10 +20,7 @@ class BaseDAO:
     # self.model (in instance method)
     # cls.model (in classmethod)
     @classmethod
-    async def find_all(
-        cls, db_session, filter_by: dict, count: bool = False, order_by: str = None
-    ) -> list:
-        # TODO: implement order_by and count
+    async def find_all(cls, db_session, filter_by: dict, order_by: str = None) -> list:
         query = select(cls.model).filter_by(**filter_by).order_by(order_by)
         result = await db_session.execute(query)
         res = result.scalars().all()
@@ -64,15 +63,18 @@ class BaseDAO:
         :param values:
         :return:
         """
-        async with db_session.begin():
-            new_instance = cls.model(**values)
-            db_session.add(new_instance)
-            try:
-                await db_session.commit()
-            except SQLAlchemyError as e:
-                await db_session.rollback()
-                raise e
-            return new_instance
+        try:
+            async with db_session.begin():  # ← commit on exit, rollback on error
+                new_instance = cls.model(**values)
+                db_session.add(new_instance)
+                return new_instance
+
+        except IntegrityError as e:
+            name_value = values.get("name", "N/A")
+            raise DuplicateNameError(name=name_value) from e
+
+        except SQLAlchemyError as e:
+            raise e
 
     @classmethod
     async def add_enum(cls, db_session, model) -> Any:
@@ -86,20 +88,23 @@ class BaseDAO:
     # ---------------------------------------
     @classmethod
     async def update(cls, db_session, filter_by: dict, **values) -> int:
-        async with db_session.begin():
-            query = (
-                sqlalchemy_update(cls.model)
-                .where(*[getattr(cls.model, k) == v for k, v in filter_by.items()])
-                .values(**values)
-                .execution_options(synchronize_db_session="fetch")
-            )
-            result = await db_session.execute(query)
-            try:
-                await db_session.commit()
-            except SQLAlchemyError as e:
-                await db_session.rollback()
-                raise e
-            return result.rowcount
+        query = (
+            sqlalchemy_update(cls.model)
+            .where(*[getattr(cls.model, k) == v for k, v in filter_by.items()])
+            .values(**values)
+            .execution_options(synchronize_db_session="fetch")
+        )
+        try:
+            async with db_session.begin():  # ← commit on exit, rollback on error
+                result = await db_session.execute(query)
+                return result.rowcount
+
+        except IntegrityError as e:
+            name_value = values.get("name", "N/A")
+            raise DuplicateNameError(name=name_value) from e
+
+        except SQLAlchemyError as e:
+            raise e
 
     # ---------------------------------------
     #            Delete Methods

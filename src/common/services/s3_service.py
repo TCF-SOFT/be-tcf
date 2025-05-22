@@ -4,6 +4,7 @@ from typing import Any, BinaryIO
 
 from aioboto3 import Session
 from aiohttp import ClientError
+from pydantic import HttpUrl
 
 from src.config.config import settings
 from utils.logging import logger
@@ -106,7 +107,7 @@ class S3Service:
                 logger.exception("S3 delete failed: %s", exc)
                 raise
 
-    def get_file_url(self, key: str) -> str:
+    def get_file_url(self, key: str) -> HttpUrl | str:
         """
         Get the public URL of a file in S3.
         """
