@@ -6,12 +6,15 @@ from fastapi_cache.decorator import cache, logger
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from api.controllers.update_entity_controller import update_entity_with_optional_image
+from api.dao.category_dao import CategoryDAO
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
 from common.deps.s3_service import get_s3_service
 from common.exceptions.exceptions import DuplicateNameError
 from common.functions.check_file_mime_type import is_file_mime_type_correct
 from common.services.s3_service import S3Service
+from schemas.category_schema import CategorySchema
 from schemas.sub_category_schema import (
     SubCategoryPostSchema,
     SubCategoryPutSchema,
@@ -31,18 +34,15 @@ router = APIRouter(tags=["Sub-Category"])
 @cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_sub_categories(
     db_session: AsyncSession = Depends(get_db),
-    slug: str = None,
     category_id: UUID | None = None,
-    category_slug: str = None,
-    count_only: bool = False,
+    category_slug: str = None
 ):
     filters = {}
-    if slug:
-        filters["slug"] = slug
+    if category_slug:
+        category: CategorySchema = await CategoryDAO.find_by_slug(db_session, category_slug)
+        filters["category_id"] = category.id
     if category_id:
         filters["category_id"] = category_id
-    if category_slug:
-        filters["category_slug"] = category_slug
 
     return await SubCategoryDAO.find_all(db_session, filter_by=filters)
 
@@ -78,50 +78,55 @@ async def post_sub_category(
             detail=f"File contents don’t match the file extension: {e}",
         )
 
-    image_key: Annotated[str, "folder/<uuid>.ext"] = await s3.upload_file(
-        image_blob.file,
-        image_blob.filename,
-        remote_path="images/sub-categories",
-        extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+    image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
+        image_blob.filename, "images/sub_categories"
     )
+    sub_category.image_url = s3.get_file_url(key=image_key)
     try:
-        return await SubCategoryDAO.add(
-            db_session,
-            category_id=sub_category.category_id,
-            category_slug=sub_category.category_slug,
-            name=sub_category.name,
-            image_url=s3.get_file_url(key=image_key),
-            slug=sub_category.slug,
+        res = await SubCategoryDAO.add(
+            **sub_category.model_dump(), db_session=db_session
         )
-
+        # Два решения: добавлять в ответ или использовать lazy=joined и делать refresh
+        # category = await CategoryDAO.find_by_id(db_session, sub_category.category_id)
+        # return SubCategorySchema.model_validate(
+        #     res, from_attributes=True
+        # ).model_copy(update={"category_slug": category.slug})
+        await db_session.refresh(res, ["category"])
+        await s3.upload_file(
+            file=image_blob.file,
+            key=image_key,
+            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+        )
+        return res
     except DuplicateNameError as e:
         logger.warning(
             f"Attempt to create a sub_category with existing slug: {sub_category.slug}"
         )
-        await s3.remove_file(image_key)
         raise e
 
 
 @router.put(
     "/sub-category/{sub_category_id}",
-    response_model=int,
+    response_model=SubCategorySchema,
     summary="Update a sub_category by id",
     status_code=status.HTTP_200_OK,
 )
 async def put_sub_category(
     sub_category_id: UUID,
-    category: SubCategoryPutSchema,
+    sub_category: SubCategoryPutSchema,
+    image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(get_db),
+    s3: S3Service = Depends(get_s3_service),
 ):
-    filters = {"id": sub_category_id}
-
-    res: Annotated[int, "affected rows"] = await SubCategoryDAO.update(
-        db_session, filters, **category.model_dump()
+    return await update_entity_with_optional_image(
+        entity_id=sub_category_id,
+        payload=sub_category,
+        dao=SubCategoryDAO,
+        upload_path="images/sub_categories",
+        db_session=db_session,
+        s3=s3,
+        image_blob=image_blob,
     )
-
-    if not res:
-        raise HTTPException(status_code=404, detail="Sub Category not found")
-    return res
 
 
 @router.delete(

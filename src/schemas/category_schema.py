@@ -4,6 +4,7 @@ from uuid import UUID
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     Field,
     HttpUrl,
     computed_field,
@@ -22,6 +23,8 @@ class _CategoryBaseSchema(BaseModel):
     @field_serializer("image_url")
     def serialize_image_url(self, v):
         return str(v) if v else None
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CategorySchema(_CategoryBaseSchema):
@@ -57,25 +60,3 @@ class CategoryPutSchema(_CategoryBaseSchema):
         Transform the input data to a dictionary.
         """
         return json.loads(data)
-
-
-class CategoryPatchSchema(BaseModel):
-    name: str | None = Field(None, examples=["Свечи"])
-    image_url: HttpUrl | None = Field(
-        None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
-    )
-    slug: str | None = Field(None, examples=["svechi-ford"])
-
-    @model_validator(mode="before")
-    @classmethod
-    def to_py_dict(cls, data: Any):
-        """
-        Transform the input data to a dictionary.
-        """
-        return json.loads(data)
-
-    @model_validator(mode="after")
-    def generate_slug(self) -> "CategoryPatchSchema":
-        if not self.slug and self.name:
-            self.slug = slugify(self.name, word_boundary=True, lowercase=True)
-        return self

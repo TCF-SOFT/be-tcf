@@ -137,11 +137,17 @@ class SubCategory(Base):
     image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
 
     category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("categories.id"))
-    category_slug: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
-    category = relationship("Category", back_populates="sub_categories")
+    category = relationship("Category", back_populates="sub_categories", lazy="joined")
     products = relationship("Product", back_populates="sub_category")
+
+    @property
+    def category_slug(self) -> str:
+        """
+        Proxy `category.slug` so Pydantic can see it.
+        """
+        return self.category.slug if self.category else None
 
     # Constraints
     __table_args__ = (UniqueConstraint("slug", name="sub_categories_slug_key"),)
