@@ -9,9 +9,7 @@ from pydantic import (
     computed_field,
     field_serializer,
     model_validator,
-    field_validator,
 )
-from pydantic_core.core_schema import ValidationInfo
 from slugify import slugify
 
 

@@ -175,7 +175,9 @@ async def put_category(
     category["image_url"] = s3.get_file_url(key=image_key)
 
     try:
-        res = await CategoryDAO.update(db_session, filter_by={"id": category_id}, **category)
+        res = await CategoryDAO.update(
+            db_session, filter_by={"id": category_id}, **category
+        )
         await s3.upload_file(
             file=image_blob.file,
             key=image_key,
