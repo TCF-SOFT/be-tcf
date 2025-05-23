@@ -12,5 +12,3 @@ async def send_waybill(email: EmailStr) -> None:
     Send waybill to email
     """
     send_waybill_confirmation_email.delay(email=email)
-
-

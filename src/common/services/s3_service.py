@@ -55,25 +55,14 @@ class S3Service:
     async def upload_file(
         self,
         file: BinaryIO,
-        file_name: str,
+        key: str,
         *,
-        remote_path: str = "tmp/",
         bucket_name: str | None = None,
         extra_args: dict[str, Any] | None = None,
-    ) -> str:
+    ) -> None:
         """
-        Stream `file` to S3 and return the object key.
-        `remote_path` may contain slashes, is auto-trimmed, and can be blank.
-        All parameters after * are keyword-only.
+        Upload a file to S3.
         """
-        # ────────────────────────────────
-        # 1. safe suffix extraction
-        # ────────────────────────────────
-        suffix = Path(file_name).suffix.lower()
-        # ────────────────────────────────
-        # 2. build key: <remote_path>/<uuid>.<ext>
-        # ────────────────────────────────
-        key = f"{remote_path.rstrip('/')}/{uuid.uuid4().hex}{suffix}".lstrip("/")
         logger.info("Uploading file to S3: %s", key)
         async with self._client() as s3:
             try:
@@ -86,8 +75,6 @@ class S3Service:
             except ClientError as exc:
                 logger.exception("S3 upload failed: %s", exc)
                 raise
-
-        return key
 
     async def remove_file(
         self,
@@ -112,3 +99,14 @@ class S3Service:
         Get the public URL of a file in S3.
         """
         return f"{self._endpoint}/{self._bucket}/{key}"
+
+    @staticmethod
+    def generate_key(file_name: str, remote_path: str = "tmp/") -> str:
+        """
+        Generate a unique key for the file to be uploaded to S3.
+        # 1. safe suffix extraction
+        # 2. build key: <remote_path>/<uuid>.<ext>
+        """
+        suffix = Path(file_name).suffix.lower()
+        key = f"{remote_path.rstrip('/')}/{uuid.uuid4().hex}{suffix}".lstrip("/")
+        return key

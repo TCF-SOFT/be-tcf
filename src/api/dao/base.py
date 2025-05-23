@@ -87,7 +87,7 @@ class BaseDAO:
     #            PUT Methods
     # ---------------------------------------
     @classmethod
-    async def update(cls, db_session, filter_by: dict, **values) -> int:
+    async def update(cls, db_session, filter_by: dict, **values) -> Any:
         query = (
             sqlalchemy_update(cls.model)
             .where(*[getattr(cls.model, k) == v for k, v in filter_by.items()])
@@ -97,7 +97,14 @@ class BaseDAO:
         try:
             async with db_session.begin():  # ← commit on exit, rollback on error
                 result = await db_session.execute(query)
-                return result.rowcount
+                if result.rowcount == 0:
+                    return None
+
+                select_query = select(cls.model).where(
+                    *[getattr(cls.model, k) == v for k, v in filter_by.items()]
+                )
+                res = await db_session.execute(select_query)
+                return res.scalar_one_or_none()
 
         except IntegrityError as e:
             name_value = values.get("name", "N/A")

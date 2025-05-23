@@ -12,6 +12,7 @@ from common.exceptions.exceptions import DuplicateNameError
 from common.functions.check_file_mime_type import is_file_mime_type_correct
 from common.services.s3_service import S3Service
 from schemas.category_schema import (
+    CategoryPatchSchema,
     CategoryPostSchema,
     CategoryPutSchema,
     CategorySchema,
@@ -31,7 +32,6 @@ router = APIRouter(tags=["Category"])
 async def get_categories(
     db_session: AsyncSession = Depends(get_db),
     slug: str = None,
-    count_only: bool = False,
     order_by: str = None,
 ):
     filters = {}
@@ -55,7 +55,7 @@ async def get_category_by_slug(
     "/category", response_model=CategorySchema, status_code=status.HTTP_201_CREATED
 )
 async def post_category(
-    category: CategoryPostSchema,
+    category_payload: CategoryPostSchema,
     image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(get_db),
     s3: S3Service = Depends(get_s3_service),
@@ -68,42 +68,42 @@ async def post_category(
             detail=f"File contents don’t match the file extension: {e}",
         )
 
-    image_key: Annotated[str, "folder/<uuid>.ext"] = await s3.upload_file(
-        image_blob.file,
-        image_blob.filename,
-        remote_path="images/categories",
-        extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+    image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
+        image_blob.filename, "images/categories"
     )
-
-    category.image_url = s3.get_file_url(key=image_key)
+    category_payload.image_url = s3.get_file_url(key=image_key)
 
     try:
-        return await CategoryDAO.add(db_session, **category.model_dump())
+        res = await CategoryDAO.add(db_session, **category_payload.model_dump())
+        await s3.upload_file(
+            file=image_blob.file,
+            key=image_key,
+            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+        )
+        return res
 
     except DuplicateNameError as e:
-        await s3.remove_file(image_key)
         logger.warning(
-            f"Attempt to create a category with existing slug/name: {category.name}"
+            f"Attempt to create a category with existing slug/name: {category_payload.name}"
         )
         raise e
 
 
-@router.put(
+@router.patch(
     "/category/{category_id}",
-    response_model=int,
-    summary="Update category by id",
+    response_model=CategorySchema,
     status_code=status.HTTP_200_OK,
+    summary="Selective update category by id",
 )
-async def put_category(
+async def patch_category(
     category_id: UUID,
-    category: CategoryPutSchema,
+    category_payload: CategoryPatchSchema,
     image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(get_db),
     s3: S3Service = Depends(get_s3_service),
 ):
-    filters = {"id": category_id}
+    category: dict = category_payload.model_dump(exclude_unset=True)
     image_key: str | None = None
-    payload = category.model_dump(exclude_unset=True)
 
     if image_blob:
         try:
@@ -114,23 +114,76 @@ async def put_category(
                 detail=f"File contents don’t match the file extension: {e}",
             )
 
-        image_key: Annotated[str, "folder/<uuid>.ext"] = await s3.upload_file(
-            image_blob.file,
-            image_blob.filename,
-            remote_path="images/categories",
-            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+        image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
+            image_blob.filename, "images/categories"
         )
-        payload["image_url"] = s3.get_file_url(key=image_key)
+        category["image_url"] = s3.get_file_url(key=image_key)
+
+    if not category:
+        raise HTTPException(status_code=400, detail="No data provided for update")
 
     try:
-        res: Annotated[int, "affected rows"] = await CategoryDAO.update(
-            db_session, filters, **payload
+        updated = await CategoryDAO.update(
+            db_session, filter_by={"id": category_id}, **category
         )
     except DuplicateNameError as e:
-        if image_key:
-            await s3.remove_file(image_key)
         logger.warning(
-            f"Attempt to create a category with existing slug/name: {category.name}"
+            f"Attempt to create a category with existing slug/name: {category_payload.name}"
+        )
+        raise e
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Category not found")
+
+    # If an image was provided, upload it to S3
+    if image_blob and image_key:
+        await s3.upload_file(
+            image_blob.file,
+            key=image_key,
+            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+        )
+
+    return updated
+
+
+@router.put(
+    "/category/{category_id}",
+    response_model=int,
+    summary="Update category by id",
+    status_code=status.HTTP_200_OK,
+)
+async def put_category(
+    category_id: UUID,
+    category_payload: CategoryPutSchema,
+    image_blob: UploadFile = File(...),
+    db_session: AsyncSession = Depends(get_db),
+    s3: S3Service = Depends(get_s3_service),
+):
+    category: dict = category_payload.model_dump(exclude_unset=True)
+
+    try:
+        await is_file_mime_type_correct(image_blob)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail=f"File contents don’t match the file extension: {e}",
+        )
+
+    image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
+        image_blob.filename, "images/categories"
+    )
+    category["image_url"] = s3.get_file_url(key=image_key)
+
+    try:
+        res = await CategoryDAO.update(db_session, filter_by={"id": category_id}, **category)
+        await s3.upload_file(
+            file=image_blob.file,
+            key=image_key,
+            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+        )
+    except DuplicateNameError as e:
+        logger.warning(
+            f"Attempt to create a category with existing slug/name: {category_payload.name}"
         )
         raise e
 

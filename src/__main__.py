@@ -4,8 +4,6 @@ from contextlib import asynccontextmanager
 import sentry_sdk
 import uvicorn
 from ddtrace import patch_all
-
-# from ddtrace import patch_all
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -28,7 +26,8 @@ from src.api.routes.offer_router import router as offer_router
 from src.api.routes.product_router import router as product_router
 from src.api.routes.sub_category_router import router as sub_category_router
 from src.api.routes.user_router import router as user_router
-from src.api.routes.waybill_router import router as waybill_router
+
+# from src.api.routes.waybill_router import router as waybill_router
 from src.api.routes.version_router import router as version_router
 from src.config.config import settings
 from src.docs import docs
