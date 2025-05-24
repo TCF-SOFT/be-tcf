@@ -1,4 +1,5 @@
-from typing import Optional
+import json
+from typing import Any, Optional
 from uuid import UUID
 
 from pydantic import (
@@ -8,13 +9,13 @@ from pydantic import (
     HttpUrl,
     computed_field,
     field_serializer,
+    model_validator,
 )
 from slugify import slugify
 
 
 class _ProductBase(BaseModel):
     address_id: Optional[str] = Field(None, examples=["AA-TEST"])
-
     name: str = Field(..., examples=["Колодки тормозные передние Escort 1990-2000"])
     cross_number: Optional[str] = Field(
         None,
@@ -24,7 +25,10 @@ class _ProductBase(BaseModel):
     )
     description: Optional[str] = Field(None, examples=["Колодки тормозные передние"])
     image_url: Optional[HttpUrl] = Field(
-        None, examples=["https://chibisafe.eucalytics.uk//REXA2bZVWeZT.webp"]
+        None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
+    )
+    sub_category_id: UUID = Field(
+        ..., examples=["34805edd-26da-456b-8360-aee69bce5092"]
     )
 
     model_config = ConfigDict(from_attributes=True)
@@ -37,29 +41,37 @@ class _ProductBase(BaseModel):
 class ProductSchema(_ProductBase):
     id: UUID
     bitrix_id: Optional[str] = Field(None, examples=["278495"])
-
     slug: Optional[str] = None
-
-    sub_category_id: UUID = Field(
-        ..., examples=["917e7aab-d859-4e2d-84bf-9a1c844e428e"]
-    )
-    sub_category_slug: str = Field(..., examples=["kolodki-tormoznye-diskovye"])
+    category_slug: str = Field(..., examples=["svechi-ford"])
+    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
 
 
 class ProductPostSchema(_ProductBase):
-    # slug: Optional[str] = None
-
-    sub_category_id: UUID = Field(
-        ..., examples=["34805edd-26da-456b-8360-aee69bce5092"]
-    )
-    sub_category_slug: str = Field(..., examples=["podkrylki"])
-
     # It is not visible in the API, in this case it is not necessary because slug is internal thing
     @computed_field
     @property
     def slug(self) -> str:
         return slugify(self.name, word_boundary=True, lowercase=True)
 
+    @model_validator(mode="before")
+    @classmethod
+    def to_py_dict(cls, data: Any):
+        """
+        Transform the input data to a dictionary.
+        """
+        return json.loads(data)
+
 
 class ProductPutSchema(_ProductBase):
-    pass
+    @computed_field
+    @property
+    def slug(self) -> str:
+        return slugify(self.name, word_boundary=True, lowercase=True)
+
+    @model_validator(mode="before")
+    @classmethod
+    def to_py_dict(cls, data: Any):
+        """
+        Transform the input data to a dictionary.
+        """
+        return json.loads(data)

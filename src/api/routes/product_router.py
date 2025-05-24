@@ -1,15 +1,23 @@
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.controllers.update_entity_controller import update_entity_with_optional_image
 from api.dao.product_dao import ProductDAO
+from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
+from common.deps.s3_service import get_s3_service
+from common.exceptions.exceptions import DuplicateNameError
+from common.functions.check_file_mime_type import is_file_mime_type_correct
+from common.services.s3_service import S3Service
 from schemas.product_schema import ProductPostSchema, ProductPutSchema, ProductSchema
+from schemas.sub_category_schema import SubCategorySchema
 from utils.cache_coder import ORJsonCoder
+from utils.logging import logger
 
 router = APIRouter(tags=["Products"])
 
@@ -20,18 +28,20 @@ router = APIRouter(tags=["Products"])
     summary="Return all products with pagination or filter them",
     status_code=status.HTTP_200_OK,
 )
-@cache(expire=60, coder=ORJsonCoder)
-async def search_products(
+# @cache(expire=60, coder=ORJsonCoder)
+async def get_products(
     db_session: AsyncSession = Depends(get_db),
     sub_category_id: UUID | None = None,
     sub_category_slug: str | None = None,
 ):
     filters = {}
+    if sub_category_slug:
+        sub_category: SubCategorySchema = await SubCategoryDAO.find_by_slug(
+            db_session, sub_category_slug
+        )
+        filters["sub_category_slug"] = sub_category.slug
     if sub_category_id:
         filters["sub_category_id"] = sub_category_id
-
-    if sub_category_slug:
-        filters["sub_category_slug"] = sub_category_slug
 
     return await ProductDAO.find_all(db_session, filter_by=filters)
 
@@ -99,32 +109,60 @@ async def get_product(
 )
 async def post_product(
     product: ProductPostSchema,
+    image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(get_db),
+    s3: S3Service = Depends(get_s3_service),
 ):
-    return await ProductDAO.add(db_session, **product.model_dump())
+    try:
+        await is_file_mime_type_correct(image_blob)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+            detail=f"File contents don’t match the file extension: {e}",
+        )
+
+    image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
+        image_blob.filename, "images/sub_categories"
+    )
+    product.image_url = s3.get_file_url(key=image_key)
+    try:
+        res = await ProductDAO.add(**product.model_dump(), db_session=db_session)
+        await db_session.refresh(res, ["sub_category"])
+        await s3.upload_file(
+            file=image_blob.file,
+            key=image_key,
+            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
+        )
+        return res
+    except DuplicateNameError as e:
+        logger.warning(
+            f"Attempt to create a product with existing slug: {product.slug}"
+        )
+        raise e
 
 
 @router.put(
     "/product/{product_id}",
-    response_model=int,
+    response_model=ProductSchema,
     summary="Update product by id",
     status_code=status.HTTP_200_OK,
 )
 async def put_product(
     product_id: UUID,
     product: ProductPutSchema,
+    image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(get_db),
+    s3: S3Service = Depends(get_s3_service),
 ):
-    filters = {"id": product_id}
-
-    res: Annotated[int, "affected rows"] = await ProductDAO.update(
-        db_session, filters, **product.model_dump()
+    return await update_entity_with_optional_image(
+        entity_id=product_id,
+        payload=product,
+        dao=ProductDAO,
+        upload_path="images/tmp",
+        db_session=db_session,
+        s3=s3,
+        image_blob=image_blob,
     )
-
-    if not res:
-        raise HTTPException(status_code=404, detail="Product not found")
-
-    return res
 
 
 @router.delete(

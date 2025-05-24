@@ -47,19 +47,6 @@ class RedisConfig(BaseModel):
     INVALIDATE_CACHES_TIMEOUT: int = env.int("INVALIDATE_CACHES_TIMEOUT", 86400)
 
 
-class ElasticSearchConfig(BaseModel):
-    """
-    Represents the configuration settings for the ElasticSearch.
-    """
-
-    # ELASTIC_HOST: str = env.str("ELASTIC_HOST")
-    # ELASTIC_PORT: int = env.int("ELASTIC_PORT", 9200)
-    # ELASTIC_USER: str = env.str("ELASTIC_USER")
-    # ELASTIC_API_KEY: str = env.str("ELASTIC_API_KEY")
-    # ELASTIC_INDEX: str = env.str("ELASTIC_INDEX", "stat_agg")
-    pass
-
-
 class TelemetryConfig(BaseModel):
     """
     Represents the configuration settings for the telemetry.
@@ -95,7 +82,6 @@ class SMTPConfig(BaseModel):
     SMTP_PORT: int = env.int("SMTP_PORT")
     SMTP_USER: str = env.str("SMTP_USER")
     SMTP_PASS: str = env.str("SMTP_PASS")
-    pass
 
 
 class SecurityConfig(BaseModel):
@@ -120,22 +106,21 @@ class Settings(BaseSettings):
 
     # Application settings
     MODE: str = env.str("MODE", "DEV")
+    RUN_PROD_WEB_SERVER: int = env.int("RUN_PROD_WEB_SERVER", 0)
 
-    # Database settings
-    ES: ElasticSearchConfig = ElasticSearchConfig()
     DB: DatabaseConfig = DatabaseConfig()
     REDIS: RedisConfig = RedisConfig()
+
     TELEMETRY: TelemetryConfig = TelemetryConfig()
     AWS: AWSConfig = AWSConfig()
     SMTP: SMTPConfig = SMTPConfig()
     SECURITY: SecurityConfig = SecurityConfig()
 
     # Logging settings
-    PROJECT_NAME: str = env.str("PROJECT_NAME", "be-tcf")
+    JSON_LOG_FORMAT: bool = env.bool("JSON_LOG_FORMAT", True)
     DEBUG: bool = env.bool("DEBUG", False)
     SAVE_LOGS_TO_FILE: bool = env.bool("SAVE_LOGS_TO_FILE", False)
-    RUN_PROD_WEB_SERVER: int = env.int("RUN_PROD_WEB_SERVER", 0)
-    JSON_LOG_FORMAT: bool = env.bool("JSON_LOG_FORMAT", True)
+    PROJECT_NAME: str = env.str("PROJECT_NAME", "be-tcf")
 
     # OpenAI
     OPENAI_API_KEY: str = env.str("OPENAI_API_KEY")

@@ -35,11 +35,13 @@ router = APIRouter(tags=["Sub-Category"])
 async def get_sub_categories(
     db_session: AsyncSession = Depends(get_db),
     category_id: UUID | None = None,
-    category_slug: str = None
+    category_slug: str = None,
 ):
     filters = {}
     if category_slug:
-        category: CategorySchema = await CategoryDAO.find_by_slug(db_session, category_slug)
+        category: CategorySchema = await CategoryDAO.find_by_slug(
+            db_session, category_slug
+        )
         filters["category_id"] = category.id
     if category_id:
         filters["category_id"] = category_id
@@ -79,18 +81,13 @@ async def post_sub_category(
         )
 
     image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
-        image_blob.filename, "images/sub_categories"
+        image_blob.filename, "images/tmp"
     )
     sub_category.image_url = s3.get_file_url(key=image_key)
     try:
         res = await SubCategoryDAO.add(
             **sub_category.model_dump(), db_session=db_session
         )
-        # Два решения: добавлять в ответ или использовать lazy=joined и делать refresh
-        # category = await CategoryDAO.find_by_id(db_session, sub_category.category_id)
-        # return SubCategorySchema.model_validate(
-        #     res, from_attributes=True
-        # ).model_copy(update={"category_slug": category.slug})
         await db_session.refresh(res, ["category"])
         await s3.upload_file(
             file=image_blob.file,

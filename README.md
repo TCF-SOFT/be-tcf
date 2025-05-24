@@ -11,6 +11,11 @@ coverage run -m pytest -s tests
 OR
 pytest tests/
 ```
+## Background jobs
+1. Celery Stack: celery, redis, flower - complex
+2. FastAPI Stack: background tasks, [fastapi mail](https://sabuhish.github.io/fastapi-mail/getting-started/#:~:text=,the%20mail%20defaults%20to%20plain) - simple (using)
+3. Dramatiq [link](https://dramatiq.io/guide.html) - simple
+
 
 ### Install pre-commit hooks (Linters, formatters, etc.)
 ```bash

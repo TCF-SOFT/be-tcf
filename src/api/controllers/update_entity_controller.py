@@ -41,6 +41,7 @@ async def update_entity_with_optional_image(
         updated = await dao.update(db_session, filter_by={"id": entity_id}, **data)
     except Exception as e:
         if image_key:
+            # TODO: remove
             await s3.remove_file(image_key)
         raise e
 

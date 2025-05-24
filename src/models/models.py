@@ -77,7 +77,6 @@ class Product(Base):
     sub_category_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("sub_categories.id"), nullable=False
     )
-    sub_category_slug: Mapped[str] = mapped_column(String, nullable=False)
 
     name: Mapped[str] = mapped_column(String, nullable=False)
     slug: Mapped[str] = mapped_column(String, nullable=True)
@@ -88,6 +87,15 @@ class Product(Base):
     # Relationships
     sub_category = relationship("SubCategory", back_populates="products", lazy="joined")
     offers = relationship("Offer", back_populates="product", lazy="select")
+
+    # Pydantic Proxies
+    @property
+    def sub_category_slug(self) -> str:
+        return self.sub_category.slug
+
+    @property
+    def category_slug(self) -> str:
+        return self.sub_category.category_slug
 
     # Vector search
     # embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)

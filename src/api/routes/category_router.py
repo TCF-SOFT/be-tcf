@@ -42,13 +42,16 @@ async def get_categories(
 
 
 @router.get(
-    "/category/slug/{slug}", response_model=CategorySchema, status_code=status.HTTP_200_OK
+    "/category/slug/{slug}",
+    response_model=CategorySchema,
+    status_code=status.HTTP_200_OK,
 )
 async def get_category_by_slug(
     slug: str,
     db_session: AsyncSession = Depends(get_db),
 ):
     return await CategoryDAO.find_by_slug(db_session, slug)
+
 
 @router.get(
     "/category/{id}", response_model=CategorySchema, status_code=status.HTTP_200_OK
