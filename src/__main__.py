@@ -26,8 +26,8 @@ from src.api.routes.offer_router import router as offer_router
 from src.api.routes.product_router import router as product_router
 from src.api.routes.sub_category_router import router as sub_category_router
 from src.api.routes.user_router import router as user_router
-
-# from src.api.routes.waybill_router import router as waybill_router
+from src.api.routes.waybill_router import router as waybill_router
+from src.api.routes.pricing_router import router as pricing_router
 from src.api.routes.version_router import router as version_router
 from src.config.config import settings
 from src.docs import docs
@@ -177,8 +177,8 @@ app.include_router(sub_category_router)
 app.include_router(product_router)
 app.include_router(offer_router)
 app.include_router(user_router)
-# app.include_router(waybill_router)
-
+app.include_router(waybill_router)
+app.include_router(pricing_router)
 app.include_router(health_check_router)
 app.include_router(version_router)
 

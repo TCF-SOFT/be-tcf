@@ -14,7 +14,8 @@ def send_waybill_confirmation_email(email: EmailStr):
     logger.info(f"Sending email to {email=}")
     msg_content: EmailMessage = create_waybill_message(email)
 
-    with smtplib.SMTP_SSL(settings.SMTP.SMTP_HOST, settings.SMTP.SMTP_PORT) as server:
+    with smtplib.SMTP(settings.SMTP.SMTP_HOST, settings.SMTP.SMTP_PORT) as server:
+        server.starttls()
         server.login(settings.SMTP.SMTP_USER, settings.SMTP.SMTP_PASS)
         server.send_message(msg_content)
 

@@ -60,11 +60,19 @@ class Offer(Base):
     # Relationships
     product = relationship("Product", back_populates="offers", lazy="joined")
 
-    # <-- Pydantic tiny helper ------------------------------
+    # <-- Pydantic tiny helpers ------------------------------
     @property
     def image_url(self) -> Optional[str]:
         """Proxy `product.image_url` so Pydantic can see it."""
         return self.product.image_url if self.product else None
+
+    @property
+    def sub_category_slug(self) -> str:
+        return self.product.sub_category_slug
+
+    @property
+    def category_slug(self) -> str:
+        return self.product.sub_category.category_slug
 
     # --------------------------------------------------------
 

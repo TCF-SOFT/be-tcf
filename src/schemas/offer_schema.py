@@ -6,6 +6,7 @@ from pydantic import (
     ConfigDict,
     Field,
 )
+from pydantic import computed_field
 
 
 class _OfferBase(BaseModel):
@@ -16,8 +17,16 @@ class _OfferBase(BaseModel):
         None, examples=["Колодки тормозные передние"]
     )
 
+    category_slug: str = Field(..., examples=["svechi-ford"])
+    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
+
     price_rub: float = Field(..., examples=[1000])
-    super_wholesale_price_rub: float | None = Field(None, examples=[500])
+    super_wholesale_price_rub: float = Field(None, examples=[500])
+    @computed_field
+    @property
+    def wholesale_price_rub(self) -> int:
+        return int((self.price_rub + self.super_wholesale_price_rub) / 2)
+
     quantity: int = Field(..., examples=[2])
 
     image_url: Optional[str] = Field(

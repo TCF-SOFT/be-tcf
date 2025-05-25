@@ -13,8 +13,17 @@ class OfferDAO(BaseDAO):
     model = Offer
 
     @classmethod
+    async def find_all_base(
+        cls, db_session, filter_by: dict, order_by: str = None
+    ) -> list[OfferSchema]:
+        query = select(cls.model).filter_by(**filter_by).order_by(order_by)
+        result = await db_session.execute(query)
+        res = result.scalars().all()
+        return res
+
+    @classmethod
     async def find_all(
-        cls, db_session, filter_by: dict, count: bool = False, order_by: str = None
+        cls, db_session, filter_by: dict, order_by: str = None
     ) -> Page[OfferSchema]:
         query = select(cls.model).filter_by(**filter_by)
         return await paginate(db_session, query)
