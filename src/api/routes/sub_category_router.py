@@ -1,18 +1,16 @@
-from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
-from fastapi_cache.decorator import cache, logger
+from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from api.controllers.create_entity_controller import create_entity_with_image
 from api.controllers.update_entity_controller import update_entity_with_optional_image
 from api.dao.category_dao import CategoryDAO
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
 from common.deps.s3_service import get_s3_service
-from common.exceptions.exceptions import DuplicateNameError
-from common.functions.check_file_mime_type import is_file_mime_type_correct
 from common.services.s3_service import S3Service
 from schemas.category_schema import CategorySchema
 from schemas.sub_category_schema import (
@@ -27,7 +25,7 @@ router = APIRouter(tags=["Sub-Category"])
 
 @router.get(
     "/sub-categories",
-    response_model=list[SubCategorySchema],
+    response_model=list[SubCategorySchema] | None,
     summary="",
     status_code=status.HTTP_200_OK,
 )
@@ -39,10 +37,11 @@ async def get_sub_categories(
 ):
     filters = {}
     if category_slug:
-        category: CategorySchema = await CategoryDAO.find_by_slug(
+        category: CategorySchema | None = await CategoryDAO.find_by_slug(
             db_session, category_slug
         )
-        filters["category_id"] = category.id
+        if category:
+            filters["category_id"] = category.id
     if category_id:
         filters["category_id"] = category_id
 
@@ -51,7 +50,7 @@ async def get_sub_categories(
 
 @router.get(
     "/sub-category/{slug}",
-    response_model=SubCategorySchema,
+    response_model=SubCategorySchema | None,
     status_code=status.HTTP_200_OK,
 )
 async def get_sub_category_by_slug(
@@ -72,34 +71,15 @@ async def post_sub_category(
     db_session: AsyncSession = Depends(get_db),
     s3: S3Service = Depends(get_s3_service),
 ):
-    try:
-        await is_file_mime_type_correct(image_blob)
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            detail=f"File contents don’t match the file extension: {e}",
-        )
-
-    image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
-        image_blob.filename, "images/tmp"
+    return await create_entity_with_image(
+        payload=sub_category,
+        image_blob=image_blob,
+        upload_path="images/tmp",
+        db_session=db_session,
+        s3=s3,
+        dao=SubCategoryDAO,
+        refresh_fields=["category"],
     )
-    sub_category.image_url = s3.get_file_url(key=image_key)
-    try:
-        res = await SubCategoryDAO.add(
-            **sub_category.model_dump(), db_session=db_session
-        )
-        await db_session.refresh(res, ["category"])
-        await s3.upload_file(
-            file=image_blob.file,
-            key=image_key,
-            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
-        )
-        return res
-    except DuplicateNameError as e:
-        logger.warning(
-            f"Attempt to create a sub_category with existing slug: {sub_category.slug}"
-        )
-        raise e
 
 
 @router.put(

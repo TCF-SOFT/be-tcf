@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from fastapi import HTTPException, UploadFile, status
@@ -18,7 +18,7 @@ async def update_entity_with_optional_image(
     db_session: AsyncSession,
     s3: S3Service,
     image_blob: Optional[UploadFile] = None,
-) -> Any:
+) -> Annotated[Any | None, "SQLAlchemy Instance"]:
     data = payload.model_dump(exclude_unset=True)
     image_key: Optional[str] = None
 

@@ -1,4 +1,3 @@
-from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
@@ -6,18 +5,16 @@ from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.controllers.create_entity_controller import create_entity_with_image
 from api.controllers.update_entity_controller import update_entity_with_optional_image
 from api.dao.product_dao import ProductDAO
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
 from common.deps.s3_service import get_s3_service
-from common.exceptions.exceptions import DuplicateNameError
-from common.functions.check_file_mime_type import is_file_mime_type_correct
 from common.services.s3_service import S3Service
 from schemas.product_schema import ProductPostSchema, ProductPutSchema, ProductSchema
 from schemas.sub_category_schema import SubCategorySchema
 from utils.cache_coder import ORJsonCoder
-from utils.logging import logger
 
 router = APIRouter(tags=["Products"])
 
@@ -45,6 +42,17 @@ async def get_products(
 
     return await ProductDAO.find_all(db_session, filter_by=filters)
 
+@router.get(
+    "/product/{product_id}",
+    response_model=ProductSchema | None,
+    summary="Return product by id",
+    status_code=status.HTTP_200_OK,
+)
+async def get_product(
+    product_id: UUID,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await ProductDAO.find_by_id(db_session, product_id)
 
 @router.get(
     "/products/search",
@@ -88,18 +96,6 @@ async def semantic_search_products(
     return await ProductDAO.vector_search(db_session, search_term)
 
 
-@router.get(
-    "/product/{product_id}",
-    response_model=ProductSchema,
-    summary="Return product by id",
-    status_code=status.HTTP_200_OK,
-)
-async def get_product(
-    product_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
-):
-    return await ProductDAO.find_by_id(db_session, product_id)
-
 
 @router.post(
     "/product",
@@ -113,32 +109,15 @@ async def post_product(
     db_session: AsyncSession = Depends(get_db),
     s3: S3Service = Depends(get_s3_service),
 ):
-    try:
-        await is_file_mime_type_correct(image_blob)
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            detail=f"File contents don’t match the file extension: {e}",
-        )
-
-    image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
-        image_blob.filename, "images/sub_categories"
+    return await create_entity_with_image(
+        payload=product,
+        image_blob=image_blob,
+        upload_path="images/tmp",
+        db_session=db_session,
+        s3=s3,
+        dao=ProductDAO,
+        refresh_fields=["sub_category"],
     )
-    product.image_url = s3.get_file_url(key=image_key)
-    try:
-        res = await ProductDAO.add(**product.model_dump(), db_session=db_session)
-        await db_session.refresh(res, ["sub_category"])
-        await s3.upload_file(
-            file=image_blob.file,
-            key=image_key,
-            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
-        )
-        return res
-    except DuplicateNameError as e:
-        logger.warning(
-            f"Attempt to create a product with existing slug: {product.slug}"
-        )
-        raise e
 
 
 @router.put(

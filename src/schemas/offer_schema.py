@@ -16,27 +16,25 @@ class _OfferBase(BaseModel):
         None, examples=["Колодки тормозные передние"]
     )
 
-    price_rub: float = Field(..., examples=[578.8])
-    super_wholesale_price_rub: float | None = Field(None, examples=[579.00])
+    price_rub: float = Field(..., examples=[1000])
+    super_wholesale_price_rub: float | None = Field(None, examples=[500])
     quantity: int = Field(..., examples=[2])
+
+    image_url: Optional[str] = Field(
+        None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
+    )
+    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
 
 class OfferSchema(_OfferBase):
     id: UUID
-    product_id: UUID
     offer_bitrix_id: Optional[str] = Field(None, examples=["278495"])
-
-    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
-
-    image_url: Optional[str] = Field(
-        None, examples=["https://chibisafe.eucalytics.uk//REXA2bZVWeZT.webp"]
-    )
 
 
 class OfferPostSchema(_OfferBase):
-    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
+    pass
 
 
 class OfferPutSchema(_OfferBase):
