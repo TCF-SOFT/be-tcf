@@ -7,6 +7,27 @@ from sqlalchemy import create_engine, text
 from config.config import settings
 
 
+async def serve_price(
+    price_type: Literal["retail", "wholesale"], ext: Literal["xlsx", "csv"] = "csv"
+) -> Path:
+    """
+    Serve a price list in the specified format (CSV or XLSX).
+    If the file already exists, return its path.
+    If not, generate the price list and return the new path.
+    """
+    file_name: str = (
+        f"price_retail.{ext}" if price_type == "retail" else f"price_wholesale.{ext}"
+    )
+    folder = Path("tmp/")
+    folder.mkdir(parents=True, exist_ok=True)
+    path = folder / file_name
+
+    if path.exists():
+        return path
+    else:
+        return await generate_price(price_type, ext)
+
+
 async def generate_price(
     price_type: Literal["retail", "wholesale"], ext: Literal["xlsx", "csv"] = "csv"
 ) -> Path:
