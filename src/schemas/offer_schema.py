@@ -5,8 +5,8 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
+    computed_field,
 )
-from pydantic import computed_field
 
 
 class _OfferBase(BaseModel):
@@ -22,6 +22,7 @@ class _OfferBase(BaseModel):
 
     price_rub: float = Field(..., examples=[1000])
     super_wholesale_price_rub: float = Field(None, examples=[500])
+
     @computed_field
     @property
     def wholesale_price_rub(self) -> int:

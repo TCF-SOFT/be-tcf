@@ -15,7 +15,9 @@ def create_waybill_message(email: EmailStr) -> EmailMessage:
         html_content = f.read()
 
     # Add plain text fallback
-    msg.set_content("Пожалуйста, ознакомьтесь с нашим коммерческим предложением. Прайс-лист во вложении.")
+    msg.set_content(
+        "Пожалуйста, ознакомьтесь с нашим коммерческим предложением. Прайс-лист во вложении."
+    )
 
     # Add HTML content
     msg.add_alternative(html_content, subtype="html")

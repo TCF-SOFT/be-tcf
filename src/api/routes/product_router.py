@@ -42,6 +42,7 @@ async def get_products(
 
     return await ProductDAO.find_all(db_session, filter_by=filters)
 
+
 @router.get(
     "/product/{product_id}",
     response_model=ProductSchema | None,
@@ -53,6 +54,7 @@ async def get_product(
     db_session: AsyncSession = Depends(get_db),
 ):
     return await ProductDAO.find_by_id(db_session, product_id)
+
 
 @router.get(
     "/products/search",
@@ -94,7 +96,6 @@ async def semantic_search_products(
     db_session: AsyncSession = Depends(get_db),
 ):
     return await ProductDAO.vector_search(db_session, search_term)
-
 
 
 @router.post(

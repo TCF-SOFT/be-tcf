@@ -81,7 +81,7 @@ async def post_category(
         upload_path="images/tmp",
         db_session=db_session,
         s3=s3,
-        dao=CategoryDAO
+        dao=CategoryDAO,
     )
 
 
