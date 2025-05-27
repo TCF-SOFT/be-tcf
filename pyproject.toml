@@ -70,6 +70,7 @@ extend-select = ["I", "C4", "SIM"]
 ignore = []
 
 [tool.ruff]
+src = ["src"]
 line-length = 88
 indent-width = 4
 show-fixes = true

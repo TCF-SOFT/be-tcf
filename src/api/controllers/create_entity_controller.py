@@ -47,3 +47,21 @@ async def create_entity_with_image(
     except exception_cls as e:
         logger.warning(f"Duplicate name/slug: {getattr(payload, 'slug', 'unknown')}")
         raise e
+
+
+async def create_entity(
+    *,
+    payload: BaseModel,
+    dao: Any,
+    db_session: AsyncSession,
+    refresh_fields: Sequence[str] = (),
+    exception_cls: type[Exception] = DuplicateNameError,
+) -> Annotated[Any | None, "SQLAlchemy Instance"]:
+    try:
+        instance = await dao.add(**payload.model_dump(), db_session=db_session)
+        if refresh_fields:
+            await db_session.refresh(instance, list(refresh_fields))
+        return instance
+    except exception_cls as e:
+        logger.warning(f"Duplicate name/slug: {getattr(payload, 'slug', 'unknown')}")
+        raise e

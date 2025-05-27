@@ -1,4 +1,3 @@
-from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -6,10 +5,16 @@ from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.dao.offer_dao import OfferDAO
-from api.di.database import get_db
-from schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
-from utils.cache_coder import ORJsonCoder
+from src.api.controllers.create_entity_controller import (
+    create_entity,
+)
+from src.api.controllers.update_entity_controller import (
+    update_entity,
+)
+from src.api.dao.offer_dao import OfferDAO
+from src.api.di.database import get_db
+from src.schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
+from src.utils.cache_coder import ORJsonCoder
 
 router = APIRouter(tags=["Offers"])
 
@@ -21,7 +26,7 @@ router = APIRouter(tags=["Offers"])
     status_code=status.HTTP_200_OK,
 )
 # @cache(expire=60, coder=ORJsonCoder)
-async def search_offers(
+async def get_offers(
     db_session: AsyncSession = Depends(get_db),
     product_id: UUID | None = None,
 ):
@@ -29,7 +34,20 @@ async def search_offers(
     if product_id:
         filters["product_id"] = product_id
 
-    return await OfferDAO.find_all(db_session, filter_by=filters)
+    return await OfferDAO.find_all_paginate(db_session, filter_by=filters)
+
+
+@router.get(
+    "/offer/{offer_id}",
+    response_model=OfferSchema,
+    summary="Return offer by id",
+    status_code=status.HTTP_200_OK,
+)
+async def get_offer(
+    offer_id: UUID,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await OfferDAO.find_by_id(db_session, offer_id)
 
 
 @router.get(
@@ -46,19 +64,6 @@ async def search_offers_by_name(
     return await OfferDAO.wildcard_search(db_session, search_term)
 
 
-@router.get(
-    "/offer/{offer_id}",
-    response_model=OfferSchema,
-    summary="Return offer by id",
-    status_code=status.HTTP_200_OK,
-)
-async def get_offer(
-    offer_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
-):
-    return await OfferDAO.find_by_id(db_session, offer_id)
-
-
 @router.post(
     "/offer",
     response_model=OfferSchema,
@@ -69,12 +74,17 @@ async def post_offer(
     offer: OfferPostSchema,
     db_session: AsyncSession = Depends(get_db),
 ):
-    return await OfferDAO.add(db_session, **offer.model_dump())
+    return await create_entity(
+        payload=offer,
+        db_session=db_session,
+        dao=OfferDAO,
+        refresh_fields=["product"],
+    )
 
 
 @router.put(
     "/offer/{offer_id}",
-    response_model=int,
+    response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
 )
@@ -83,16 +93,9 @@ async def put_offer(
     offer: OfferPutSchema,
     db_session: AsyncSession = Depends(get_db),
 ):
-    filters = {"id": offer_id}
-
-    res: Annotated[int, "affected rows"] = await OfferDAO.update(
-        db_session, filters, **offer.model_dump()
+    return await update_entity(
+        entity_id=offer_id, payload=offer, dao=OfferDAO, db_session=db_session
     )
-
-    if not res:
-        raise HTTPException(status_code=404, detail="Offer not found")
-
-    return res
 
 
 @router.delete(

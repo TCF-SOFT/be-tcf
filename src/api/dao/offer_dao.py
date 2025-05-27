@@ -4,25 +4,16 @@ from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
 
-from api.dao.base import BaseDAO
-from models.models import Offer
-from schemas.offer_schema import OfferSchema
+from src.api.dao.base import BaseDAO
+from src.models.models import Offer
+from src.schemas.offer_schema import OfferSchema
 
 
 class OfferDAO(BaseDAO):
     model = Offer
 
     @classmethod
-    async def find_all_base(
-        cls, db_session, filter_by: dict, order_by: str = None
-    ) -> list[OfferSchema]:
-        query = select(cls.model).filter_by(**filter_by).order_by(order_by)
-        result = await db_session.execute(query)
-        res = result.scalars().all()
-        return res
-
-    @classmethod
-    async def find_all(
+    async def find_all_paginate(
         cls, db_session, filter_by: dict, order_by: str = None
     ) -> Page[OfferSchema]:
         query = select(cls.model).filter_by(**filter_by)

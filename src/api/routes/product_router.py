@@ -5,16 +5,22 @@ from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.controllers.create_entity_controller import create_entity_with_image
-from api.controllers.update_entity_controller import update_entity_with_optional_image
-from api.dao.product_dao import ProductDAO
-from api.dao.sub_category_dao import SubCategoryDAO
-from api.di.database import get_db
-from common.deps.s3_service import get_s3_service
-from common.services.s3_service import S3Service
-from schemas.product_schema import ProductPostSchema, ProductPutSchema, ProductSchema
-from schemas.sub_category_schema import SubCategorySchema
-from utils.cache_coder import ORJsonCoder
+from src.api.controllers.create_entity_controller import create_entity_with_image
+from src.api.controllers.update_entity_controller import (
+    update_entity_with_optional_image,
+)
+from src.api.dao.product_dao import ProductDAO
+from src.api.dao.sub_category_dao import SubCategoryDAO
+from src.api.di.database import get_db
+from src.common.deps.s3_service import get_s3_service
+from src.common.services.s3_service import S3Service
+from src.schemas.product_schema import (
+    ProductPostSchema,
+    ProductPutSchema,
+    ProductSchema,
+)
+from src.schemas.sub_category_schema import SubCategorySchema
+from src.utils.cache_coder import ORJsonCoder
 
 router = APIRouter(tags=["Products"])
 
@@ -40,7 +46,7 @@ async def get_products(
     if sub_category_id:
         filters["sub_category_id"] = sub_category_id
 
-    return await ProductDAO.find_all(db_session, filter_by=filters)
+    return await ProductDAO.find_all_paginate(db_session, filter_by=filters)
 
 
 @router.get(

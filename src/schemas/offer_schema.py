@@ -17,22 +17,10 @@ class _OfferBase(BaseModel):
         None, examples=["Колодки тормозные передние"]
     )
 
-    category_slug: str = Field(..., examples=["svechi-ford"])
-    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
-
     price_rub: float = Field(..., examples=[1000])
     super_wholesale_price_rub: float = Field(None, examples=[500])
 
-    @computed_field
-    @property
-    def wholesale_price_rub(self) -> int:
-        return int((self.price_rub + self.super_wholesale_price_rub) / 2)
-
     quantity: int = Field(..., examples=[2])
-
-    image_url: Optional[str] = Field(
-        None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
-    )
     product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
@@ -41,6 +29,17 @@ class _OfferBase(BaseModel):
 class OfferSchema(_OfferBase):
     id: UUID
     offer_bitrix_id: Optional[str] = Field(None, examples=["278495"])
+    category_slug: str = Field(..., examples=["svechi-ford"])
+    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
+
+    image_url: Optional[str] = Field(
+        None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
+    )
+
+    @computed_field
+    @property
+    def wholesale_price_rub(self) -> int:
+        return int((self.price_rub + self.super_wholesale_price_rub) / 2)
 
 
 class OfferPostSchema(_OfferBase):

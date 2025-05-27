@@ -6,16 +6,16 @@ from sqlalchemy import func, or_, select
 
 from api.dao.base import BaseDAO
 from common.microservices.open_ai_service import get_embedding
-from models.models import Product
 from schemas.product_schema import ProductSchema
+from src.models.models import Product
 
 
 class ProductDAO(BaseDAO):
     model = Product
 
     @classmethod
-    async def find_all(
-        cls, db_session, filter_by: dict, count: bool = False, order_by: str = None
+    async def find_all_paginate(
+        cls, db_session, filter_by: dict
     ) -> Page[ProductSchema]:
         query = select(cls.model).filter_by(**filter_by)
         return await paginate(db_session, query)

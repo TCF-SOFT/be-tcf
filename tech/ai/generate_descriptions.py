@@ -6,7 +6,6 @@ from openai import AsyncClient
 from pydantic import BaseModel
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import make_url
-
 from src.config.config import settings
 
 client = AsyncClient(api_key=settings.OPENAI_API_KEY)

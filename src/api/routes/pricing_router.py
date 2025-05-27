@@ -11,14 +11,20 @@ router = APIRouter(tags=["Pricing"])
 
 @router.get("/price/{price_type}", status_code=200, response_class=FileResponse)
 async def get_price(
-    price_type: Literal["retail", "wholesale"], ext: Literal["xlsx", "csv"], cache: bool = True,
+    price_type: Literal["retail", "wholesale"],
+    ext: Literal["xlsx", "csv"],
+    cache: bool = True,
 ) -> FileResponse:
     """
     Get the price list in the specified format.
     CSV: 5.0mb
     XLSX: 1.8mb
     """
-    path: Path = await serve_price(price_type, ext) if cache else await generate_price(price_type, ext)
+    path: Path = (
+        await serve_price(price_type, ext)
+        if cache
+        else await generate_price(price_type, ext)
+    )
     return FileResponse(
         path,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"

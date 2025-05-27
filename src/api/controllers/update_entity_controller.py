@@ -40,9 +40,6 @@ async def update_entity_with_optional_image(
     try:
         updated = await dao.update(db_session, filter_by={"id": entity_id}, **data)
     except Exception as e:
-        if image_key:
-            # TODO: remove
-            await s3.remove_file(image_key)
         raise e
 
     if not updated:
@@ -54,5 +51,27 @@ async def update_entity_with_optional_image(
             key=image_key,
             extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
         )
+
+    return updated
+
+
+async def update_entity(
+    *,
+    entity_id: UUID,
+    payload: BaseModel,
+    dao: Any,
+    db_session: AsyncSession,
+) -> Annotated[Any | None, "SQLAlchemy Instance"]:
+    data = payload.model_dump(exclude_unset=True)
+
+    if not data:
+        raise HTTPException(status_code=400, detail="No data provided for update")
+    try:
+        updated = await dao.update(db_session, filter_by={"id": entity_id}, **data)
+    except Exception as e:
+        raise e
+
+    if not updated:
+        raise HTTPException(status_code=404, detail="Entity not found")
 
     return updated
