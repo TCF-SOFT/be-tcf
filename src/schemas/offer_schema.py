@@ -36,6 +36,8 @@ class OfferSchema(_OfferBase):
         None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
     )
 
+    is_deleted: bool = Field(..., examples=[False])
+
     @computed_field
     @property
     def wholesale_price_rub(self) -> int:

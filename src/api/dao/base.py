@@ -69,9 +69,9 @@ class BaseDAO:
                 db_session.add(new_instance)
                 return new_instance
 
-        except IntegrityError as e:
-            name_value = values.get("name", "N/A")
-            raise DuplicateNameError(name=name_value) from e
+        # except IntegrityError as e:
+        #     name_value = values.get("name", "N/A")
+        #     raise DuplicateNameError(name=name_value) from e
 
         except SQLAlchemyError as e:
             raise e

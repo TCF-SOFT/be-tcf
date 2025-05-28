@@ -36,8 +36,9 @@ async def get_products(
     db_session: AsyncSession = Depends(get_db),
     sub_category_id: UUID | None = None,
     sub_category_slug: str | None = None,
+    is_deleted: bool = False,
 ):
-    filters = {}
+    filters = {"is_deleted": is_deleted}
     if sub_category_slug:
         sub_category: SubCategorySchema = await SubCategoryDAO.find_by_slug(
             db_session, sub_category_slug

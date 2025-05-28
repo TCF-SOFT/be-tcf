@@ -184,25 +184,25 @@ class SubCategory(Base):
 
 class Waybill(Base):
     id: Mapped[uuid_pk]
-    user_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id"), nullable=False
-    )
-    type: Mapped[Literal["in", "out"]] = mapped_column(
-        String, nullable=False
-    )
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    type: Mapped[Literal["in", "out"]] = mapped_column(String, nullable=False)
     is_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     counterparty_name: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
     user = relationship("User", back_populates="waybills", lazy="joined")
-    waybill_offers = relationship("WaybillOffer", back_populates="waybill", lazy="joined")
+    waybill_offers = relationship(
+        "WaybillOffer", back_populates="waybill", lazy="joined"
+    )
 
 
 class StockMovement(Base):
     id: Mapped[uuid_pk]
 
     offer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("offers.id"), nullable=False)
-    waybill_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("waybills.id"), nullable=True)
+    waybill_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("waybills.id"), nullable=True
+    )
 
     type: Mapped[Literal["in", "out"]] = mapped_column(String, nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -219,13 +219,16 @@ class StockMovement(Base):
 
 
 class WaybillOffer(Base):
+    """
+    Визуальное отображение того, что пользователь выбрал на момент оформления.
+     Это как бумажная накладная — она не меняется даже если продукт позже удалён или переименован.
+    """
+
     id: Mapped[uuid_pk]
     waybill_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("waybills.id"), nullable=False
     )
-    offer_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("offers.id"), nullable=False
-    )
+    offer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("offers.id"), nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
     # Soft delete field
@@ -237,5 +240,5 @@ class WaybillOffer(Base):
     price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
 
     # Relationships
-    waybill = relationship("Waybill", back_populates="offers", lazy="joined")
+    waybill = relationship("Waybill", back_populates="waybill_offers", lazy="joined")
     offer = relationship("Offer", back_populates="waybill_offers", lazy="joined")

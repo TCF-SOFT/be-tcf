@@ -26,6 +26,7 @@ Table products {
   image_url varchar
   sub_category_slug varchar
   embedding vector(1536)
+  is_deleted bool
 }
 
 Table offers {
@@ -38,6 +39,7 @@ Table offers {
   super_wholesale_price_rub numeric(12,4)
   is_available_by_request boolean
   quantity integer
+  is_deleted bool
 }
 
 Table users {
@@ -64,15 +66,29 @@ Table invoices_offers {
 Table waybills {
   id uuid [pk]
   user_id uuid [ref: > users.id]
-  type varchar // or bool? in/out
-  is_pending bool // tmp -> потом сохранение и прописываются изменения в offers
-  supplier_name varchar
-  created_at timestamp
-  updated_at timestamp
+  type varchar
+  is_pending boolean
+  counterparty_name varchar
 }
 
-Table waybills_offers {
+Table waybill_offers {
+  id uuid [pk]
   waybill_id uuid [ref: > waybills.id]
   offer_id uuid [ref: > offers.id]
-  quantity integer
+  quantity int
+  is_deleted boolean
+  brand varchar
+  manufacturer_number varchar
+  price_rub numeric
+}
+
+Table stock_movements {
+  id uuid [pk]
+  offer_id uuid [ref: > offers.id]
+  waybill_id uuid [ref: > waybills.id]
+  type varchar
+  quantity int
+  comment varchar
+  user_id uuid [ref: > users.id]
+  reverted boolean
 }

@@ -12,7 +12,7 @@ from pydantic import (
     model_validator,
 )
 from slugify import slugify
-# TODO: add is_deleted field to ProductSchema
+
 
 class _ProductBase(BaseModel):
     address_id: Optional[str] = Field(None, examples=["AA-TEST"])
@@ -44,6 +44,8 @@ class ProductSchema(_ProductBase):
     slug: Optional[str] = None
     category_slug: str = Field(..., examples=["svechi-ford"])
     sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
+
+    is_deleted: bool = Field(..., examples=[False])
 
 
 class ProductPostSchema(_ProductBase):

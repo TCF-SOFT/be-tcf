@@ -29,8 +29,10 @@ router = APIRouter(tags=["Offers"])
 async def get_offers(
     db_session: AsyncSession = Depends(get_db),
     product_id: UUID | None = None,
+    is_deleted: bool = False,
 ):
-    filters = {}
+    filters = {"is_deleted": is_deleted}
+
     if product_id:
         filters["product_id"] = product_id
 
