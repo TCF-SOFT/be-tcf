@@ -36,6 +36,9 @@ class User(Base):
         String, nullable=True
     )
 
+    # Relationships
+    waybills = relationship("Waybill", back_populates="user", lazy="joined")
+
     def __str__(self):
         return f"User: {self.email}"
 
@@ -57,8 +60,12 @@ class Offer(Base):
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
+    # Soft delete field
+    is_deleted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
     # Relationships
     product = relationship("Product", back_populates="offers", lazy="joined")
+    waybill_offers = relationship("WaybillOffer", back_populates="offer")
 
     # <-- Pydantic tiny helpers ------------------------------
     @property
@@ -91,6 +98,9 @@ class Product(Base):
     cross_number: Mapped[str] = mapped_column(String, nullable=True)
     description: Mapped[str] = mapped_column(Text, nullable=True)
     image_url: Mapped[str] = mapped_column(String, nullable=True)
+
+    # Soft delete field
+    is_deleted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Relationships
     sub_category = relationship("SubCategory", back_populates="products", lazy="joined")
@@ -172,13 +182,60 @@ class SubCategory(Base):
         return f"SubCategory: {self.name}"
 
 
-# class Image(Base):
-#     id: Mapped[uuid_pk]
-#     product_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("products.id"))
-#     image_url: Mapped[str] = mapped_column(String, nullable=False)
-#     is_thumbnail: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-#
-#     product = relationship("Product", back_populates="images", lazy="select")
-#
-#     def __str__(self):
-#         return f"Image: {self.image_url}"
+class Waybill(Base):
+    id: Mapped[uuid_pk]
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id"), nullable=False
+    )
+    type: Mapped[Literal["in", "out"]] = mapped_column(
+        String, nullable=False
+    )
+    is_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
+    counterparty_name: Mapped[str] = mapped_column(String, nullable=False)
+
+    # Relationships
+    user = relationship("User", back_populates="waybills", lazy="joined")
+    waybill_offers = relationship("WaybillOffer", back_populates="waybill", lazy="joined")
+
+
+class StockMovement(Base):
+    id: Mapped[uuid_pk]
+
+    offer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("offers.id"), nullable=False)
+    waybill_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("waybills.id"), nullable=True)
+
+    type: Mapped[Literal["in", "out"]] = mapped_column(String, nullable=False)
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    reverted: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    # Relationships
+    offer = relationship("Offer", lazy="joined")
+    user = relationship("User", lazy="joined")
+    waybill = relationship("Waybill", lazy="joined")
+
+
+class WaybillOffer(Base):
+    id: Mapped[uuid_pk]
+    waybill_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("waybills.id"), nullable=False
+    )
+    offer_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("offers.id"), nullable=False
+    )
+    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    # Soft delete field
+    is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    # Snapshot fields
+    brand: Mapped[str] = mapped_column(String, nullable=False)
+    manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
+    price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
+
+    # Relationships
+    waybill = relationship("Waybill", back_populates="offers", lazy="joined")
+    offer = relationship("Offer", back_populates="waybill_offers", lazy="joined")

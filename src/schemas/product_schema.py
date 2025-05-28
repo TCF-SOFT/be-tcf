@@ -12,7 +12,7 @@ from pydantic import (
     model_validator,
 )
 from slugify import slugify
-
+# TODO: add is_deleted field to ProductSchema
 
 class _ProductBase(BaseModel):
     address_id: Optional[str] = Field(None, examples=["AA-TEST"])

@@ -1,0 +1,78 @@
+Table categories {
+  id uuid [pk]
+  name varchar
+  slug varchar
+  image_url varchar
+}
+
+Table sub_categories {
+  id uuid [pk]
+  category_id uuid [ref: > categories.id]
+  name varchar
+  slug varchar [unique]
+  image_url varchar
+  category_slug varchar
+}
+
+Table products {
+  id uuid [pk]
+  bitrix_id varchar
+  address_id varchar
+  sub_category_id uuid [ref: > sub_categories.id]
+  name varchar
+  slug varchar
+  cross_number varchar
+  description text
+  image_url varchar
+  sub_category_slug varchar
+  embedding vector(1536)
+}
+
+Table offers {
+  id uuid [pk]
+  product_id uuid [ref: > products.id]
+  brand varchar
+  manufacturer_number varchar
+  internal_description varchar
+  price_rub numeric(12,4) [null]
+  super_wholesale_price_rub numeric(12,4)
+  is_available_by_request boolean
+  quantity integer
+}
+
+Table users {
+  id uuid [pk]
+  email varchar
+  hashed_password varchar
+  is_active boolean
+  is_superuser boolean
+  is_verified boolean
+  role varchar
+}
+
+Table invoices {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+
+}
+
+Table invoices_offers {
+  invoice_id uuid [ref: > invoices.id]
+  offer_id uuid [ref: > offers.id]
+}
+
+Table waybills {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+  type varchar // or bool? in/out
+  is_pending bool // tmp -> потом сохранение и прописываются изменения в offers
+  supplier_name varchar
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table waybills_offers {
+  waybill_id uuid [ref: > waybills.id]
+  offer_id uuid [ref: > offers.id]
+  quantity integer
+}
