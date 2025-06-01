@@ -185,7 +185,9 @@ class SubCategory(Base):
 class Waybill(Base):
     id: Mapped[uuid_pk]
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-    type: Mapped[Literal["in", "out"]] = mapped_column(String, nullable=False)
+    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT"]] = mapped_column(
+        String, nullable=False
+    )
     is_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     counterparty_name: Mapped[str] = mapped_column(String, nullable=False)
 
@@ -194,6 +196,13 @@ class Waybill(Base):
     waybill_offers = relationship(
         "WaybillOffer", back_populates="waybill", lazy="joined"
     )
+
+    @property
+    def author(self) -> str:
+        """
+        Proxy `user.name` so Pydantic can see it.
+        """
+        return self.user.first_name
 
 
 class StockMovement(Base):
@@ -204,7 +213,9 @@ class StockMovement(Base):
         ForeignKey("waybills.id"), nullable=True
     )
 
-    type: Mapped[Literal["in", "out"]] = mapped_column(String, nullable=False)
+    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT"]] = mapped_column(
+        String, nullable=False
+    )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
     comment: Mapped[Optional[str]] = mapped_column(String, nullable=True)
@@ -230,9 +241,6 @@ class WaybillOffer(Base):
     )
     offer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("offers.id"), nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
-
-    # Soft delete field
-    is_deleted: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     # Snapshot fields
     brand: Mapped[str] = mapped_column(String, nullable=False)

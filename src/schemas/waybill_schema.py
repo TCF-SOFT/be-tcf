@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Literal
 from uuid import UUID
 
@@ -10,17 +11,18 @@ from pydantic import (
 
 class _WaybillBaseSchema(BaseModel):
     user_id: UUID
-    type: Literal["in", "out"]
-    is_pending: bool = Field(..., examples=[False])
-    counterparty_name: str = Field(
-        ..., examples=["ООО Рога и Копыта"]
-    )
+    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT"]
+    is_pending: bool = Field(..., examples=[True])
+    counterparty_name: str = Field(..., examples=["ООО Рога и Копыта"])
 
     model_config = ConfigDict(from_attributes=True)
 
 
 class WaybillSchema(_WaybillBaseSchema):
     id: UUID
+    author: str = Field(..., examples=["Vasiliy Pinov"])
+    created_at: datetime
+    updated_at: datetime
 
 
 class WaybillPostSchema(_WaybillBaseSchema):

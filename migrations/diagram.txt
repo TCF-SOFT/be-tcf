@@ -76,7 +76,6 @@ Table waybill_offers {
   waybill_id uuid [ref: > waybills.id]
   offer_id uuid [ref: > offers.id]
   quantity int
-  is_deleted boolean
   brand varchar
   manufacturer_number varchar
   price_rub numeric

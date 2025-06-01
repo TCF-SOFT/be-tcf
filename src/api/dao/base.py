@@ -36,7 +36,7 @@ class BaseDAO:
     async def find_by_id(cls, db_session, _id: UUID) -> Any:
         query = select(cls.model).filter_by(id=_id)
         result = await db_session.execute(query)
-        res = result.scalar_one_or_none()
+        res = result.unique().scalar_one_or_none()
         return res
 
     @classmethod
@@ -69,9 +69,9 @@ class BaseDAO:
                 db_session.add(new_instance)
                 return new_instance
 
-        # except IntegrityError as e:
-        #     name_value = values.get("name", "N/A")
-        #     raise DuplicateNameError(name=name_value) from e
+        except IntegrityError as e:
+            name_value = values.get("name", "N/A")
+            raise DuplicateNameError(name=name_value) from e
 
         except SQLAlchemyError as e:
             raise e
@@ -126,7 +126,7 @@ class BaseDAO:
         """
         query = select(cls.model).filter_by(id=_id)
         result = await db_session.execute(query)
-        enum = result.scalar_one_or_none()
+        enum = result.unique().scalar_one_or_none()
 
         if enum:
             await db_session.delete(enum)
