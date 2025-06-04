@@ -69,7 +69,6 @@ async def get_product(
     summary="Search products by name",
     status_code=status.HTTP_200_OK,
 )
-@cache(expire=60, coder=ORJsonCoder)
 async def search_products_by_name(
     search_term: str,
     db_session: AsyncSession = Depends(get_db),
@@ -83,7 +82,6 @@ async def search_products_by_name(
     summary="Full text search products",
     status_code=status.HTTP_200_OK,
 )
-@cache(expire=60, coder=ORJsonCoder)
 async def full_text_search_products(
     search_term: str,
     db_session: AsyncSession = Depends(get_db),
@@ -91,18 +89,18 @@ async def full_text_search_products(
     return await ProductDAO.full_text_search(db_session, search_term)
 
 
-@router.get(
-    "/products/vector_search",
-    response_model=Page[ProductSchema],
-    summary="Semantic/Vector search products by name",
-    status_code=status.HTTP_200_OK,
-)
-@cache(expire=60, coder=ORJsonCoder)
-async def semantic_search_products(
-    search_term: str,
-    db_session: AsyncSession = Depends(get_db),
-):
-    return await ProductDAO.vector_search(db_session, search_term)
+# @router.get(
+#     "/products/vector_search",
+#     response_model=Page[ProductSchema],
+#     summary="Semantic/Vector search products by name",
+#     status_code=status.HTTP_200_OK,
+# )
+# @cache(expire=60, coder=ORJsonCoder)
+# async def semantic_search_products(
+#     search_term: str,
+#     db_session: AsyncSession = Depends(get_db),
+# ):
+#     return await ProductDAO.vector_search(db_session, search_term)
 
 
 @router.post(

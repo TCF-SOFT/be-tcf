@@ -81,6 +81,17 @@ class Offer(Base):
     def category_slug(self) -> str:
         return self.product.sub_category.category_slug
 
+    @property
+    def product_name(self) -> str:
+        return self.product.name
+
+    @property
+    def cross_number(self) -> Optional[str]:
+        """
+        Proxy `product.cross_number` so Pydantic can see it.
+        """
+        return self.product.cross_number if self.product else None
+
     # --------------------------------------------------------
 
 

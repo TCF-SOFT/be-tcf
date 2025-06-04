@@ -31,6 +31,13 @@ class OfferSchema(_OfferBase):
     offer_bitrix_id: Optional[str] = Field(None, examples=["278495"])
     category_slug: str = Field(..., examples=["svechi-ford"])
     sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
+    product_name: str = Field(..., examples=["Escort 1990-2000"])
+    cross_number: Optional[str] = Field(
+        None,
+        examples=[
+            "6962492, 1048310, 97AG2K021BA, 1133750, 1048308, 6180371, 94AB2K021AB, 6704271, 1130753"
+        ],
+    )
 
     image_url: Optional[str] = Field(
         None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]

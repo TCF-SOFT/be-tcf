@@ -55,15 +55,14 @@ async def get_offer(
 @router.get(
     "/offers/search",
     response_model=Page[OfferSchema],
-    summary="Search offers by name",
+    summary="Search offers by product name, cross_number, brand and manufacturer_number",
     status_code=status.HTTP_200_OK,
 )
-@cache(expire=60, coder=ORJsonCoder)
-async def search_offers_by_name(
+async def search_offers(
     search_term: str,
     db_session: AsyncSession = Depends(get_db),
 ):
-    return await OfferDAO.wildcard_search(db_session, search_term)
+    return await OfferDAO.smart_offer_search(db_session, search_term)
 
 
 @router.post(

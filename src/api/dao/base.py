@@ -20,7 +20,7 @@ class BaseDAO:
     # self.model (in instance method)
     # cls.model (in classmethod)
     @classmethod
-    async def find_all(cls, db_session, filter_by: dict, order_by: str = None) -> list:
+    async def find_all(cls, db_session, filter_by: dict, order_by: str = None) -> list[model]:
         query = select(cls.model).filter_by(**filter_by).order_by(order_by)
         result = await db_session.execute(query)
         res = result.scalars().all()
@@ -56,7 +56,7 @@ class BaseDAO:
     #            POST Methods
     # ---------------------------------------
     @classmethod
-    async def add(cls, db_session, **values) -> Any:
+    async def add(cls, db_session, **values) -> model:
         """
         More: https://habr.com/ru/articles/828328/, 'Управление транзакциями'
         :param db_session:

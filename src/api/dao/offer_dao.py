@@ -3,9 +3,11 @@ from uuid import UUID
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import joinedload
 
 from src.api.dao.base import BaseDAO
-from src.models.models import Offer
+from src.models.models import Offer, Product
 from src.schemas.offer_schema import OfferSchema
 
 
@@ -43,6 +45,30 @@ class OfferDAO(BaseDAO):
                 func.replace(cls.model.brand, ".", "").ilike(search_term),
                 func.replace(cls.model.manufacturer_number, ".", "").ilike(search_term),
             )
+        )
+
+        return await paginate(db_session, query)
+
+    @classmethod
+    async def smart_offer_search(
+        cls, db_session: AsyncSession, search_term: str
+    ) -> Page[OfferSchema]:
+        search_term = f"%{search_term.lower()}%"
+        o = cls.model
+        p = Product
+
+        query = (
+            select(o)
+            .join(p, o.product_id == p.id)
+            .where(
+                or_(
+                    func.lower(p.name).ilike(search_term),
+                    func.lower(p.cross_number).ilike(search_term),
+                    func.lower(o.manufacturer_number).ilike(search_term),
+                    func.lower(o.brand).ilike(search_term),
+                )
+            )
+            .options(joinedload(o.product))  # чтобы продукт был доступен
         )
 
         return await paginate(db_session, query)
