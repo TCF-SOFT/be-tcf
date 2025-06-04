@@ -72,3 +72,43 @@ class OfferDAO(BaseDAO):
         )
 
         return await paginate(db_session, query)
+
+    @classmethod
+    async def full_text_search(
+        cls,
+        db_session,
+        search_term: str,
+    ) -> Page[OfferSchema]:
+        """
+        Perform a full-text search across product name, cross_number,
+        offer brand and manufacturer_number using trigram similarity.
+        """
+        o = cls.model
+        p = Product
+
+        similarity_threshold = 0.15
+
+        query = (
+            select(o)
+            .join(p, o.product_id == p.id)
+            .where(
+                or_(
+                    func.similarity(p.name, search_term) > similarity_threshold,
+                    func.similarity(p.cross_number, search_term)
+                    > similarity_threshold,
+                    func.similarity(o.brand, search_term)
+                    > similarity_threshold,
+                    func.similarity(o.manufacturer_number, search_term)
+                    > similarity_threshold,
+                )
+            )
+            .order_by(
+                func.greatest(
+                    func.similarity(p.name, search_term),
+                    func.similarity(p.cross_number, search_term),
+                    func.similarity(o.brand, search_term),
+                    func.similarity(o.manufacturer_number, search_term),
+                ).desc()
+            )
+        )
+        return await paginate(db_session, query)

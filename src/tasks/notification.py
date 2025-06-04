@@ -11,6 +11,7 @@ def create_waybill_message(email: EmailStr) -> EmailMessage:
     msg["From"] = settings.SMTP.SMTP_USER
     msg["To"] = email
 
+    # TODO: add cert
     with open("src/tasks/templates/template.html", "r", encoding="utf-8") as f:
         html_content = f.read()
 

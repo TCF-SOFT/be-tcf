@@ -65,6 +65,19 @@ async def search_offers(
     return await OfferDAO.smart_offer_search(db_session, search_term)
 
 
+@router.get(
+    "/offers/text_search",
+    response_model=Page[OfferSchema],
+    summary="Search offers by product name, cross_number, brand and manufacturer_number",
+    status_code=status.HTTP_200_OK,
+)
+async def full_text_search_offers(
+    search_term: str,
+    db_session: AsyncSession = Depends(get_db),
+):
+    return await OfferDAO.full_text_search(db_session, search_term)
+
+
 @router.post(
     "/offer",
     response_model=OfferSchema,
