@@ -3,10 +3,11 @@ from uuid import UUID
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas.offer_schema import OfferSchema
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
-from src.models.models import Waybill, WaybillOffer
+from src.models.models import Waybill, WaybillOffer, Offer
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 
 
@@ -33,21 +34,15 @@ class WaybillService:
         waybill_id: UUID,
         waybill_offer: WaybillOfferPostSchema,
     ) -> WaybillOffer:
-        async with db_session.begin():
-            # получаем текущие данные из offers — для валидации
-            offer = await OfferDAO.find_by_id(db_session, waybill_offer.offer_id)
-            if not offer:
-                raise HTTPException(status_code=404, detail="Offer not found")
-
-            return await WaybillOfferDAO.add(
-                db_session,
-                waybill_id=waybill_id,
-                offer_id=waybill_offer.offer_id,
-                quantity=waybill_offer.quantity,
-                brand=waybill_offer.brand,
-                manufacturer_number=waybill_offer.manufacturer_number,
-                price_rub=waybill_offer.price_rub,
-            )
+        return await WaybillOfferDAO.add(
+            db_session,
+            waybill_id=waybill_id,
+            offer_id=waybill_offer.offer_id,
+            quantity=waybill_offer.quantity,
+            brand=waybill_offer.brand,
+            manufacturer_number=waybill_offer.manufacturer_number,
+            price_rub=waybill_offer.price_rub,
+        )
 
     @staticmethod
     async def fetch_waybill_offers(waybill) -> list[WaybillOfferSchema]:
@@ -59,6 +54,7 @@ class WaybillService:
                 WaybillOfferSchema.model_validate(
                     {
                         "id": item.id,
+                        "waybill_id": waybill.id,
                         "offer_id": offer.id,
                         "quantity": item.quantity,
                         "brand": item.brand,

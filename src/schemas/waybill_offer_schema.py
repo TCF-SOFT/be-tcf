@@ -19,6 +19,7 @@ class WaybillOfferPostSchema(_WaybillOfferBaseSchema):
 
 class WaybillOfferSchema(_WaybillOfferBaseSchema):
     id: UUID
+    waybill_id: UUID
     product_name: str
     image_url: str | None
     category_slug: str

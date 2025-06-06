@@ -11,7 +11,7 @@ from pydantic import (
 
 class _WaybillBaseSchema(BaseModel):
     user_id: UUID
-    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT"]
+    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]
     is_pending: bool = Field(..., examples=[True])
     counterparty_name: str = Field(..., examples=["ООО Рога и Копыта"])
 

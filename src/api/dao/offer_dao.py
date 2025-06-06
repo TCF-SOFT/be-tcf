@@ -21,16 +21,6 @@ class OfferDAO(BaseDAO):
         query = select(cls.model).filter_by(**filter_by)
         return await paginate(db_session, query)
 
-    @classmethod
-    async def find_by_id(cls, db_session, _id: UUID) -> OfferSchema:
-        """
-        Базовый метод DAO должен проходить через model_validate()
-         для преобразования в нужную схему с последующей сериализацией.
-        """
-        query = select(cls.model).filter_by(id=_id)
-        result = await db_session.execute(query)
-        res = result.scalar_one_or_none()
-        return OfferSchema.model_validate(res)
 
     @classmethod
     async def wildcard_search(

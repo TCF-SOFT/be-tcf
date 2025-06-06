@@ -49,7 +49,7 @@ class WaybillDAO(BaseDAO):
         for w_offer in offers:
             # Обновляем количество в оффере
             offer: Offer = w_offer.offer
-            if waybill.waybill_type == "WAYBILL_IN":
+            if waybill.waybill_type in ["WAYBILL_IN", "WAYBILL_RETURN"]:
                 offer.quantity += w_offer.quantity
             else:
                 offer.quantity -= w_offer.quantity

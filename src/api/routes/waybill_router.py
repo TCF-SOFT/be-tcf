@@ -7,8 +7,10 @@ from fastapi_pagination import Page
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.controllers.create_entity_controller import create_entity
-from api.dao.waybill_offer_dao import WaybillOfferDAO
+from src.api.controllers.create_entity_controller import create_entity
+from src.api.dao.offer_dao import OfferDAO
+from src.api.dao.waybill_offer_dao import WaybillOfferDAO
+from src.models.models import Product, Offer
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.di.database import get_db
 from src.api.services.waybill_service import WaybillService
@@ -32,7 +34,7 @@ async def send_waybill(email: EmailStr) -> None:
 @router.get("/waybills", status_code=200, response_model=Page[WaybillSchema])
 async def get_waybills(
     db_session: AsyncSession = Depends(get_db),
-    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT"] | None = None,
+    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"] | None = None,
     is_pending: bool | None = None,
     user_id: UUID | None = None,
     search_term: str = "",
@@ -109,15 +111,38 @@ async def commit_waybill(
     return await WaybillService.commit(db_session, waybill_id, user_id)
 
 
-@router.post("/waybill/{waybill_id}/offers", status_code=201)
+@router.post("/waybill/{waybill_id}/offers", status_code=201, response_model=WaybillOfferSchema)
 async def add_offer_to_waybill(
     waybill_id: UUID,
     waybill_offer: WaybillOfferPostSchema,
     db_session: AsyncSession = Depends(get_db),
     user=Depends(get_current_user),
 ):
-    return await WaybillService.add_offer_to_waybill(
+    # получаем текущие данные из offers — для валидации
+    offer = await OfferDAO.find_by_id(db_session, waybill_offer.offer_id)
+    if not offer:
+        raise HTTPException(status_code=404, detail="Offer not found")
+
+    product: Product = offer.product
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+
+    waybill_offer_obj = await WaybillService.add_offer_to_waybill(
         db_session, waybill_id, waybill_offer
+    )
+
+    return WaybillOfferSchema(
+        id=waybill_offer_obj.id,
+        waybill_id=waybill_id,
+        offer_id=offer.id,
+        quantity=waybill_offer_obj.quantity,
+        brand=waybill_offer_obj.brand,
+        manufacturer_number=waybill_offer_obj.manufacturer_number,
+        price_rub=waybill_offer_obj.price_rub,
+        product_name=product.name,
+        image_url=product.image_url,
+        category_slug=product.sub_category.category_slug,
+        sub_category_slug=product.sub_category_slug,
     )
 
 

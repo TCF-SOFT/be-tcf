@@ -196,7 +196,7 @@ class SubCategory(Base):
 class Waybill(Base):
     id: Mapped[uuid_pk]
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT"]] = mapped_column(
+    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]] = mapped_column(
         String, nullable=False
     )
     is_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
@@ -224,7 +224,7 @@ class StockMovement(Base):
         ForeignKey("waybills.id"), nullable=True
     )
 
-    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT"]] = mapped_column(
+    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]] = mapped_column(
         String, nullable=False
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
