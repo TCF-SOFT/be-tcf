@@ -1,20 +1,29 @@
+import uuid
 from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends
+from fastapi_users import FastAPIUsers
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.dao.user_dao import UserDAO
-from api.di.database import get_db
-from schemas.schemas import UserSchema
+from src.api.auth.backend import authentication_backend
+from src.api.auth.dependencies import get_user_manager
+from src.api.dao.user_dao import UserDAO
+from src.api.di.database import get_db
+from src.models import User
+from src.schemas.user_schema import UserRead
 
 # Create the router
 router = APIRouter(tags=["Users"])
 
+fastapi_users = FastAPIUsers[User, uuid.UUID](
+    get_user_manager,
+    [authentication_backend],
+)
 
 @router.get(
     "/users",
-    response_model=list[UserSchema],
+    response_model=list[UserRead],
     summary="Return all users or filter them",
 )
 async def get_users(
@@ -31,7 +40,7 @@ async def get_users(
 
 @router.get(
     "/users/{user_id}",
-    response_model=UserSchema,
+    response_model=UserRead,
     summary="Return user by id",
 )
 async def get_user(
@@ -39,3 +48,5 @@ async def get_user(
     db_session: AsyncSession = Depends(get_db),
 ):
     return await UserDAO.find_by_id(db_session, user_id)
+
+

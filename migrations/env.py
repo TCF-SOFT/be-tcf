@@ -6,13 +6,12 @@ from src.config.config import settings
 from src.models import Base
 from src.utils.logging import logger
 
-# TODO: read a guide how to define models in project (several files or just one) and metadata
-# ? use __init__.py to import all models
+# ? use `__init__.py` in `models` to import all models
 target_metadata = Base.metadata
 
 logger.info("Tables seen by Alembic:")
 for t in Base.metadata.tables:
-    logger.info("- %r", t)
+    logger.info("%r", t)
 
 def do_run_migrations(connection):
     context.configure(
@@ -40,6 +39,8 @@ async def run_migrations_online():
 
     async with connectable.connect() as connection:
         await connection.run_sync(do_run_migrations)
+
+    await connectable.dispose()
 
 
 asyncio.run(run_migrations_online())
