@@ -2,10 +2,10 @@ import asyncio
 
 from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
-
-from src.models.models import *
 from src.config.config import settings
 from src.models.base import Base
+from src.models.models import *
+from src.models.user import User
 
 # TODO: read a guide how to define models in project (several files or just one) and metadata
 target_metadata = Base.metadata

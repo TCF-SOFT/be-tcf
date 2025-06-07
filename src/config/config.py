@@ -1,3 +1,5 @@
+from typing import Literal
+
 from environs import Env
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
@@ -99,6 +101,37 @@ class SecurityConfig(BaseModel):
     pass
 
 
+class ServerConfig(BaseModel):
+    """
+    Represents the configuration settings for the server.
+    """
+    HOST: str = "0.0.0.0"
+    PORT: int = 8080
+    ENV: Literal["DEV", "PROD"] = env.str("ENV", "DEV").upper()
+
+    # CORS settings
+    ALLOW_ORIGINS: list[str] = [
+        "http://localhost:8080",
+        "https://tcf.eucalytics.uk",
+        "http://localhost:3000",
+        # Vercel TMP
+        "https://nextjs-dashboard-git-main-utikpuhliks-projects.vercel.app/",
+        "https://nextjs-dashboard-xi-rouge-64.vercel.app/",
+        "https://nextjs-dashboard-utikpuhliks-projects.vercel.app/",
+    ]
+    ALLOW_CREDENTIALS: bool = True
+    ALLOW_METHODS: list[str] = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
+    ALLOW_HEADERS: list[str] = [
+        "Content-Type",
+        "Set-Cookie",
+        "Authorization",
+        "Access-Control-Allow-Headers",
+        "Access-Control-Allow-Origin",
+    ]
+
+
+
+
 class Settings(BaseSettings):
     """
     Represents the configuration settings for the application.
@@ -115,6 +148,8 @@ class Settings(BaseSettings):
     AWS: AWSConfig = AWSConfig()
     SMTP: SMTPConfig = SMTPConfig()
     SECURITY: SecurityConfig = SecurityConfig()
+
+    SERVER: ServerConfig = ServerConfig()
 
     # Logging settings
     JSON_LOG_FORMAT: bool = env.bool("JSON_LOG_FORMAT", True)

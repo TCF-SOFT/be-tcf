@@ -15,34 +15,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.models.base import Base, str_uniq, uuid_pk
 
 
-class User(Base):
-    id: Mapped[uuid_pk]
-    email: Mapped[str_uniq]
-    hashed_password: Mapped[str] = mapped_column(String, nullable=False)
-
-    first_name: Mapped[str] = mapped_column(String, nullable=False)
-    last_name: Mapped[str] = mapped_column(String, nullable=True)
-    avatar_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
-
-    is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    is_superuser: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    is_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-
-    role: Mapped[Literal["admin", "employee", "user"]] = mapped_column(
-        String, nullable=False, default="user"
-    )
-
-    position: Mapped[Literal["Менеджер", "Кладовщик"]] = mapped_column(
-        String, nullable=True
-    )
-
-    # Relationships
-    waybills = relationship("Waybill", back_populates="user", lazy="joined")
-
-    def __str__(self):
-        return f"User: {self.email}"
-
-
 class Offer(Base):
     id: Mapped[uuid_pk]
     product_id: Mapped[uuid.UUID] = mapped_column(
@@ -196,8 +168,8 @@ class SubCategory(Base):
 class Waybill(Base):
     id: Mapped[uuid_pk]
     user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]] = mapped_column(
-        String, nullable=False
+    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]] = (
+        mapped_column(String, nullable=False)
     )
     is_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     counterparty_name: Mapped[str] = mapped_column(String, nullable=False)
@@ -224,8 +196,8 @@ class StockMovement(Base):
         ForeignKey("waybills.id"), nullable=True
     )
 
-    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]] = mapped_column(
-        String, nullable=False
+    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]] = (
+        mapped_column(String, nullable=False)
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 

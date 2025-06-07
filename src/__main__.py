@@ -128,26 +128,10 @@ add_pagination(app)
 # --------------------------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8080",
-        "https://api-tcf.eucalytics.uk",
-        "https://tcf.eucalytics.uk",
-        "http://localhost:5173",
-        "http://localhost:3000",
-        # Vercel TMP
-        "https://nextjs-dashboard-git-main-utikpuhliks-projects.vercel.app/",
-        "https://nextjs-dashboard-xi-rouge-64.vercel.app/",
-        "https://nextjs-dashboard-utikpuhliks-projects.vercel.app/",
-    ],
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allow_headers=[
-        "Content-Type",
-        "Set-Cookie",
-        "Authorization",
-        "Access-Control-Allow-Headers",
-        "Access-Control-Allow-Origin",
-    ],
+    allow_origins=settings.SERVER.ALLOW_ORIGINS,
+    allow_credentials=settings.SERVER.ALLOW_CREDENTIALS,
+    allow_methods=settings.SERVER.ALLOW_METHODS,
+    allow_headers=settings.SERVER.ALLOW_HEADERS,
 )
 
 app.middleware("http")(LoggingMiddleware())
