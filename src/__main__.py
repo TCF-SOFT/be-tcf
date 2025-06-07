@@ -15,10 +15,11 @@ from prometheus_fastapi_instrumentator import Instrumentator
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.middleware.cors import CORSMiddleware
 
-from common.services.s3_service import S3Service
-from src.api.controllers.api_microservice_version import get_microservice_version
+from src.api.di.database import dispose
 from src.api.di.di import ResourceModule
-from src.api.di.redis_service import RedisService
+from src.common.services.s3_service import S3Service
+from src.api.controllers.api_microservice_version import get_microservice_version
+from src.common.services.redis_service import RedisService
 from src.api.middleware.logging_middleware import LoggingMiddleware
 from src.api.routes.category_router import router as category_router
 from src.api.routes.health_check_router import router as health_check_router
@@ -37,7 +38,7 @@ from src.utils.logging import logger
 async def check_health(app: FastAPI):
     logger.info("[!] Performing health-check of services...")
     # Check Redis health
-    if not await app.state.resources.get_redis().ping():
+    if not await app.state.redis.ping():
         logger.error("[X] Health-check failed: Unable to ping Redis")
         sys.exit(1)
     logger.info("[+] Redis connection established")
@@ -69,12 +70,14 @@ async def lifespan(app: FastAPI):
 
     # Resources initialization
     logger.info("[!] Initializing resources...")
-    app.state.resources = ResourceModule(redis=RedisService())
+    app.state.resources = ResourceModule(redis_service=RedisService())
+    app.state.redis_service = app.state.resources.get_redis_service()
+    app.state.redis = app.state.redis_service.get_redis()
     app.state.s3 = S3Service()
     logger.info("[+] Resources initialized successfully")
 
     # Redis Cache
-    FastAPICache.init(RedisBackend(app.state.resources.get_redis()), prefix="be-tcf")
+    FastAPICache.init(RedisBackend(app.state.redis), prefix="be-tcf")
 
     # Check health of services
     await check_health(app)
@@ -83,6 +86,9 @@ async def lifespan(app: FastAPI):
         yield
     finally:
         logger.info("[!] Shutting down the application...")
+        await app.state.redis_service.close()
+        await dispose()  # Close the database connection pool
+
 
 
 # Datadog tracing (should be initialized before the app creation)

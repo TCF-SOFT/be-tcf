@@ -1,7 +1,7 @@
 from redis.asyncio import Redis
 
-from api.di.redis_service import RedisService
-from utils.singleton import SingletonMeta
+from src.common.services.redis_service import RedisService
+from src.utils.singleton import SingletonMeta
 
 
 class ResourceModule(metaclass=SingletonMeta):
@@ -10,8 +10,12 @@ class ResourceModule(metaclass=SingletonMeta):
     - RedisService
     """
 
-    def __init__(self, redis: RedisService):
-        self.redis = redis.get_redis()
+    def __init__(self, redis_service: RedisService):
+        self.redis_service = redis_service
+        self.redis = redis_service.get_redis()
+
+    def get_redis_service(self) -> RedisService:
+        return self.redis_service
 
     def get_redis(self) -> Redis:
         return self.redis

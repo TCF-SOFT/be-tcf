@@ -3,13 +3,16 @@ import asyncio
 from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 from src.config.config import settings
-from src.models.base import Base
-from src.models.models import *
-from src.models.user import User
+from src.models import Base
+from src.utils.logging import logger
 
 # TODO: read a guide how to define models in project (several files or just one) and metadata
+# ? use __init__.py to import all models
 target_metadata = Base.metadata
 
+logger.info("Tables seen by Alembic:")
+for t in Base.metadata.tables:
+    logger.info("- %r", t)
 
 def do_run_migrations(connection):
     context.configure(

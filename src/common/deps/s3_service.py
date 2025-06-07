@@ -1,6 +1,6 @@
 from fastapi import Request
 
-from common.services.s3_service import S3Service
+from src.common.services.s3_service import S3Service
 
 
 def get_s3_service(request: Request) -> S3Service:

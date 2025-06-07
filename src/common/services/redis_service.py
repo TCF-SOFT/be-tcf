@@ -23,5 +23,9 @@ class RedisService:
             connection_pool=pool, ssl=True, encoding="utf-8", decode_responses=True
         )
 
+    async def close(self):
+        await self.redis.close()
+        await self.redis.connection_pool.disconnect()
+
     def get_redis(self) -> Redis:
         return self.redis

@@ -2,7 +2,7 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from api.di.di import ResourceModule
-from api.di.redis_service import RedisService
+from common.services.redis_service import RedisService
 
 
 @pytest.fixture(

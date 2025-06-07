@@ -7,7 +7,7 @@ from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
 from sqlalchemy.ext.asyncio import async_sessionmaker
 from src.api.di.database import engine
-from src.api.di.redis_service import get_redis
+from common.services.redis_service import get_redis
 from src.config.config import settings
 from src.models.base import Base
 from src.models.models import Cocktail, CocktailLabel, Image, Label, Rating, User

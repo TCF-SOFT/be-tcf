@@ -1,6 +1,5 @@
-from typing import Literal, Optional
-
-from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTableUUID
+from typing import Literal, Optional, TYPE_CHECKING
+from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTableUUID
 from sqlalchemy import (
     Boolean,
     String,
@@ -8,6 +7,10 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, str_uniq, uuid_pk
+
+if TYPE_CHECKING:
+    # Do not import, just use type with `session: "AsyncSession"`
+    from sqlalchemy.ext.asyncio import AsyncSession
 
 
 class User(Base, SQLAlchemyBaseUserTableUUID):
@@ -35,3 +38,10 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
 
     # Relationships
     waybills = relationship("Waybill", back_populates="user", lazy="joined")
+
+    @classmethod
+    def get_db(cls, session: "AsyncSession"):
+        """
+        Database Adapter
+        """
+        return SQLAlchemyUserDatabase(session, cls)

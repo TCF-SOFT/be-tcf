@@ -86,19 +86,16 @@ class SMTPConfig(BaseModel):
     SMTP_PASS: str = env.str("SMTP_PASS")
 
 
-class SecurityConfig(BaseModel):
+class AuthConfig(BaseModel):
     """
-    Represents the configuration settings for the security.
+    Represents the configuration settings for authentication tokens.
     """
+    LIFETIME_SECONDS: int = 3600
+    RESET_PASSWORD_TOKEN_SECRET: str = env.str("RESET_PASSWORD_TOKEN_SECRET")
+    VERIFICATION_TOKEN_SECRET: str = env.str("VERIFICATION_TOKEN_SECRET")
 
-    # JWT_ALGORITHM: str = env.str("JWT_ALGORITHM")
-    # JWT_EXPIRE: int = env.str("JWT_EXPIRE")
-    # JWT_SECRET: str = env.str("JWT_SECRET")
-    # PASSWORD_MANAGER_SECRET: str = env.str("PASSWORD_MANAGER_SECRET")
-    #
     # AUTHENTIK_CLIENT_ID: str = env.str("AUTHENTIK_CLIENT_ID")
     # AUTHENTIK_CLIENT_SECRET: str = env.str("AUTHENTIK_CLIENT_SECRET")
-    pass
 
 
 class ServerConfig(BaseModel):
@@ -147,7 +144,7 @@ class Settings(BaseSettings):
     TELEMETRY: TelemetryConfig = TelemetryConfig()
     AWS: AWSConfig = AWSConfig()
     SMTP: SMTPConfig = SMTPConfig()
-    SECURITY: SecurityConfig = SecurityConfig()
+    AUTH: AuthConfig = AuthConfig()
 
     SERVER: ServerConfig = ServerConfig()
 
