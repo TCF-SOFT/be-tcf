@@ -13,11 +13,13 @@ __all__ = (
 
 from .access_token import AccessToken
 from .base import Base
+from .models import (
+    Category,
+    Offer,
+    Product,
+    StockMovement,
+    SubCategory,
+    Waybill,
+    WaybillOffer,
+)
 from .user import User
-from .models import Category
-from .models import SubCategory
-from .models import Product
-from .models import Offer
-from .models import Waybill
-from .models import WaybillOffer
-from .models import StockMovement

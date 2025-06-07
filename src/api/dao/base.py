@@ -20,7 +20,9 @@ class BaseDAO:
     # self.model (in instance method)
     # cls.model (in classmethod)
     @classmethod
-    async def find_all(cls, db_session, filter_by: dict, order_by: str = None) -> list[model]:
+    async def find_all(
+        cls, db_session, filter_by: dict, order_by: str = None
+    ) -> list[model]:
         query = select(cls.model).filter_by(**filter_by).order_by(order_by)
         result = await db_session.execute(query)
         res = result.unique().scalars().all()

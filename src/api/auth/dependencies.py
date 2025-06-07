@@ -3,8 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.user_manager import UserManager
 from src.api.di.database import get_db
-from src.models.user import User
 from src.models.access_token import AccessToken
+from src.models.user import User
+
 
 async def get_users_db(db_session: AsyncSession = Depends(get_db)):
     """

@@ -1,7 +1,6 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,7 +19,6 @@ from src.schemas.product_schema import (
     ProductSchema,
 )
 from src.schemas.sub_category_schema import SubCategorySchema
-from src.utils.cache_coder import ORJsonCoder
 
 router = APIRouter(tags=["Products"])
 

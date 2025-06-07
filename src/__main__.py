@@ -11,25 +11,16 @@ from fastapi.responses import ORJSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
-from prometheus_fastapi_instrumentator import Instrumentator
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.middleware.cors import CORSMiddleware
 
+from api.routes import router
+from src.api.controllers.api_microservice_version import get_microservice_version
 from src.api.di.database import dispose
 from src.api.di.di import ResourceModule
-from src.common.services.s3_service import S3Service
-from src.api.controllers.api_microservice_version import get_microservice_version
-from src.common.services.redis_service import RedisService
 from src.api.middleware.logging_middleware import LoggingMiddleware
-from src.api.routes.category_router import router as category_router
-from src.api.routes.health_check_router import router as health_check_router
-from src.api.routes.offer_router import router as offer_router
-from src.api.routes.pricing_router import router as pricing_router
-from src.api.routes.product_router import router as product_router
-from src.api.routes.sub_category_router import router as sub_category_router
-from src.api.routes.user_router import router as user_router
-from src.api.routes.version_router import router as version_router
-from src.api.routes.waybill_router import router as waybill_router
+from src.common.services.redis_service import RedisService
+from src.common.services.s3_service import S3Service
 from src.config.config import settings
 from src.docs import docs
 from src.utils.logging import logger
@@ -90,7 +81,6 @@ async def lifespan(app: FastAPI):
         await dispose()  # Close the database connection pool
 
 
-
 # Datadog tracing (should be initialized before the app creation)
 if settings.TELEMETRY.DD_TRACE_ENABLED:
     patch_all(
@@ -112,7 +102,7 @@ app = FastAPI(
     servers=docs.servers,
     version="1.2.0",
     contact=docs.contact,
-    openapi_url="/docs/pricing-v2/openapi.json",
+    openapi_url="/docs/openapi.json",
     # docs_url=docs.DOCS_URL,
     # redoc_url=docs.REDOC_URL,
     lifespan=lifespan,
@@ -121,11 +111,11 @@ app = FastAPI(
 # --------------------------------------------------
 # Instrumentator (monitoring Prometheus - Grafana)
 # --------------------------------------------------
-instrumentator = Instrumentator(
-    should_group_status_codes=False,
-    excluded_handlers=["/metrics"],
-)
-instrumentator.instrument(app).expose(app)
+# instrumentator = Instrumentator(
+#     should_group_status_codes=False,
+#     excluded_handlers=["/metrics"],
+# )
+# instrumentator.instrument(app).expose(app)
 
 add_pagination(app)
 
@@ -162,15 +152,7 @@ def validation_exception_handler(
     )
 
 
-app.include_router(category_router)
-app.include_router(sub_category_router)
-app.include_router(product_router)
-app.include_router(offer_router)
-app.include_router(user_router)
-app.include_router(waybill_router)
-app.include_router(pricing_router)
-app.include_router(health_check_router)
-app.include_router(version_router)
+app.include_router(router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8080, log_config=None)

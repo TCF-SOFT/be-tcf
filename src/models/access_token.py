@@ -1,11 +1,13 @@
 from typing import TYPE_CHECKING
+
 from fastapi_users_db_sqlalchemy import GUID
 from fastapi_users_db_sqlalchemy.access_token import (
-    SQLAlchemyBaseAccessTokenTableUUID,
     SQLAlchemyAccessTokenDatabase,
+    SQLAlchemyBaseAccessTokenTableUUID,
 )
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import mapped_column, Mapped, declared_attr
+from sqlalchemy.orm import Mapped, declared_attr, mapped_column
+
 from src.models.base import Base
 
 if TYPE_CHECKING:

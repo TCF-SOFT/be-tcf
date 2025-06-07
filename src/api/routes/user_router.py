@@ -1,19 +1,26 @@
 from typing import Literal
-from uuid import UUID
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.routes.fastapi_users_router import fastapi_users_router
+from schemas.user_schema import UserUpdate
 from src.api.dao.user_dao import UserDAO
 from src.api.di.database import get_db
 from src.schemas.user_schema import UserRead
 
 # Create the router
-router = APIRouter(tags=["Users"])
+router = APIRouter(tags=["Users"], prefix="/users")
+
+# /me
+# /{id}
+router.include_router(
+    router=fastapi_users_router.get_users_router(UserRead, UserUpdate)
+)
 
 
 @router.get(
-    "/users",
+    "",
     response_model=list[UserRead],
     summary="Return all users or filter them",
 )
@@ -27,17 +34,3 @@ async def get_users(
         filters["role"] = role
 
     return await UserDAO.find_all(db_session, filters)
-
-
-@router.get(
-    "/users/{user_id}",
-    response_model=UserRead,
-    summary="Return user by id",
-)
-async def get_user(
-    user_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
-):
-    return await UserDAO.find_by_id(db_session, user_id)
-
-

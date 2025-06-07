@@ -1,0 +1,27 @@
+from fastapi import APIRouter
+
+from .auth_router import router as auth_router
+from .category_router import router as category_router
+from .health_check_router import router as health_check_router
+from .offer_router import router as offer_router
+from .pricing_router import router as pricing_router
+from .product_router import router as product_router
+from .sub_category_router import router as sub_category_router
+from .user_router import router as user_router
+from .version_router import router as version_router
+from .waybill_router import router as waybill_router
+
+# TODO: add v1 prefix
+router = APIRouter()
+
+# Include all routers
+router.include_router(auth_router)
+router.include_router(user_router)
+router.include_router(category_router)
+router.include_router(sub_category_router)
+router.include_router(product_router)
+router.include_router(offer_router)
+router.include_router(waybill_router)
+router.include_router(pricing_router)
+router.include_router(health_check_router)
+router.include_router(version_router)

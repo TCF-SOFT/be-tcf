@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
@@ -20,7 +18,6 @@ class OfferDAO(BaseDAO):
     ) -> Page[OfferSchema]:
         query = select(cls.model).filter_by(**filter_by)
         return await paginate(db_session, query)
-
 
     @classmethod
     async def wildcard_search(
@@ -84,10 +81,8 @@ class OfferDAO(BaseDAO):
             .where(
                 or_(
                     func.similarity(p.name, search_term) > similarity_threshold,
-                    func.similarity(p.cross_number, search_term)
-                    > similarity_threshold,
-                    func.similarity(o.brand, search_term)
-                    > similarity_threshold,
+                    func.similarity(p.cross_number, search_term) > similarity_threshold,
+                    func.similarity(o.brand, search_term) > similarity_threshold,
                     func.similarity(o.manufacturer_number, search_term)
                     > similarity_threshold,
                 )

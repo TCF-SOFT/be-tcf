@@ -1,7 +1,6 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi_cache.decorator import cache
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -14,7 +13,6 @@ from src.api.controllers.update_entity_controller import (
 from src.api.dao.offer_dao import OfferDAO
 from src.api.di.database import get_db
 from src.schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
-from src.utils.cache_coder import ORJsonCoder
 
 router = APIRouter(tags=["Offers"])
 

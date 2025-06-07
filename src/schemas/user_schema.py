@@ -2,7 +2,7 @@ import uuid
 from typing import Literal
 
 from fastapi_users import schemas
-from pydantic import Field, HttpUrl, BaseModel
+from pydantic import BaseModel, Field, HttpUrl, field_serializer
 
 
 class _BaseUser(BaseModel):
@@ -15,6 +15,10 @@ class _BaseUser(BaseModel):
     avatar_url: HttpUrl | None = Field(
         None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
     )
+
+    @field_serializer("avatar_url")
+    def serialize_avatar_url(self, v):
+        return str(v) if v else None
 
 
 class UserRead(schemas.BaseUser[uuid.UUID], _BaseUser):

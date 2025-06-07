@@ -9,12 +9,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
-from src.api.dao.waybill_offer_dao import WaybillOfferDAO
-from src.models.models import Product, Offer
 from src.api.dao.waybill_dao import WaybillDAO
+from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.database import get_db
 from src.api.services.waybill_service import WaybillService
-from src.models.models import Waybill
+from src.models.models import Product, Waybill
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
 from src.tasks.tasks import send_waybill_confirmation_email
@@ -111,7 +110,9 @@ async def commit_waybill(
     return await WaybillService.commit(db_session, waybill_id, user_id)
 
 
-@router.post("/waybill/{waybill_id}/offers", status_code=201, response_model=WaybillOfferSchema)
+@router.post(
+    "/waybill/{waybill_id}/offers", status_code=201, response_model=WaybillOfferSchema
+)
 async def add_offer_to_waybill(
     waybill_id: UUID,
     waybill_offer: WaybillOfferPostSchema,

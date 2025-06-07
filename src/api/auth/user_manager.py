@@ -3,8 +3,8 @@ import uuid
 from fastapi import Request
 from fastapi_users import BaseUserManager, UUIDIDMixin
 
-from models.user import User
 from src.config.config import settings
+from src.models.user import User
 from src.utils.logging import logger
 
 

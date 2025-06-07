@@ -1,5 +1,9 @@
-from typing import Literal, Optional, TYPE_CHECKING
-from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase, SQLAlchemyBaseUserTableUUID
+from typing import TYPE_CHECKING, Literal, Optional
+
+from fastapi_users_db_sqlalchemy import (
+    SQLAlchemyBaseUserTableUUID,
+    SQLAlchemyUserDatabase,
+)
 from sqlalchemy import (
     Boolean,
     String,

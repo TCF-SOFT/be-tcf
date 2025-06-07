@@ -90,6 +90,7 @@ class AuthConfig(BaseModel):
     """
     Represents the configuration settings for authentication tokens.
     """
+
     LIFETIME_SECONDS: int = 3600
     RESET_PASSWORD_TOKEN_SECRET: str = env.str("RESET_PASSWORD_TOKEN_SECRET")
     VERIFICATION_TOKEN_SECRET: str = env.str("VERIFICATION_TOKEN_SECRET")
@@ -102,6 +103,7 @@ class ServerConfig(BaseModel):
     """
     Represents the configuration settings for the server.
     """
+
     HOST: str = "0.0.0.0"
     PORT: int = 8080
     ENV: Literal["DEV", "PROD"] = env.str("ENV", "DEV").upper()
@@ -125,8 +127,6 @@ class ServerConfig(BaseModel):
         "Access-Control-Allow-Headers",
         "Access-Control-Allow-Origin",
     ]
-
-
 
 
 class Settings(BaseSettings):

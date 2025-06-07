@@ -12,7 +12,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.models.base import Base, str_uniq, uuid_pk
+from src.models.base import Base, uuid_pk
 
 
 class Offer(Base):
