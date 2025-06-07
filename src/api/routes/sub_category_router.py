@@ -20,11 +20,11 @@ from schemas.sub_category_schema import (
 )
 from utils.cache_coder import ORJsonCoder
 
-router = APIRouter(tags=["Sub-Category"])
+router = APIRouter(tags=["Sub-Categories"], prefix="/sub-categories")
 
 
 @router.get(
-    "/sub-categories",
+    "",
     response_model=list[SubCategorySchema] | None,
     summary="",
     status_code=status.HTTP_200_OK,
@@ -49,7 +49,7 @@ async def get_sub_categories(
 
 
 @router.get(
-    "/sub-category/{slug}",
+    "/{slug}",
     response_model=SubCategorySchema | None,
     status_code=status.HTTP_200_OK,
 )
@@ -61,7 +61,7 @@ async def get_sub_category_by_slug(
 
 
 @router.post(
-    "/sub-category",
+    "",
     response_model=SubCategorySchema,
     status_code=status.HTTP_201_CREATED,
 )
@@ -83,7 +83,7 @@ async def post_sub_category(
 
 
 @router.put(
-    "/sub-category/{sub_category_id}",
+    "/{sub_category_id}",
     response_model=SubCategorySchema,
     summary="Update a sub_category by id",
     status_code=status.HTTP_200_OK,
@@ -107,7 +107,7 @@ async def put_sub_category(
 
 
 @router.delete(
-    "/sub-category/{sub_category_id}",
+    "/{sub_category_id}",
     summary="Delete sub_category by id",
     status_code=status.HTTP_204_NO_CONTENT,
 )

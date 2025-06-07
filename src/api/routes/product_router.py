@@ -20,11 +20,11 @@ from src.schemas.product_schema import (
 )
 from src.schemas.sub_category_schema import SubCategorySchema
 
-router = APIRouter(tags=["Products"])
+router = APIRouter(tags=["Products"], prefix="/products")
 
 
 @router.get(
-    "/products",
+    "",
     response_model=Page[ProductSchema],
     summary="Return all products with pagination or filter them",
     status_code=status.HTTP_200_OK,
@@ -49,7 +49,7 @@ async def get_products(
 
 
 @router.get(
-    "/product/{product_id}",
+    "/{product_id}",
     response_model=ProductSchema | None,
     summary="Return product by id",
     status_code=status.HTTP_200_OK,
@@ -62,7 +62,7 @@ async def get_product(
 
 
 @router.get(
-    "/products/search",
+    "/search",
     response_model=Page[ProductSchema],
     summary="Search products by name",
     status_code=status.HTTP_200_OK,
@@ -75,7 +75,7 @@ async def search_products_by_name(
 
 
 @router.get(
-    "/products/text_search",
+    "/text_search",
     response_model=Page[ProductSchema],
     summary="Full text search products",
     status_code=status.HTTP_200_OK,
@@ -102,7 +102,7 @@ async def full_text_search_products(
 
 
 @router.post(
-    "/product",
+    "",
     response_model=ProductSchema,
     summary="Create new product",
     status_code=status.HTTP_201_CREATED,
@@ -125,7 +125,7 @@ async def post_product(
 
 
 @router.put(
-    "/product/{product_id}",
+    "/{product_id}",
     response_model=ProductSchema,
     summary="Update product by id",
     status_code=status.HTTP_200_OK,
@@ -149,7 +149,7 @@ async def put_product(
 
 
 @router.delete(
-    "/product/{product_id}",
+    "/{product_id}",
     summary="Delete product by id",
     status_code=status.HTTP_204_NO_CONTENT,
 )

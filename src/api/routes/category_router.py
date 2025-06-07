@@ -20,11 +20,11 @@ from schemas.category_schema import (
 )
 from utils.logging import logger
 
-router = APIRouter(tags=["Category"])
+router = APIRouter(tags=["Categories"], prefix="/categories")
 
 
 @router.get(
-    "/categories",
+    "",
     response_model=list[CategorySchema],
     summary="Get all categories",
     status_code=status.HTTP_200_OK,
@@ -38,7 +38,7 @@ async def get_categories(
 
 
 @router.get(
-    "/category/slug/{slug}",
+    "/slug/{slug}",
     response_model=CategorySchema | None,
     summary="Get category by slug",
     status_code=status.HTTP_200_OK,
@@ -51,7 +51,7 @@ async def get_category_by_slug(
 
 
 @router.get(
-    "/category/{id}",
+    "/{id}",
     response_model=CategorySchema | None,
     summary="Get category by id",
     status_code=status.HTTP_200_OK,
@@ -64,7 +64,7 @@ async def get_category_by_id(
 
 
 @router.post(
-    "/category",
+    "",
     response_model=CategorySchema,
     summary="Create a new category",
     status_code=status.HTTP_201_CREATED,
@@ -86,7 +86,7 @@ async def post_category(
 
 
 @router.patch(
-    "/category/{category_id}",
+    "/{category_id}",
     response_model=CategorySchema,
     status_code=status.HTTP_200_OK,
     summary="Selective update category by id",
@@ -110,7 +110,7 @@ async def patch_category(
 
 
 @router.put(
-    "/category/{category_id}",
+    "/{category_id}",
     response_model=int,
     summary="Update category by id",
     status_code=status.HTTP_200_OK,
@@ -158,7 +158,7 @@ async def put_category(
 
 
 @router.delete(
-    "/category/{category_id}",
+    "/{category_id}",
     summary="Delete a category by id",
     status_code=status.HTTP_204_NO_CONTENT,
 )

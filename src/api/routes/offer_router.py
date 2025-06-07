@@ -14,11 +14,11 @@ from src.api.dao.offer_dao import OfferDAO
 from src.api.di.database import get_db
 from src.schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
 
-router = APIRouter(tags=["Offers"])
+router = APIRouter(tags=["Offers"], prefix="/offers")
 
 
 @router.get(
-    "/offers",
+    "",
     response_model=Page[OfferSchema],
     summary="Return all offers with pagination or filter them",
     status_code=status.HTTP_200_OK,
@@ -38,7 +38,7 @@ async def get_offers(
 
 
 @router.get(
-    "/offer/{offer_id}",
+    "/{offer_id}",
     response_model=OfferSchema,
     summary="Return offer by id",
     status_code=status.HTTP_200_OK,
@@ -51,7 +51,7 @@ async def get_offer(
 
 
 @router.get(
-    "/offers/search",
+    "/search",
     response_model=Page[OfferSchema],
     summary="Search offers by product name, cross_number, brand and manufacturer_number",
     status_code=status.HTTP_200_OK,
@@ -64,7 +64,7 @@ async def search_offers(
 
 
 @router.get(
-    "/offers/text_search",
+    "/text_search",
     response_model=Page[OfferSchema],
     summary="Search offers by product name, cross_number, brand and manufacturer_number",
     status_code=status.HTTP_200_OK,
@@ -77,7 +77,7 @@ async def full_text_search_offers(
 
 
 @router.post(
-    "/offer",
+    "",
     response_model=OfferSchema,
     summary="Create new offer",
     status_code=status.HTTP_201_CREATED,
@@ -95,7 +95,7 @@ async def post_offer(
 
 
 @router.put(
-    "/offer/{offer_id}",
+    "/{offer_id}",
     response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
@@ -111,7 +111,7 @@ async def put_offer(
 
 
 @router.delete(
-    "/offer/{offer_id}",
+    "/{offer_id}",
     summary="Delete offer by id",
     status_code=status.HTTP_204_NO_CONTENT,
 )
