@@ -2,11 +2,12 @@ import uuid
 from typing import Literal
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.routes.fastapi_users_router import current_active_user, require_admin, require_employee
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO
@@ -17,10 +18,12 @@ from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOffe
 from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
 from src.tasks.tasks import send_waybill_confirmation_email
 
-router = APIRouter(tags=["Waybills"], prefix="/waybills")
+router = APIRouter(
+    tags=["Waybills"], prefix="/waybills", dependencies=[Depends(require_employee)]
+)
 
 
-@router.get("/{email}", status_code=200)
+@router.get("test/{email}", status_code=status.HTTP_200_OK)
 async def send_waybill(email: EmailStr) -> None:
     """
     Send waybill to email
@@ -29,7 +32,11 @@ async def send_waybill(email: EmailStr) -> None:
     send_waybill_confirmation_email.delay(email=email)
 
 
-@router.get("", status_code=200, response_model=Page[WaybillSchema])
+@router.get(
+    "",
+    status_code=status.HTTP_200_OK,
+    response_model=Page[WaybillSchema],
+)
 async def get_waybills(
     db_session: AsyncSession = Depends(get_db),
     waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"] | None = None,
@@ -52,7 +59,11 @@ async def get_waybills(
     )
 
 
-@router.get("/{waybill_id}", status_code=200, response_model=WaybillSchema)
+@router.get(
+    "/{waybill_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=WaybillSchema,
+)
 async def get_waybill(
     waybill_id: UUID, db_session: AsyncSession = Depends(get_db)
 ) -> WaybillSchema | None:
@@ -64,7 +75,7 @@ async def get_waybill(
 
 @router.get(
     "/{waybill_id}/offers",
-    status_code=200,
+    status_code=status.HTTP_200_OK,
     response_model=list[WaybillOfferSchema],
 )
 async def get_waybill_offers(
@@ -75,20 +86,20 @@ async def get_waybill_offers(
     """
     waybill: Waybill = await WaybillDAO.find_by_id(db_session, waybill_id)
     if not waybill:
-        raise HTTPException(status_code=404, detail="Waybill not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Waybill not found"
+        )
 
     return await WaybillService.fetch_waybill_offers(waybill)
 
 
-def get_current_user():
-    return uuid.UUID("b5fe5a3b-dfa2-43d3-a81e-34404d8f75d4")
-
-
-@router.post("", status_code=201, response_model=WaybillSchema)
+@router.post(
+    "",
+    status_code=status.HTTP_201_CREATED,
+    response_model=WaybillSchema,
+)
 async def create_waybill(
-    waybill: WaybillPostSchema,
-    db_session: AsyncSession = Depends(get_db),
-    user=Depends(get_current_user),
+    waybill: WaybillPostSchema, db_session: AsyncSession = Depends(get_db)
 ):
     return await create_entity(
         payload=waybill,
@@ -98,30 +109,41 @@ async def create_waybill(
     )
 
 
-@router.post("/{waybill_id}/commit", status_code=201, response_model=WaybillSchema)
+@router.post(
+    "/{waybill_id}/commit",
+    status_code=status.HTTP_201_CREATED,
+    response_model=WaybillSchema,
+)
 async def commit_waybill(
     waybill_id: UUID,
     db_session: AsyncSession = Depends(get_db),
-    user_id=Depends(get_current_user),
+    user_id=Depends(current_active_user),
 ):
     return await WaybillService.commit(db_session, waybill_id, user_id)
 
 
-@router.post("/{waybill_id}/offers", status_code=201, response_model=WaybillOfferSchema)
+@router.post(
+    "/{waybill_id}/offers",
+    status_code=status.HTTP_201_CREATED,
+    response_model=WaybillOfferSchema,
+)
 async def add_offer_to_waybill(
     waybill_id: UUID,
     waybill_offer: WaybillOfferPostSchema,
     db_session: AsyncSession = Depends(get_db),
-    user=Depends(get_current_user),
 ):
     # получаем текущие данные из offers — для валидации
     offer = await OfferDAO.find_by_id(db_session, waybill_offer.offer_id)
     if not offer:
-        raise HTTPException(status_code=404, detail="Offer not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Offer not found"
+        )
 
     product: Product = offer.product
     if not product:
-        raise HTTPException(status_code=404, detail="Product not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
+        )
 
     waybill_offer_obj = await WaybillService.add_offer_to_waybill(
         db_session, waybill_id, waybill_offer
@@ -142,13 +164,12 @@ async def add_offer_to_waybill(
     )
 
 
-@router.delete("/{waybill_id}", status_code=204)
-async def delete_waybill(
-    waybill_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
-    user=Depends(get_current_user),
-):
+@router.delete(
+    "/{waybill_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_waybill(waybill_id: UUID, db_session: AsyncSession = Depends(get_db)):
     deleted = await WaybillDAO.delete_by_id(db_session, waybill_id)
     if not deleted:
-        raise HTTPException(status_code=404, detail="Waybill not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Waybill not found")
     return
