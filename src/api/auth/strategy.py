@@ -21,7 +21,6 @@ def get_database_strategy(
     """
     Пришлось создать дополнительную таблицу AccessToken, в сравнении с RedisStrategy
     Зависимости описаны в `dependencies.py`
-    TODO: с alembic не удалось сделать миграцию AccessToken
     """
     return DatabaseStrategy(
         database=access_tokens_db,

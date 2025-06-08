@@ -10,7 +10,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO
-from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.database import get_db
 from src.api.services.waybill_service import WaybillService
 from src.models.models import Product, Waybill
@@ -99,9 +98,7 @@ async def create_waybill(
     )
 
 
-@router.post(
-    "/{waybill_id}/commit", status_code=201, response_model=WaybillSchema
-)
+@router.post("/{waybill_id}/commit", status_code=201, response_model=WaybillSchema)
 async def commit_waybill(
     waybill_id: UUID,
     db_session: AsyncSession = Depends(get_db),
@@ -110,9 +107,7 @@ async def commit_waybill(
     return await WaybillService.commit(db_session, waybill_id, user_id)
 
 
-@router.post(
-    "/{waybill_id}/offers", status_code=201, response_model=WaybillOfferSchema
-)
+@router.post("/{waybill_id}/offers", status_code=201, response_model=WaybillOfferSchema)
 async def add_offer_to_waybill(
     waybill_id: UUID,
     waybill_offer: WaybillOfferPostSchema,
@@ -147,9 +142,7 @@ async def add_offer_to_waybill(
     )
 
 
-@router.delete(
-    "/{waybill_id}", status_code=204
-)
+@router.delete("/{waybill_id}", status_code=204)
 async def delete_waybill(
     waybill_id: UUID,
     db_session: AsyncSession = Depends(get_db),

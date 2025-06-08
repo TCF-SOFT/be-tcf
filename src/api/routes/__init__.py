@@ -1,4 +1,5 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.security import HTTPBearer
 
 from .auth_router import router as auth_router
 from .category_router import router as category_router
@@ -13,7 +14,9 @@ from .waybill_router import router as waybill_router
 from .waybill_offers_router import router as waybill_offers_router
 
 # TODO: add v1 prefix
-router = APIRouter()
+
+http_bearer = HTTPBearer(auto_error=False)
+router = APIRouter(dependencies=[Depends(http_bearer)])
 
 # Include all routers
 router.include_router(auth_router)

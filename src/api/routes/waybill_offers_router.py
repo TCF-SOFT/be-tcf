@@ -8,6 +8,7 @@ from src.api.di.database import get_db
 
 router = APIRouter(tags=["Waybill-Offers"], prefix="/waybill-offers")
 
+
 @router.delete("/{waybill_offer_id}", status_code=204)
 async def delete_offer_from_waybill(
     waybill_offer_id: UUID,

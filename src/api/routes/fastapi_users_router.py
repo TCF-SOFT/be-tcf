@@ -10,3 +10,8 @@ fastapi_users_router = FastAPIUsers[User, uuid.UUID](
     get_user_manager,
     [authentication_backend],
 )
+
+current_active_user = fastapi_users_router.current_user(active=True)
+current_active_superuser = fastapi_users_router.current_user(
+    active=True, superuser=True
+)
