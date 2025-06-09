@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, BackgroundTasks
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.user_manager import UserManager
@@ -21,5 +21,8 @@ async def get_access_tokens_db(db_session: AsyncSession = Depends(get_db)):
     return AccessToken.get_db(db_session)
 
 
-async def get_user_manager(users_db=Depends(get_users_db)):
-    yield UserManager(users_db)
+async def get_user_manager(
+    users_db=Depends(get_users_db),
+    background_tasks: BackgroundTasks = BackgroundTasks,
+):
+    yield UserManager(users_db, background_tasks)

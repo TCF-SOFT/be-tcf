@@ -7,7 +7,11 @@ from fastapi_pagination import Page
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.routes.fastapi_users_router import current_active_user, require_admin, require_employee
+from api.routes.fastapi_users_router import (
+    current_active_user,
+    require_admin,
+    require_employee,
+)
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO
@@ -16,20 +20,10 @@ from src.api.services.waybill_service import WaybillService
 from src.models.models import Product, Waybill
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
-from src.tasks.tasks import send_waybill_confirmation_email
 
 router = APIRouter(
     tags=["Waybills"], prefix="/waybills", dependencies=[Depends(require_employee)]
 )
-
-
-@router.get("test/{email}", status_code=status.HTTP_200_OK)
-async def send_waybill(email: EmailStr) -> None:
-    """
-    Send waybill to email
-    """
-    # for i in range(5):
-    send_waybill_confirmation_email.delay(email=email)
 
 
 @router.get(
