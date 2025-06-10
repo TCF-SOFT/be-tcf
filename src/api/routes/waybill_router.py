@@ -1,10 +1,8 @@
-import uuid
 from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
-from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.routes.fastapi_users_router import (
