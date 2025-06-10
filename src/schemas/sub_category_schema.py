@@ -32,6 +32,7 @@ class SubCategorySchema(_SubCategoryBase):
     id: UUID
     slug: str = Field(..., examples=["svechi-zazhiganiia"])
     category_slug: str = Field(..., examples=["svechi-ford"])
+    category_name: str = Field(..., examples=["Свечи"])
 
 
 class SubCategoryPostSchema(_SubCategoryBase):

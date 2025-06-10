@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
-from src.models.models import Waybill, WaybillOffer
+from src.models.models import Waybill, WaybillOffer, Offer
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 
 
@@ -45,8 +45,7 @@ class WaybillService:
     async def fetch_waybill_offers(waybill) -> list[WaybillOfferSchema]:
         result: list[WaybillOfferSchema] = []
         for item in waybill.waybill_offers:
-            offer = item.offer
-            product = offer.product if offer else None
+            offer: Offer = item.offer
             result.append(
                 WaybillOfferSchema.model_validate(
                     {
@@ -54,13 +53,15 @@ class WaybillService:
                         "waybill_id": waybill.id,
                         "offer_id": offer.id,
                         "quantity": item.quantity,
-                        "brand": item.brand,
-                        "manufacturer_number": item.manufacturer_number,
+                        "brand": offer.brand,
+                        "manufacturer_number": offer.manufacturer_number,
                         "price_rub": item.price_rub,
-                        "product_name": product.name,
-                        "image_url": product.image_url if product else None,
-                        "category_slug": product.category_slug,
-                        "sub_category_slug": product.sub_category_slug,
+                        "product_name": offer.product_name,
+                        "image_url": offer.image_url if offer else None,
+                        "category_slug": offer.category_slug,
+                        "category_name": offer.category_name,
+                        "sub_category_slug": offer.sub_category_slug,
+                        "sub_category_name": offer.sub_category_name,
                     }
                 )
             )

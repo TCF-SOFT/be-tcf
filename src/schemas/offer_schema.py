@@ -30,7 +30,9 @@ class OfferSchema(_OfferBase):
     id: UUID
     offer_bitrix_id: str | None = Field(None, examples=["278495"])
     category_slug: str = Field(..., examples=["svechi-ford"])
+    category_name: str = Field(..., examples=["Свечи"])
     sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
+    sub_category_name: str = Field(..., examples=["Свечи зажигания"])
     product_name: str = Field(..., examples=["Escort 1990-2000"])
     cross_number: str | None = Field(
         None,

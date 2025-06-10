@@ -51,8 +51,22 @@ class Offer(Base):
         return self.product.sub_category_slug
 
     @property
+    def sub_category_name(self) -> str:
+        """
+        WaybillOffer and Offer use this to display sub-category name.
+        """
+        return self.product.sub_category.name
+
+    @property
     def category_slug(self) -> str:
         return self.product.sub_category.category_slug
+
+    @property
+    def category_name(self) -> str:
+        """
+        WaybillOffer and Offer uss this to display category name.
+        """
+        return self.product.sub_category.category.name
 
     @property
     def product_name(self) -> str:
@@ -95,8 +109,16 @@ class Product(Base):
         return self.sub_category.slug
 
     @property
+    def sub_category_name(self) -> str:
+        return self.sub_category.name
+
+    @property
     def category_slug(self) -> str:
         return self.sub_category.category_slug
+
+    @property
+    def category_name(self) -> str:
+        return self.sub_category.category.name
 
     # Vector search
     # embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)
@@ -112,9 +134,6 @@ class Product(Base):
         #     postgresql_ops={"embedding": "vector_l2_ops"},
         # ),
     )
-
-    def __str__(self):
-        return f"Product: {self.name}"
 
 
 class Category(Base):
@@ -133,9 +152,6 @@ class Category(Base):
     # Constraints
     __table_args__ = (UniqueConstraint("slug", name="categories_slug_key"),)
 
-    def __str__(self):
-        return f"Category: {self.name}"
-
 
 class SubCategory(Base):
     __tablename__ = "sub_categories"
@@ -153,16 +169,14 @@ class SubCategory(Base):
 
     @property
     def category_slug(self) -> str:
-        """
-        Proxy `category.slug` so Pydantic can see it.
-        """
-        return self.category.slug if self.category else None
+        return self.category.slug
+
+    @property
+    def category_name(self) -> str:
+        return self.category.name
 
     # Constraints
     __table_args__ = (UniqueConstraint("slug", name="sub_categories_slug_key"),)
-
-    def __str__(self):
-        return f"SubCategory: {self.name}"
 
 
 class Waybill(Base):

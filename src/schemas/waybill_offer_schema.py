@@ -23,5 +23,7 @@ class WaybillOfferSchema(_WaybillOfferBaseSchema):
     product_name: str
     address_id: str | None = Field(None, examples=["AA-TEST"])
     image_url: str | None
-    category_slug: str
-    sub_category_slug: str
+    category_slug: str = Field(..., examples=["svechi-ford"])
+    category_name: str = Field(..., examples=["Свечи"])
+    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
+    sub_category_name: str = Field(..., examples=["Свечи зажигания"])

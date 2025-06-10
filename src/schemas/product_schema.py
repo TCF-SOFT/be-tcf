@@ -42,7 +42,9 @@ class ProductSchema(_ProductBase):
     bitrix_id: Optional[str] = Field(None, examples=["278495"])
     slug: Optional[str] = None
     category_slug: str = Field(..., examples=["svechi-ford"])
+    category_name: str = Field(..., examples=["Свечи"])
     sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
+    sub_category_name: str = Field(..., examples=["Свечи зажигания"])
 
     is_deleted: bool = Field(..., examples=[False])
 
