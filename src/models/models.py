@@ -17,6 +17,7 @@ from src.models.base import Base, uuid_pk
 
 class Offer(Base):
     id: Mapped[uuid_pk]
+    address_id: Mapped[str] = mapped_column(String, nullable=True)
     product_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("products.id"), nullable=False
     )
@@ -70,7 +71,6 @@ class Offer(Base):
 class Product(Base):
     id: Mapped[uuid_pk]
     bitrix_id: Mapped[str] = mapped_column(String, nullable=True)
-    address_id: Mapped[str] = mapped_column(String, nullable=True)
 
     sub_category_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("sub_categories.id"), nullable=False

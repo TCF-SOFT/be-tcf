@@ -21,6 +21,7 @@ class WaybillOfferSchema(_WaybillOfferBaseSchema):
     id: UUID
     waybill_id: UUID
     product_name: str
+    address_id: str | None = Field(None, examples=["AA-TEST"])
     image_url: str | None
     category_slug: str
     sub_category_slug: str

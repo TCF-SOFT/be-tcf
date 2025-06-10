@@ -1,4 +1,3 @@
-from typing import Optional
 from uuid import UUID
 
 from pydantic import (
@@ -10,10 +9,11 @@ from pydantic import (
 
 
 class _OfferBase(BaseModel):
+    address_id: str | None = Field(None, examples=["AA-TEST"])
     brand: str = Field(..., examples=["MARKON"])
     manufacturer_number: str = Field(..., examples=["6000180"])
 
-    internal_description: Optional[str] = Field(
+    internal_description: str | None = Field(
         None, examples=["Колодки тормозные передние"]
     )
 
@@ -28,18 +28,18 @@ class _OfferBase(BaseModel):
 
 class OfferSchema(_OfferBase):
     id: UUID
-    offer_bitrix_id: Optional[str] = Field(None, examples=["278495"])
+    offer_bitrix_id: str | None = Field(None, examples=["278495"])
     category_slug: str = Field(..., examples=["svechi-ford"])
     sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
     product_name: str = Field(..., examples=["Escort 1990-2000"])
-    cross_number: Optional[str] = Field(
+    cross_number: str | None = Field(
         None,
         examples=[
             "6962492, 1048310, 97AG2K021BA, 1133750, 1048308, 6180371, 94AB2K021AB, 6704271, 1130753"
         ],
     )
 
-    image_url: Optional[str] = Field(
+    image_url: str | None = Field(
         None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
     )
 

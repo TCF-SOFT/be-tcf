@@ -15,7 +15,6 @@ from slugify import slugify
 
 
 class _ProductBase(BaseModel):
-    address_id: Optional[str] = Field(None, examples=["AA-TEST"])
     name: str = Field(..., examples=["Колодки тормозные передние Escort 1990-2000"])
     cross_number: Optional[str] = Field(
         None,
