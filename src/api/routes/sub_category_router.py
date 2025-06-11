@@ -10,6 +10,7 @@ from api.controllers.update_entity_controller import update_entity_with_optional
 from api.dao.category_dao import CategoryDAO
 from api.dao.sub_category_dao import SubCategoryDAO
 from api.di.database import get_db
+from api.routes.fastapi_users_router import require_employee
 from common.deps.s3_service import get_s3_service
 from common.services.s3_service import S3Service
 from schemas.category_schema import CategorySchema
@@ -64,6 +65,7 @@ async def get_sub_category_by_slug(
     "",
     response_model=SubCategorySchema,
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_employee)],
 )
 async def post_sub_category(
     sub_category: SubCategoryPostSchema,
@@ -87,6 +89,7 @@ async def post_sub_category(
     response_model=SubCategorySchema,
     summary="Update a sub_category by id",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_employee)],
 )
 async def put_sub_category(
     sub_category_id: UUID,
@@ -110,6 +113,7 @@ async def put_sub_category(
     "/{sub_category_id}",
     summary="Delete sub_category by id",
     status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(require_employee)],
 )
 async def delete_sub_category(
     sub_category_id: UUID,

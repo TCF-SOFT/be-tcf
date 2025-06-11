@@ -1,6 +1,6 @@
 import uuid
 
-from fastapi import Request, BackgroundTasks
+from fastapi import BackgroundTasks, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 

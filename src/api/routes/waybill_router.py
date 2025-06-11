@@ -7,7 +7,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.routes.fastapi_users_router import (
     current_active_user,
-    require_admin,
     require_employee,
 )
 from src.api.controllers.create_entity_controller import create_entity
@@ -163,5 +162,7 @@ async def add_offer_to_waybill(
 async def delete_waybill(waybill_id: UUID, db_session: AsyncSession = Depends(get_db)):
     deleted = await WaybillDAO.delete_by_id(db_session, waybill_id)
     if not deleted:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Waybill not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Waybill not found"
+        )
     return

@@ -2,16 +2,19 @@ from io import BytesIO
 from pathlib import Path
 
 from docx import Document
-from docx.shared import Pt, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml.ns import qn
+from docx.shared import Pt
 
 from schemas.waybill_offer_schema import WaybillOfferSchema
 from schemas.waybill_schema import WaybillSchema
 
 templates_path = Path("templates")
 
-def generate_waybill_word(waybill: WaybillSchema, offers: list[WaybillOfferSchema], total_sum):
+
+def generate_waybill_word(
+    waybill: WaybillSchema, offers: list[WaybillOfferSchema], total_sum
+):
     doc = Document()
     style = doc.styles["Normal"]
     font = style.font

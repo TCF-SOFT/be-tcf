@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Literal
 from uuid import UUID
 
-from fastapi import APIRouter, BackgroundTasks, status, Depends, HTTPException
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -39,7 +39,8 @@ async def print_waybill(
         total_sum = sum(o["price_rub"] * o["quantity"] for o in offers)
     except ValueError:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Can't generate PDF"
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Can't generate PDF",
         )
 
     content = generate_waybill_word(waybill, offers, total_sum)

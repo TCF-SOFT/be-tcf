@@ -31,7 +31,9 @@ async def send_email(
         message,
         sender=admin_email,
         recipients=[recipient],
-        hostname=settings.SMTP.SMTP_HOST if settings.RUN_PROD_WEB_SERVER else "localhost",
+        hostname=settings.SMTP.SMTP_HOST
+        if settings.RUN_PROD_WEB_SERVER
+        else "localhost",
         port=settings.SMTP.SMTP_PORT if settings.RUN_PROD_WEB_SERVER else 1025,
         username=settings.SMTP.SMTP_USER if settings.RUN_PROD_WEB_SERVER else None,
         password=settings.SMTP.SMTP_PASS if settings.RUN_PROD_WEB_SERVER else None,

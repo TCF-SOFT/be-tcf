@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.routes.fastapi_users_router import require_employee
 from src.api.controllers.create_entity_controller import (
     create_entity,
 )
@@ -51,7 +52,7 @@ async def get_offer(
 
 
 @router.get(
-    "/search",
+    "/search/wildcard",
     response_model=Page[OfferSchema],
     summary="Search offers by product name, cross_number, brand and manufacturer_number",
     status_code=status.HTTP_200_OK,
@@ -64,7 +65,7 @@ async def search_offers(
 
 
 @router.get(
-    "/text_search",
+    "/search/text_search",
     response_model=Page[OfferSchema],
     summary="Search offers by product name, cross_number, brand and manufacturer_number",
     status_code=status.HTTP_200_OK,
@@ -81,6 +82,7 @@ async def full_text_search_offers(
     response_model=OfferSchema,
     summary="Create new offer",
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_employee)],
 )
 async def post_offer(
     offer: OfferPostSchema,
@@ -99,6 +101,7 @@ async def post_offer(
     response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_employee)],
 )
 async def put_offer(
     offer_id: UUID,
@@ -114,6 +117,7 @@ async def put_offer(
     "/{offer_id}",
     summary="Delete offer by id",
     status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(require_employee)],
 )
 async def delete_offer(
     offer_id: UUID,

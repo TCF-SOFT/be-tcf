@@ -1,4 +1,3 @@
-from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
@@ -9,16 +8,14 @@ from api.controllers.create_entity_controller import create_entity_with_image
 from api.controllers.update_entity_controller import update_entity_with_optional_image
 from api.dao.category_dao import CategoryDAO
 from api.di.database import get_db
+from api.routes.fastapi_users_router import require_employee
 from common.deps.s3_service import get_s3_service
-from common.exceptions.exceptions import DuplicateNameError
-from common.functions.check_file_mime_type import is_file_mime_type_correct
 from common.services.s3_service import S3Service
 from schemas.category_schema import (
     CategoryPostSchema,
     CategoryPutSchema,
     CategorySchema,
 )
-from utils.logging import logger
 
 router = APIRouter(tags=["Categories"], prefix="/categories")
 
@@ -68,6 +65,7 @@ async def get_category_by_id(
     response_model=CategorySchema,
     summary="Create a new category",
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_employee)],
 )
 async def post_category(
     category_payload: CategoryPostSchema,
@@ -90,6 +88,7 @@ async def post_category(
     response_model=CategorySchema,
     status_code=status.HTTP_200_OK,
     summary="Selective update category by id",
+    dependencies=[Depends(require_employee)],
 )
 async def patch_category(
     category_id: UUID,
@@ -109,58 +108,11 @@ async def patch_category(
     )
 
 
-@router.put(
-    "/{category_id}",
-    response_model=int,
-    summary="Update category by id",
-    status_code=status.HTTP_200_OK,
-)
-async def put_category(
-    category_id: UUID,
-    category_payload: CategoryPutSchema,
-    image_blob: UploadFile = File(...),
-    db_session: AsyncSession = Depends(get_db),
-    s3: S3Service = Depends(get_s3_service),
-):
-    category: dict = category_payload.model_dump(exclude_unset=True)
-
-    try:
-        await is_file_mime_type_correct(image_blob)
-    except ValueError as e:
-        raise HTTPException(
-            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            detail=f"File contents don’t match the file extension: {e}",
-        )
-
-    image_key: Annotated[str, "folder/<uuid>.ext"] = s3.generate_key(
-        image_blob.filename, "images/categories"
-    )
-    category["image_url"] = s3.get_file_url(key=image_key)
-
-    try:
-        res = await CategoryDAO.update(
-            db_session, filter_by={"id": category_id}, **category
-        )
-        await s3.upload_file(
-            file=image_blob.file,
-            key=image_key,
-            extra_args={"ACL": "public-read", "ContentType": image_blob.content_type},
-        )
-    except DuplicateNameError as e:
-        logger.warning(
-            f"Attempt to create a category with existing slug/name: {category_payload.name}"
-        )
-        raise e
-
-    if not res:
-        raise HTTPException(status_code=404, detail="Category not found")
-    return res
-
-
 @router.delete(
     "/{category_id}",
     summary="Delete a category by id",
     status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(require_employee)],
 )
 async def delete_category(
     category_id: UUID,

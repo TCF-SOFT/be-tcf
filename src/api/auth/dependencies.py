@@ -1,4 +1,4 @@
-from fastapi import Depends, BackgroundTasks
+from fastapi import BackgroundTasks, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.user_manager import UserManager

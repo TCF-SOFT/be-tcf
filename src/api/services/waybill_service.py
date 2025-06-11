@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
-from src.models.models import Waybill, WaybillOffer, Offer
+from src.models.models import Offer, Waybill, WaybillOffer
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 
 

@@ -128,6 +128,7 @@ app.add_middleware(
     allow_credentials=settings.SERVER.ALLOW_CREDENTIALS,
     allow_methods=settings.SERVER.ALLOW_METHODS,
     allow_headers=settings.SERVER.ALLOW_HEADERS,
+    expose_headers=["Content-Disposition"],
 )
 
 app.middleware("http")(LoggingMiddleware())

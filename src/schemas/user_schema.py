@@ -17,8 +17,8 @@ class _BaseUser(BaseModel):
     )
 
     # Customer only fields:
-    customer_type: Literal["USER_RETAIL", "USER_WHOLESALE", "USER_SUPER_WHOLESALE"] = Field(
-        "USER_RETAIL", examples=["USER_RETAIL"]
+    customer_type: Literal["USER_RETAIL", "USER_WHOLESALE", "USER_SUPER_WHOLESALE"] = (
+        Field("USER_RETAIL", examples=["USER_RETAIL"])
     )
     mailing: bool = False
 

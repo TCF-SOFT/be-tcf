@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.routes.fastapi_users_router import require_employee
 from src.api.controllers.create_entity_controller import create_entity_with_image
 from src.api.controllers.update_entity_controller import (
     update_entity_with_optional_image,
@@ -106,6 +107,7 @@ async def full_text_search_products(
     response_model=ProductSchema,
     summary="Create new product",
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_employee)],
 )
 async def post_product(
     product: ProductPostSchema,
@@ -129,6 +131,7 @@ async def post_product(
     response_model=ProductSchema,
     summary="Update product by id",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_employee)],
 )
 async def put_product(
     product_id: UUID,
@@ -152,6 +155,7 @@ async def put_product(
     "/{product_id}",
     summary="Delete product by id",
     status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(require_employee)],
 )
 async def delete_product(
     product_id: UUID,
