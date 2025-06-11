@@ -1,6 +1,6 @@
 from typing import Literal
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.routes.fastapi_users_router import fastapi_users_router
@@ -22,6 +22,7 @@ router.include_router(
 @router.get(
     "",
     response_model=list[UserRead],
+    status_code=status.HTTP_200_OK,
     summary="Return all users or filter them",
 )
 async def get_users(

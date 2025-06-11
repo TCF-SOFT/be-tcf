@@ -42,8 +42,8 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
 
     # TODO: Customer only fields
     # loyalty_lvl: Mapped[int]
-    customer_type: Mapped[Literal["retail", "wholesale", "super_wholesale"]] = (
-        mapped_column(String, nullable=False, default="retail")
+    customer_type: Mapped[Literal["USER_RETAIL", "USER_WHOLESALE", "USER_SUPER_WHOLESALE"]] = (
+        mapped_column(String, nullable=False, default="USER_RETAIL")
     )
     mailing: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
