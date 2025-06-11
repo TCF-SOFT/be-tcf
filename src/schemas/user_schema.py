@@ -16,6 +16,12 @@ class _BaseUser(BaseModel):
         None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
     )
 
+    # Customer only fields:
+    customer_type: Literal["retail", "wholesale", "super_wholesale"] = Field(
+        "retail", examples=["retail"]
+    )
+    mailing: bool = False
+
     @field_serializer("avatar_url")
     def serialize_avatar_url(self, v):
         return str(v) if v else None

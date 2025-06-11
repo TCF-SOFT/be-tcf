@@ -40,6 +40,13 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
         String, nullable=True
     )
 
+    # TODO: Customer only fields
+    # loyalty_lvl: Mapped[int]
+    customer_type: Mapped[Literal["retail", "wholesale", "super_wholesale"]] = (
+        mapped_column(String, nullable=False, default="retail")
+    )
+    mailing: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
     # Relationships
     waybills = relationship("Waybill", back_populates="user", lazy="joined")
 
