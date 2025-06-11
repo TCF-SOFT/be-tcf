@@ -3,10 +3,10 @@ from pydantic import EmailStr
 from src.tasks.mailing.send_email import send_email
 from pathlib import Path
 
-template_path = Path("src/tasks/mailing/templates/pricing_email.html")
+templates_path = Path("templates")
 
 async def send_pricing_email(email: EmailStr | str) -> None:
-    with open(template_path, "r", encoding="utf-8") as file:
+    with open(templates_path / "pricing_email.html", "r", encoding="utf-8") as file:
         html = file.read()
 
     await send_email(

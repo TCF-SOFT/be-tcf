@@ -5,7 +5,7 @@ from .auth_router import router as auth_router
 from .category_router import router as category_router
 from .health_check_router import router as health_check_router
 from .offer_router import router as offer_router
-from .pricing_router import router as pricing_router
+from .document_router import router as pricing_router
 from .product_router import router as product_router
 from .sub_category_router import router as sub_category_router
 from .user_router import router as user_router

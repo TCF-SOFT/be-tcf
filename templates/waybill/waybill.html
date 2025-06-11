@@ -1,0 +1,78 @@
+<!-- templates/waybill.html -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+    }
+
+    body {
+      font-family: sans-serif;
+      font-size: 12pt;
+      line-height: 1.4;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    th, td {
+      border: 1px solid #444;
+      padding: 6px 10px;
+      text-align: left;
+    }
+
+    .total {
+      text-align: right;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Накладная №{{ waybill.number }}</h1>
+  <p>Дата: {{ waybill.created_at }}</p>
+  <p>Контрагент: {{ waybill.counterparty_name }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>№</th>
+        <th>Система</th>
+        <th>Название</th>
+        <th>Бренд</th>
+        <th>Артикул</th>
+        <th>Цена</th>
+        <th>Кол-во</th>
+        <th>Сумма</th>
+      </tr>
+    </thead>
+    </thead>
+    <tbody>
+      {% for item in offers %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ item.category_name }}</td>
+        <td>{{ item.product_name }}</td>
+        <td>{{ item.brand }}</td>
+        <td>{{ item.manufacturer_number }}</td>
+        <td>{{ "{:,.2f}".format(item.price_rub) }} ₽</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ "{:,.2f}".format(item.price_rub * item.quantity) }} ₽</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p class="total">Итого: {{ total_sum | round(2) }} ₽</p>
+</body>
+</html>
