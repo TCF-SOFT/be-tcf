@@ -17,7 +17,6 @@ Table sub_categories {
 Table products {
   id uuid [pk]
   bitrix_id varchar
-  address_id varchar
   sub_category_id uuid [ref: > sub_categories.id]
   name varchar
   slug varchar
@@ -31,13 +30,13 @@ Table products {
 
 Table offers {
   id uuid [pk]
+  address_id varchar
   product_id uuid [ref: > products.id]
   brand varchar
   manufacturer_number varchar
   internal_description varchar
-  price_rub numeric(12,4) [null]
+  price_rub numeric(12,4)
   super_wholesale_price_rub numeric(12,4)
-  is_available_by_request boolean
   quantity integer
   is_deleted bool
 }
@@ -50,18 +49,21 @@ Table users {
   is_superuser boolean
   is_verified boolean
   role varchar
+  position varchar
+  customer_type varchar
+  mailing boolean
 }
 
-Table invoices {
-  id uuid [pk]
-  user_id uuid [ref: > users.id]
+// Table invoices {
+//   id uuid [pk]
+//   user_id uuid [ref: > users.id]
 
-}
+// }
 
-Table invoices_offers {
-  invoice_id uuid [ref: > invoices.id]
-  offer_id uuid [ref: > offers.id]
-}
+// Table invoices_offers {
+//   invoice_id uuid [ref: > invoices.id]
+//   offer_id uuid [ref: > offers.id]
+// }
 
 Table waybills {
   id uuid [pk]

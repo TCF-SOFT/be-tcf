@@ -1,9 +1,10 @@
 from collections.abc import AsyncGenerator
 
 from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
 
 from src.config.config import settings
+from utils.logging import logger
 
 if settings.MODE == "TEST":
     # Use the test database
@@ -29,12 +30,17 @@ AsyncSessionFactory = async_sessionmaker(
     expire_on_commit=False,
 )
 
+# Dependency for FastAPI Users
+async def get_auth_db() -> AsyncGenerator[AsyncSession, None]:
+    async with AsyncSessionFactory() as session:
+        yield session
 
-# Dependency
+# Dependency for DAO
 async def get_db() -> AsyncGenerator:
     async with AsyncSessionFactory() as session:
-        # logger.debug(f"ASYNC Pool: {engine.pool.status()}")
-        yield session
+        # logger.warning(f"ASYNC Pool: {engine.pool.status()}")
+        async with session.begin():
+            yield session
 
 
 async def dispose() -> None:

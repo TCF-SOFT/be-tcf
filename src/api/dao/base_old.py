@@ -1,7 +1,7 @@
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import select, delete as sa_delete
+from sqlalchemy import select
 from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -120,22 +120,23 @@ class BaseDAO:
     #            Delete Methods
     # ---------------------------------------
     @classmethod
-    async def delete_by_id(cls, db: AsyncSession, _id: UUID) -> bool:
+    async def delete_by_id(cls, db_session, _id: UUID) -> bool:
         """
-        Try to delete a row by primary key.
-
-        Returns:
-            True  – if record existed and was removed
-            False – if record not found
+        Delete an object by id
+        :param db_session:
+        :param _id:
+        :return:
         """
-        stmt = (
-            sa_delete(cls.model)
-            .where(cls.model.id == _id)
-            .returning(cls.model.id)          # ← return PK of deleted row
-        )
+        query = select(cls.model).filter_by(id=_id)
+        result = await db_session.execute(query)
+        enum = result.unique().scalar_one_or_none()
 
-        result = await db.execute(stmt)
-        await db.flush()
+        if enum:
+            await db_session.delete(enum)
+            await db_session.commit()
 
-        deleted_id = result.scalar_one_or_none()
-        return deleted_id is not None
+            # Проверяем, что объект удален
+            result = await db_session.execute(query)
+            return result.scalar_one_or_none() is None
+
+        return False

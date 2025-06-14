@@ -68,17 +68,3 @@ class WaybillDAO(BaseDAO):
 
         await db_session.commit()
         return waybill
-
-    @classmethod
-    async def add(cls, db_session: AsyncSession, **values) -> model:
-        # TODO: всё-таки выяснить почему sqlalchemy.exc.InvalidRequestError: A transaction is already begun on this Session.
-        #   async with db_session.begin():  # ← commit on exit, rollback on error
-        #   у категорий всё работает, а у накладных нет
-        try:
-            new_instance = cls.model(**values)
-            db_session.add(new_instance)
-            await db_session.commit()
-            return new_instance
-        except Exception as e:
-            await db_session.rollback()
-            raise e
