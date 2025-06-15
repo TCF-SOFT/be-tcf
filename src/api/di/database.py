@@ -38,7 +38,7 @@ async def get_auth_db() -> AsyncGenerator[AsyncSession, None]:
 # Dependency for DAO
 async def get_db() -> AsyncGenerator:
     async with AsyncSessionFactory() as session:
-        # logger.warning(f"ASYNC Pool: {engine.pool.status()}")
+        logger.debug(f"ASYNC Pool: {engine.pool.status()}")
         async with session.begin():
             yield session
 
