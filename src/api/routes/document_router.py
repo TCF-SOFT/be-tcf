@@ -5,7 +5,7 @@ from uuid import UUID
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
-from starlette.responses import FileResponse
+from fastapi.responses import FileResponse
 
 from api.controllers.pricing_controller import generate_price, serve_price
 from api.dao.waybill_dao import WaybillDAO
