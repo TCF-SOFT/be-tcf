@@ -1,7 +1,8 @@
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import select, delete as sa_delete
+from sqlalchemy import delete as sa_delete
+from sqlalchemy import select
 from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -131,7 +132,7 @@ class BaseDAO:
         stmt = (
             sa_delete(cls.model)
             .where(cls.model.id == _id)
-            .returning(cls.model.id)          # ← return PK of deleted row
+            .returning(cls.model.id)  # ← return PK of deleted row
         )
 
         result = await db.execute(stmt)

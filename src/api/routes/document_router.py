@@ -3,9 +3,9 @@ from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi.responses import FileResponse
 
 from api.controllers.pricing_controller import generate_price, serve_price
 from api.dao.waybill_dao import WaybillDAO
@@ -22,7 +22,6 @@ router = APIRouter(tags=["Documents"], prefix="/documents")
 @router.get(
     "/waybills/{waybill_id}/print",
     status_code=status.HTTP_200_OK,
-    response_model=FileResponse,
 )
 async def print_waybill(
     waybill_id: UUID,
@@ -37,9 +36,9 @@ async def print_waybill(
     offers_raw = await WaybillService.fetch_waybill_offers(waybill_raw)
 
     try:
-        waybill = WaybillSchema.model_validate(waybill_raw)
+        WaybillSchema.model_validate(waybill_raw)
         offers = [WaybillOfferSchema.model_validate(o) for o in offers_raw]
-        total_sum = sum(o.price_rub * o.quantity for o in offers)
+        sum(o.price_rub * o.quantity for o in offers)
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -47,18 +46,29 @@ async def print_waybill(
         )
 
     invoice_data = {
-    "number": "51240 13793277",
-    "fio": "2 Менеджер",
-    "phone": "+7 (999) 042-46-66",
-    "city": "Не заполнен у пользователя",
-    "delivery": "Самовывоз",
-    "items": [
-        {"name": "Прокладки клапанной крышки", "brand": "Transit BSG", "number": "AR893", "price": 500, "quantity": 10},
-        {"name": "Прокладки клапанной крышки", "brand": "Transit пробка", "number": "AR806", "price": 300, "quantity": 5}
-    ],
-    "total": 9999
-}
-
+        "number": "51240 13793277",
+        "fio": "2 Менеджер",
+        "phone": "+7 (999) 042-46-66",
+        "city": "Не заполнен у пользователя",
+        "delivery": "Самовывоз",
+        "items": [
+            {
+                "name": "Прокладки клапанной крышки",
+                "brand": "Transit BSG",
+                "number": "AR893",
+                "price": 500,
+                "quantity": 10,
+            },
+            {
+                "name": "Прокладки клапанной крышки",
+                "brand": "Transit пробка",
+                "number": "AR806",
+                "price": 300,
+                "quantity": 5,
+            },
+        ],
+        "total": 9999,
+    }
 
     return FileResponse(
         path=printer.create_invoice(invoice_data),

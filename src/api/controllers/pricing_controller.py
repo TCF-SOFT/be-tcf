@@ -4,7 +4,7 @@ from typing import Literal
 import pandas as pd
 from sqlalchemy import create_engine, text
 
-from config.config import settings
+from src.config import settings
 
 
 async def serve_price(

@@ -37,12 +37,14 @@ async def get_products(
     sub_category_slug: str | None = None,
     is_deleted: bool = False,
 ):
-    filters = {"is_deleted": is_deleted}
+    filters: dict[str, bool | UUID | str] = {"is_deleted": is_deleted}
     if sub_category_slug:
         sub_category: SubCategorySchema = await SubCategoryDAO.find_by_slug(
             db_session, sub_category_slug
         )
-        filters["sub_category_slug"] = sub_category.slug
+        if sub_category:
+            filters["sub_category_id"] = sub_category.id
+
     if sub_category_id:
         filters["sub_category_id"] = sub_category_id
 

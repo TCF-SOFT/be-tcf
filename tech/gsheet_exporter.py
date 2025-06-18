@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from loguru import logger
 from sqlalchemy import create_engine
-from src.config.config import settings
+from src.config import settings
 
 TABLE = "new_price_ford"
 SHEETS = ["offers"]

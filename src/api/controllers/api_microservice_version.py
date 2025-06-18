@@ -1,6 +1,6 @@
 import importlib.metadata
 
-from src.config.config import settings
+from src.config import settings
 from src.utils.logging import logger
 
 

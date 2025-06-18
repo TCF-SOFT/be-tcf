@@ -4,7 +4,7 @@ from fastapi import BackgroundTasks, Request
 from fastapi_users import BaseUserManager, UUIDIDMixin
 from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 
-from src.config.config import settings
+from src.config import settings
 from src.models.user import User
 from src.utils.logging import logger
 from tasks.mailing import send_verification_email

@@ -1,0 +1,140 @@
+[
+  {
+    "name": "Двигатель",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/engine.webp",
+    "id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "slug": "dvigatel-ford"
+  },
+  {
+    "name": "Карданный вал",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/cardan_shaft.webp",
+    "id": "b5fe5a3b-dfa2-43d3-a81e-34404d8f75d4",
+    "slug": "kardannyy-val-ford"
+  },
+  {
+    "name": "КПП ручная и автоматическая",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/hand_and_automatic_checkpoint.webp",
+    "id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "slug": "kpp-ruchnaya-i-avtomaticheskaya-ford"
+  },
+  {
+    "name": "Кузов",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/body.webp",
+    "id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "slug": "kuzov-ford"
+  },
+  {
+    "name": "Оптика",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/optics.webp",
+    "id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "slug": "optika-ford"
+  },
+  {
+    "name": "Подвеска",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/suspension.webp",
+    "id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "slug": "podveska-ford"
+  },
+  {
+    "name": "Редуктор и привода",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/reducer_and_drive.webp",
+    "id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "slug": "reduktor-i-privoda-ford"
+  },
+  {
+    "name": "Ремни и ролики",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/belts_and_rollers.webp",
+    "id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "slug": "remni-ford"
+  },
+  {
+    "name": "Рулевое управление",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/steering.webp",
+    "id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "slug": "rulevoe-upravlenie-ford"
+  },
+  {
+    "name": "Система выхлопная и Турбины",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/exhaust_system_and_turbines.webp",
+    "id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "slug": "sistema-vyhlopnaya-i-turbiny-ford"
+  },
+  {
+    "name": "Система зажигания и управ-я",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/ignition_system_and_management.webp",
+    "id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "slug": "sistema-zazhiganiya-i-uprav-ya-ford"
+  },
+  {
+    "name": "Система охлаждения",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/cooling_system.webp",
+    "id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "slug": "sistema-ohlazhdeniya-ford"
+  },
+  {
+    "name": "Аксессуары",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/accessories.webp",
+    "id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "slug": "aksessuary-ford"
+  },
+  {
+    "name": "inferior",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/tmp/96fdaaa79d2b436d9d371ba168fe7536.jpg",
+    "id": "1b314496-edd6-4946-8d25-8ff0bd07c091",
+    "slug": "inferior"
+  },
+  {
+    "name": "Генераторы и их компоненты",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/generators_and_their_components.webp",
+    "id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "slug": "generatory-i-ih-komponenty-ford"
+  },
+  {
+    "name": "Свечи",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/candles.webp",
+    "id": "2b3fb1a9-f13b-430f-a78e-94041fb0ed44",
+    "slug": "svechi"
+  },
+  {
+    "name": "Система топливная",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/the_system_is_fuel.webp",
+    "id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "slug": "sistema-toplivnaya-ford"
+  },
+  {
+    "name": "Система тормозная",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/the_brake_system.webp",
+    "id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "slug": "sistema-tormoznaya-ford"
+  },
+  {
+    "name": "Стартеры и их компоненты",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/starters_and_their_components.webp",
+    "id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "slug": "startery-i-ih-komponenty-ford"
+  },
+  {
+    "name": "Сцепление",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch.webp",
+    "id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "slug": "sceplenie-ford"
+  },
+  {
+    "name": "Фильтры",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/filters.webp",
+    "id": "6ba2e599-5456-4a38-9474-e475531cf961",
+    "slug": "filtry-ford"
+  },
+  {
+    "name": "Электрооборудование",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/electrical_equipment.webp",
+    "id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "slug": "elektrooborudovanie-ford"
+  },
+  {
+    "name": "Колеса",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/wheels.webp",
+    "id": "47b547b1-112c-40d4-842c-749295e35128",
+    "slug": "kolesa-ford"
+  }
+]

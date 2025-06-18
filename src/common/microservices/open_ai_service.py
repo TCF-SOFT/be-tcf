@@ -8,8 +8,8 @@ from tenacity import (
     wait_exponential,
 )
 
-from config.config import settings
-from utils.logging import logger
+from src.config import settings
+from src.utils.logging import logger
 
 client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
 

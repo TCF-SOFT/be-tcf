@@ -1,0 +1,2558 @@
+[
+  {
+    "name": "Щупы",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "a3b84e36-9e03-495b-8e74-cd841405e6fe",
+    "slug": "shchupy",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Бачок ГУР",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "1f689a78-7b77-4257-915a-c9694b24fc0e",
+    "slug": "bachok-gur",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Автомобильный набор",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "85f8b3a8-3901-463d-8a73-ff93907fbec9",
+    "slug": "avtomobilnyi-nabor",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Аптечка автомобильная",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "abdd4d65-2309-4098-ab0b-97df63c97acd",
+    "slug": "aptechka-avtomobilnaia",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Батарейки",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "926c85da-8927-4933-af53-f52dfd0c7d49",
+    "slug": "batareiki",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Брелки",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "6af72efd-5f49-4a27-bd8f-1e4b4e7cf72f",
+    "slug": "brelki",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Заглушка ремня безопасности",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "f02ba38c-2d38-46b9-a3aa-ced351826a9c",
+    "slug": "zaglushka-remnia-bezopasnosti",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Коврики",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "9d5667ec-4614-4899-9caf-1b1b0bee77e9",
+    "slug": "kovriki",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Огнетушитель",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "5744a653-b5a3-4be6-8f03-46f06942d1f8",
+    "slug": "ognetushitel",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Одежда",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "34436959-8516-4918-aa0c-038e04e3fd05",
+    "slug": "odezhda",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Перчатки",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "efb081d3-9de5-4ed7-b871-65ae4e14bc98",
+    "slug": "perchatki",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Салфетка замшевая",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "a2ef35db-1fd5-4806-a503-4fde8c605165",
+    "slug": "salfetka-zamshevaia",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Сигнал автомобильный",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "c9ae970c-3b3e-4d1a-b203-e462e319b495",
+    "slug": "signal-avtomobilnyi",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Скотч / Изолента",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "57a40490-6c0c-4d2d-895c-36db7d37159d",
+    "slug": "skotch-izolenta",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Солнцезащитные шторки",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "ec0a1a8a-3292-49ae-b155-ec1b51748ec3",
+    "slug": "solntsezashchitnye-shtorki",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Стартовые провода",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "aac229de-f432-4dfa-b5b0-b907dadeee74",
+    "slug": "startovye-provoda",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Трос буксировочный",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "0dc61efb-c30c-4424-b384-b3ddfc34863c",
+    "slug": "tros-buksirovochnyi",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Хомуты",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "f3249e2d-d5a9-4127-8b2a-56eb57545292",
+    "slug": "khomuty",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Электрика",
+    "category_id": "b675f6ac-e21d-4a1a-ae5f-df422a3718a2",
+    "image_url": null,
+    "id": "4ae40202-569d-4f4f-a4fe-eedf4abec1f0",
+    "slug": "elektrika",
+    "category_slug": "aksessuary-ford",
+    "category_name": "Аксессуары"
+  },
+  {
+    "name": "Генераторы в сборе",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "03ab8ad8-6e51-4e82-9710-e209a4aa23c1",
+    "slug": "generatory-v-sbore",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Диодный мост",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "251fa9cb-4d79-45f2-9603-16442ab83755",
+    "slug": "diodnyi-most",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Компоненты генератора",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "d484de13-f458-49d0-81eb-0d7906845fd5",
+    "slug": "komponenty-generatora",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Контактное кольцо генератора",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "953eb39e-7441-4d91-9a50-a082c9ffc24b",
+    "slug": "kontaktnoe-koltso-generatora",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Подшипники генератора",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "c6ab62e4-7ae1-41d8-9bbe-7f8563d45236",
+    "slug": "podshipniki-generatora",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Регулятор напряжения",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "48c183f8-16ad-4fe5-ae93-9837a8d17ca9",
+    "slug": "reguliator-napriazheniia",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Сальники генератора",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "90543b18-69e4-4820-899d-0afe2ac408f4",
+    "slug": "salniki-generatora",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Шкив генератора",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "180d0ac3-a8b7-4e8a-b970-5df7107d733a",
+    "slug": "shkiv-generatora",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Якорь (ротор) генератора",
+    "category_id": "9c011a78-d5aa-43ae-aa05-6d1fe2e0f51f",
+    "image_url": null,
+    "id": "f1eb1b56-8431-4c2e-8511-e383709330c8",
+    "slug": "iakor-rotor-generatora",
+    "category_slug": "generatory-i-ih-komponenty-ford",
+    "category_name": "Генераторы и их компоненты"
+  },
+  {
+    "name": "Датчик ABS",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "e7d8457e-a7b0-4257-819c-5b258f846d99",
+    "slug": "datchik-abs",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Механизмы замков",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "33f2d1d4-d8a7-4c37-9c13-cd79200d5dda",
+    "slug": "mekhanizmy-zamkov",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Прокладки поддона",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "dc933c7b-f6d8-413c-a67a-7a1b17dcc25c",
+    "slug": "prokladki-poddona",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Прокладки разные",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "4854d503-0065-4e51-ac51-6e7d687a7e4b",
+    "slug": "prokladki-raznye",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Распредвал",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "8284f853-9dca-42b8-9271-e6d3f954fa8b",
+    "slug": "raspredval",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Сальники двигателя",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "37e6fe0b-e971-4b00-a4f0-5b7301fbaad2",
+    "slug": "salniki-dvigatelia",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Сальники клапанов",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "031f15d2-23c4-4b39-a90e-7af6ee23e1e4",
+    "slug": "salniki-klapanov",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Толкатели,коромысла, гидрокомпенсаторы",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "5c607447-fb3b-4ec5-abde-189897b8011b",
+    "slug": "tolkateli-koromysla-gidrokompensatory",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Успокоители, гидронатяжители цепей",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "188bd63d-865f-4c1a-a83f-b3cfb8a1d633",
+    "slug": "uspokoiteli-gidronatiazhiteli-tsepei",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Цепи",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "1bd063be-158c-4087-b90b-3b84a83ba637",
+    "slug": "tsepi",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Шатуны и болты шатунов",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "6ee55d53-28aa-4f8b-9a19-c753ca4f3780",
+    "slug": "shatuny-i-bolty-shatunov",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Шкивы,зубчатые шестерни",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": null,
+    "id": "4f186f66-bf18-4252-ac84-715887fd59df",
+    "slug": "shkivy-zubchatye-shesterni",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Валы КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "6dbfbef9-ba3f-4195-9477-4e9d083a8fd0",
+    "slug": "valy-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Детали",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "032e5c82-3be4-42b2-b3cf-790c4b4f52b2",
+    "slug": "detali",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "КПП в сборе",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "852fe33b-47e6-4f1d-86e5-db977760887e",
+    "slug": "kpp-v-sbore",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Компоненты КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "b19ef548-252e-402f-a0ca-97c41a54a67b",
+    "slug": "komponenty-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Крышки,кожуха,хвостовики КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "c59c3f18-c586-4dfd-ba9d-615cc991d4f3",
+    "slug": "kryshki-kozhukha-khvostoviki-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Подушки / Опоры КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "1e6347bc-e97e-495a-83cf-f0fad7fdd9ef",
+    "slug": "podushki-opory-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Подшипники КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "e51adec3-d010-4330-a841-73d430c0a9de",
+    "slug": "podshipniki-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Радиаторы КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "945ee571-cceb-4dec-a4f4-99f941afd9e4",
+    "slug": "radiatory-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Ремкомплекты, прокладки КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "70d3dafb-2660-4eb3-9821-9af858ded07a",
+    "slug": "remkomplekty-prokladki-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Рычаги / чехлы / рукоятка КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "9ceee6c1-c81c-4245-8e85-eebaa6ede17d",
+    "slug": "rychagi-chekhly-rukoiatka-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Сальники КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "84ba5807-023d-4d8f-a9f7-77637b04c0da",
+    "slug": "salniki-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Синхронизаторы КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "2c46e772-fe6b-4f84-85cb-74de90e3b080",
+    "slug": "sinkhronizatory-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Трос переключения передач",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "2ba904ce-06c9-4dae-8123-1176a2e3a78a",
+    "slug": "tros-perekliucheniia-peredach",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Тросики спидометра",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "5b9d508c-0db7-4769-8f8b-763e14475316",
+    "slug": "trosiki-spidometra",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Шестерни и муфты КПП",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "9203b448-5945-4754-b815-d390e0ae94c1",
+    "slug": "shesterni-i-mufty-kpp",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Шестерни спидометра",
+    "category_id": "9e9a9082-240a-4243-9a29-608dc532fec9",
+    "image_url": null,
+    "id": "5237878d-e69a-4e6e-9816-63614ce21344",
+    "slug": "shesterni-spidometra",
+    "category_slug": "kpp-ruchnaya-i-avtomaticheskaya-ford",
+    "category_name": "КПП ручная и автоматическая"
+  },
+  {
+    "name": "Компоненты карданного вала",
+    "category_id": "b5fe5a3b-dfa2-43d3-a81e-34404d8f75d4",
+    "image_url": null,
+    "id": "1a6e31a9-a62c-44d4-8c82-9610ca37388f",
+    "slug": "komponenty-kardannogo-vala",
+    "category_slug": "kardannyy-val-ford",
+    "category_name": "Карданный вал"
+  },
+  {
+    "name": "Крестовины и подшипники вала",
+    "category_id": "b5fe5a3b-dfa2-43d3-a81e-34404d8f75d4",
+    "image_url": null,
+    "id": "12f32e5b-6171-4432-b26b-359e6179271c",
+    "slug": "krestoviny-i-podshipniki-vala",
+    "category_slug": "kardannyy-val-ford",
+    "category_name": "Карданный вал"
+  },
+  {
+    "name": "Резиновая эластичная муфта",
+    "category_id": "b5fe5a3b-dfa2-43d3-a81e-34404d8f75d4",
+    "image_url": null,
+    "id": "faaeb2a7-cb6d-4b71-9330-d5e7b744ebde",
+    "slug": "rezinovaia-elastichnaia-mufta",
+    "category_slug": "kardannyy-val-ford",
+    "category_name": "Карданный вал"
+  },
+  {
+    "name": "Центральный подшипник карданного вала",
+    "category_id": "b5fe5a3b-dfa2-43d3-a81e-34404d8f75d4",
+    "image_url": null,
+    "id": "8c144124-d910-487c-9f53-29e8f0c8c5c6",
+    "slug": "tsentralnyi-podshipnik-kardannogo-vala",
+    "category_slug": "kardannyy-val-ford",
+    "category_name": "Карданный вал"
+  },
+  {
+    "name": "Брызговики",
+    "category_id": "47b547b1-112c-40d4-842c-749295e35128",
+    "image_url": null,
+    "id": "ddaaa9c7-3ed1-432a-b647-95c879bc9056",
+    "slug": "bryzgoviki",
+    "category_slug": "kolesa-ford",
+    "category_name": "Колеса"
+  },
+  {
+    "name": "Гайки и болты колес",
+    "category_id": "47b547b1-112c-40d4-842c-749295e35128",
+    "image_url": null,
+    "id": "2937f536-8209-4834-9346-3d439cbefeb1",
+    "slug": "gaiki-i-bolty-koles",
+    "category_slug": "kolesa-ford",
+    "category_name": "Колеса"
+  },
+  {
+    "name": "Домкрат",
+    "category_id": "47b547b1-112c-40d4-842c-749295e35128",
+    "image_url": null,
+    "id": "5d8a11a8-c856-435e-8e87-f0a7c1aa500d",
+    "slug": "domkrat",
+    "category_slug": "kolesa-ford",
+    "category_name": "Колеса"
+  },
+  {
+    "name": "Колесные диски",
+    "category_id": "47b547b1-112c-40d4-842c-749295e35128",
+    "image_url": null,
+    "id": "ec02e250-5a51-4967-b470-04546469f6e8",
+    "slug": "kolesnye-diski",
+    "category_slug": "kolesa-ford",
+    "category_name": "Колеса"
+  },
+  {
+    "name": "Колпаки",
+    "category_id": "47b547b1-112c-40d4-842c-749295e35128",
+    "image_url": null,
+    "id": "82e8e851-0faa-4bcc-a5b4-50e882c03b0b",
+    "slug": "kolpaki",
+    "category_slug": "kolesa-ford",
+    "category_name": "Колеса"
+  },
+  {
+    "name": "Шпилька ступицы колеса",
+    "category_id": "47b547b1-112c-40d4-842c-749295e35128",
+    "image_url": null,
+    "id": "0e311327-e5ac-40db-9e18-268179d896e9",
+    "slug": "shpilka-stupitsy-kolesa",
+    "category_slug": "kolesa-ford",
+    "category_name": "Колеса"
+  },
+  {
+    "name": "Дворники",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "3f814f94-aff7-4def-bcb5-da3a8a47f2fb",
+    "slug": "dvorniki",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Детали кузова",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "6a400632-aa74-4f65-be03-de5c925faf39",
+    "slug": "detali-kuzova",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Заготовка ключа / Брелок-пульт",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "4d521ee4-e42f-4656-a799-ca2dabda3add",
+    "slug": "zagotovka-kliucha-brelok-pult",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Замки и ключи",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "06753add-3045-413e-bbc4-2371e6bf2f0b",
+    "slug": "zamki-i-kliuchi",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Зеркала заднего вида",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "44023982-046a-4a34-877e-f5d1ad39766e",
+    "slug": "zerkala-zadnego-vida",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Крылья / Накладки крыльев",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "cba9a61e-0438-46ff-8cb6-30add53cacd9",
+    "slug": "krylia-nakladki-krylev",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Крышка зеркала",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "cbd9ffe0-8428-4a1a-964a-16c22f74ed1a",
+    "slug": "kryshka-zerkala",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Наружная облицовка",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "f73b139f-1f06-4413-ae4b-4667484f17a4",
+    "slug": "naruzhnaia-oblitsovka",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Петли дверей",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "3d97beb4-1520-4a83-b3c3-7d9ce4b908de",
+    "slug": "petli-dverei",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Подкрылки",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "34805edd-26da-456b-8360-aee69bce5092",
+    "slug": "podkrylki",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Ролики дверей",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "eb60b23a-fd2a-4739-8119-4d16a1f76caf",
+    "slug": "roliki-dverei",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Ручки дверей",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "2327d999-9a72-49f9-8cd0-8d122d0af292",
+    "slug": "ruchki-dverei",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Скобы / Защелки дверей",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "17be16df-af18-4631-801d-ff12e189a243",
+    "slug": "skoby-zashchelki-dverei",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Стекло зеркала",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "70eeef12-b0b3-4fd5-9554-dde19a5c0cd7",
+    "slug": "steklo-zerkala",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Стеклоподъемник",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "bef1089a-0083-4374-b00a-2e200208732b",
+    "slug": "steklopodemnik",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Стойки телескопические",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "218999c6-3667-4414-928a-b667f4e546a9",
+    "slug": "stoiki-teleskopicheskie",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Стёкла кузова",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "da02a8cb-1555-4130-96d4-e9334278cce8",
+    "slug": "stekla-kuzova",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Уплотнители дверей / окон",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "e8598dae-1a8a-41ab-8f08-d9271fdba5ed",
+    "slug": "uplotniteli-dverei-okon",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Эмблемы и надписи",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": null,
+    "id": "deef7974-cc50-4e52-853e-ecce34952dcd",
+    "slug": "emblemy-i-nadpisi",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Дополнительное освещение",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "75680a88-bb01-4192-b63f-bef97822aa01",
+    "slug": "dopolnitelnoe-osveshchenie",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Дублер поворота в зеркале",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "da6d2f3b-c9a9-4cf4-9ac4-78c74350c5fa",
+    "slug": "dubler-povorota-v-zerkale",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Задние фонари",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "cb2fee6d-fd9d-4ffe-a2b1-6e59062f40a6",
+    "slug": "zadnie-fonari",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Лампочки",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "b06a93ef-ce14-4472-a516-e87a5f8c79c7",
+    "slug": "lampochki",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Плата заднего фонаря",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "4b75a0ed-6cf6-4dfa-bc5a-06d14e3bf088",
+    "slug": "plata-zadnego-fonaria",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Поворотники",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "39fee9f3-8295-41cc-9da4-5e45d3a1875a",
+    "slug": "povorotniki",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Повторитель крыла",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "4af8808e-0285-45d5-b8c9-afebb2b516ee",
+    "slug": "povtoritel-kryla",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Подсветка номера",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "2f2822eb-fe6f-49da-8003-df29ef42549d",
+    "slug": "podsvetka-nomera",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Противотуманные фары",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "98e6f50c-a2a3-4cd2-b282-84238cdf5312",
+    "slug": "protivotumannye-fary",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Разъемы",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "15ee2a9a-920d-48b7-84dc-35c56bad4966",
+    "slug": "razemy",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Рамка / крепления противотуманной фары",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "ab9545ea-c5a9-4418-89b2-197edba328d4",
+    "slug": "ramka-krepleniia-protivotumannoi-fary",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Стекла фар",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "771b7d05-4a7e-4a10-87bf-cf1a0583b630",
+    "slug": "stekla-far",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Фары",
+    "category_id": "c838a890-c431-44f6-97a5-f35d983f11cf",
+    "image_url": null,
+    "id": "798f46d5-16d7-48fa-aef9-99966b01d226",
+    "slug": "fary",
+    "category_slug": "optika-ford",
+    "category_name": "Оптика"
+  },
+  {
+    "name": "Амортизатор",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "e6a446ef-95a2-4878-8461-8d917de40367",
+    "slug": "amortizator",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Компоненты подвески",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "48f44a36-9b58-45a0-8093-7015e11baac9",
+    "slug": "komponenty-podveski",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Подушка амортизатора",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "bdb4eb57-e953-463e-9353-ce6d915d7fb1",
+    "slug": "podushka-amortizatora",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Подшипник амортизатора",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "9afd733c-9db4-440c-b8c6-dfd819560be5",
+    "slug": "podshipnik-amortizatora",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Подшипники ступицы",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "61442a2e-d03a-4965-ad88-af336baca0a5",
+    "slug": "podshipniki-stupitsy",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Пружины",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "59b458de-3fa8-4193-9452-758fee5bc761",
+    "slug": "pruzhiny",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Рессоры",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "dee9247c-cbce-4883-9724-144df5864670",
+    "slug": "ressory",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Рычаг Перений подвески",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "5cc26b5e-70d9-4346-a978-e4798224e23f",
+    "slug": "rychag-perenii-podveski",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Рычаги задней подвески",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "ebfbe825-4431-49d1-ac5a-162f086c9748",
+    "slug": "rychagi-zadnei-podveski",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Сайлентблоки подвески",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "820f386f-becb-49b8-b4ad-ca3c147562ff",
+    "slug": "sailentbloki-podveski",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Сальники ступиц",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "30e5ac34-f6b1-4585-8400-d5ffba305bb4",
+    "slug": "salniki-stupits",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Стабилизаторы поперечной устойчивости",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "bc9e6105-1dc7-42f4-bef1-5c1c82633c94",
+    "slug": "stabilizatory-poperechnoi-ustoichivosti",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Стремянка",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "222aba1b-7190-44fa-bf9a-6bd8b99749eb",
+    "slug": "stremianka",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Ступицы и цапфы",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "0ab0b6ee-de80-4b33-b054-60535ef652c2",
+    "slug": "stupitsy-i-tsapfy",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Шаровые опоры",
+    "category_id": "7c37b07a-cd99-4508-bf7a-accf6344b45e",
+    "image_url": null,
+    "id": "005f80c0-5bfe-486b-acbb-87b512c6aec3",
+    "slug": "sharovye-opory",
+    "category_slug": "podveska-ford",
+    "category_name": "Подвеска"
+  },
+  {
+    "name": "Пыльники ШРУСов и приводов",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": null,
+    "id": "3b8067d9-82f4-4db2-a096-0842059d57ac",
+    "slug": "pylniki-shrusov-i-privodov",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "Редуктора,мосты и компоненты",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": null,
+    "id": "d6bab388-ceed-405d-a612-4b21c236d82b",
+    "slug": "reduktora-mosty-i-komponenty",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "Сальники редуктора и приводов",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": null,
+    "id": "398efc1c-5a03-47cd-b94d-0ab29b2b2ee7",
+    "slug": "salniki-reduktora-i-privodov",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "Трехшип",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": null,
+    "id": "cb4d1bc3-1602-4eb5-8f0e-fc1d20b6f0c7",
+    "slug": "trekhship",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "ШРУСы",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": null,
+    "id": "028413ff-cba9-43ee-aea8-1bbfc708e8e6",
+    "slug": "shrusy",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "К-т ремней ГРМ с роликами",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": null,
+    "id": "9a4fa980-1dfe-4c38-917a-a9efe8d5a0aa",
+    "slug": "k-t-remnei-grm-s-rolikami",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Ремни разные",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": null,
+    "id": "1420e44c-f866-44ad-8e8f-0c116fc6ae50",
+    "slug": "remni-raznye",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Ручейковые ремни 3PK",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": null,
+    "id": "8c482515-8490-4776-81bc-288d55d3ba32",
+    "slug": "rucheikovye-remni-3pk",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Компоненты рулевого управления",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "2094bdaf-3fca-4080-9057-6b7a440e01e2",
+    "slug": "komponenty-rulevogo-upravleniia",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Подшипники рулевого управления",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "a0718589-f60f-4d11-89b0-8bff7d61d791",
+    "slug": "podshipniki-rulevogo-upravleniia",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Помпа г/у руля",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "e1b6f4a3-75fe-4cbf-8094-021dcdb35ffe",
+    "slug": "pompa-g-u-rulia",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Пыльники рулевой рейки",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "5493f40a-510d-4ba4-9595-4b52e2f5d433",
+    "slug": "pylniki-rulevoi-reiki",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Ремкомплекты рулевого управления",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "1310c22e-2083-42ab-b769-d0fc145731a8",
+    "slug": "remkomplekty-rulevogo-upravleniia",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Рулевые карданы",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "99857ac6-1379-4afa-9898-1b09831c81ba",
+    "slug": "rulevye-kardany",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Рулевые колонки",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "b3b6831e-22c9-4686-abd9-e14a1b83a494",
+    "slug": "rulevye-kolonki",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Рулевые наконечники",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "935f260d-c6de-49ff-8518-7ca98db7c65a",
+    "slug": "rulevye-nakonechniki",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Рулевые рейки",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "2b343eca-b5a0-44ff-a6a0-9e3859a87f6b",
+    "slug": "rulevye-reiki",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Рулевые тяги",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "8c2dc4d8-f7e9-44f5-936f-301c25152ffd",
+    "slug": "rulevye-tiagi",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Шланг г/у",
+    "category_id": "1f170957-d07a-4ae3-a52b-6cb44cb19e02",
+    "image_url": null,
+    "id": "cc3546e6-9032-4aa3-9cdd-453d5a241aba",
+    "slug": "shlang-g-u",
+    "category_slug": "rulevoe-upravlenie-ford",
+    "category_name": "Рулевое управление"
+  },
+  {
+    "name": "Актуатор Турбины",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "b988127c-712c-41fb-9462-9a41539ba90d",
+    "slug": "aktuator-turbiny",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Выпускной колектор",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "ab0c66f4-43b2-4f82-b125-f3cb2c556f7c",
+    "slug": "vypusknoi-kolektor",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Геометрия",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "3a3f4ba1-47ed-4183-8a39-85dce0986518",
+    "slug": "geometriia",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Гофра глушителя",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "b23e6815-f75b-4363-9f56-7066e10aca46",
+    "slug": "gofra-glushitelia",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Интеркулеры",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "5e3bfef4-a8ba-48c7-97bb-3900f605a5c0",
+    "slug": "interkulery",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Картриджи турбин",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "c5582a5e-4a54-44a8-bf9a-0d01f3a0b62f",
+    "slug": "kartridzhi-turbin",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Клапан / охладители EGR",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "df4e76a6-6fef-4379-b9ac-9b1d59a1e5c9",
+    "slug": "klapan-okhladiteli-egr",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Компоненты выпускного тракта",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "35142485-6040-4c65-90a1-703554b9b6fb",
+    "slug": "komponenty-vypusknogo-trakta",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Патрубок",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "d1b2f056-2030-47ff-baf9-d02821c080a6",
+    "slug": "patrubok",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Прокладки выпускного тракта и турбин",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "48910a2b-f9fe-4fd3-ab40-7d6e1596c20d",
+    "slug": "prokladki-vypusknogo-trakta-i-turbin",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Трубки",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "7e6728dc-9df3-41e1-aaec-31ba46e7aef6",
+    "slug": "trubki",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Турбины в сборе",
+    "category_id": "8c02562a-dc7d-4a52-9a56-2702e16e2bd0",
+    "image_url": null,
+    "id": "c2f2de3a-a03d-4135-9fed-440d3f639237",
+    "slug": "turbiny-v-sbore",
+    "category_slug": "sistema-vyhlopnaya-i-turbiny-ford",
+    "category_name": "Система выхлопная и Турбины"
+  },
+  {
+    "name": "Бегунки трамблера",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "a706ef55-2f25-4012-bc55-192d0155f92f",
+    "slug": "begunki-tramblera",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Кабели высокого напряжения",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "0c588918-a548-4fee-bd4e-3f3846a28d17",
+    "slug": "kabeli-vysokogo-napriazheniia",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Катушки зажигания",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "08dedae3-8ac8-417a-8574-083aa9b0c0d1",
+    "slug": "katushki-zazhiganiia",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Конденсаторы трамблера",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "8c2dd9bb-42a6-4eee-bc75-1ec273270647",
+    "slug": "kondensatory-tramblera",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Контакты трамблера",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "f841f062-f32c-4997-bc98-0ce852ca1acc",
+    "slug": "kontakty-tramblera",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Крышки трамблера",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "9e868f92-723c-4a11-a6b4-5339b33b4c95",
+    "slug": "kryshki-tramblera",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Модули зажигания",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "1ad838bb-d97c-498d-9349-681ff2094cbf",
+    "slug": "moduli-zazhiganiia",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Трамблеры",
+    "category_id": "8092ab14-9ce6-4dae-b591-a15dd4cbcd72",
+    "image_url": null,
+    "id": "488def82-70ec-4ef4-aa7d-5693a10c50c9",
+    "slug": "tramblery",
+    "category_slug": "sistema-zazhiganiya-i-uprav-ya-ford",
+    "category_name": "Система зажигания и управ-я"
+  },
+  {
+    "name": "Бачки",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "1bf2fdd4-4e31-424c-8aed-b3434165c0b8",
+    "slug": "bachki",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Клапаны, краны отопителя (печки)",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "13d491dc-5382-4dc8-abf5-1212e7ab4fbc",
+    "slug": "klapany-krany-otopitelia-pechki",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Компоненты системы охлаждения",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "d73bc2d5-7585-48c1-a61a-c8c98e05e880",
+    "slug": "komponenty-sistemy-okhlazhdeniia",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Корпуса термостатов",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "34aee087-b794-41dd-b4a7-f0fdb73b2f20",
+    "slug": "korpusa-termostatov",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Крышки системы охлаждения",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "dba173ae-ed32-4708-be94-7a5a15701fcf",
+    "slug": "kryshki-sistemy-okhlazhdeniia",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Насос кондиционера / комплектующие",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "813ffa5a-bbbe-485a-82d0-0ac564a96faf",
+    "slug": "nasos-konditsionera-komplektuiushchie",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Подшипник компрессора кондиционера",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "492ed729-7dbe-43e6-9bdf-0f52a0ff6a5a",
+    "slug": "podshipnik-kompressora-konditsionera",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Радиатор кондиционера",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "27274cad-805e-4dcb-8ee9-7afaaa30bc1e",
+    "slug": "radiator-konditsionera",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Радиаторы ДВС",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "4a8a800a-ec3f-4fd8-b7c3-a13ac9d087a7",
+    "slug": "radiatory-dvs",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Радиаторы отопителя",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "62047b1e-e777-4f9b-9e90-d0de15481d25",
+    "slug": "radiatory-otopitelia",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Термомуфты / шкивы помп / подшипники",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "94d75fed-2af6-475f-9af9-aba8c1f784fd",
+    "slug": "termomufty-shkivy-pomp-podshipniki",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Термостат",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "6f0ac899-a38d-402d-a1f6-4f789581241c",
+    "slug": "termostat",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Шланги системы охлаждения",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "444a80fe-84d3-4e8c-a1a0-0ac9b16031f3",
+    "slug": "shlangi-sistemy-okhlazhdeniia",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Электровентилятор охлаждения радиаторов",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "0e8d9610-0339-4701-ba42-13d39b34d741",
+    "slug": "elektroventiliator-okhlazhdeniia-radiatorov",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Электромотор печки",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": null,
+    "id": "a091d38b-59cd-4127-bcc8-c3247e24b4cf",
+    "slug": "elektromotor-pechki",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Компоненты топливной системы",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "5f0b0199-0729-4d8e-8501-5bff12469fa2",
+    "slug": "komponenty-toplivnoi-sistemy",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Крышки бензобака",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "9408dc1b-f729-4a51-83e5-5f59d2cbdf2a",
+    "slug": "kryshki-benzobaka",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Лючок крышки бензобака",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "3b2977c5-6b4c-4636-b0e2-2b51748c7040",
+    "slug": "liuchok-kryshki-benzobaka",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Распылители",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "57efd322-1f29-4800-8aef-dbcd731d0424",
+    "slug": "raspyliteli",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Ремкомплекты карбюратора / ТНВД / Форсунок",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "265c4bdf-2d4d-45ff-93c7-7e1feb82527d",
+    "slug": "remkomplekty-karbiuratora-tnvd-forsunok",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Тросики газа",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "bbd38ef7-853c-4f54-97e7-84b813f049a4",
+    "slug": "trosiki-gaza",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Трубки топливной системы",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "1b826697-fc4d-403f-bcab-60f5d217c465",
+    "slug": "trubki-toplivnoi-sistemy",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Уплотнитель форсунки",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "07349555-28b3-4eb3-8b8a-cb13e583d1fb",
+    "slug": "uplotnitel-forsunki",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Шайба уплотнительная",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "d5a11888-1120-4a5f-85f9-78bc6bc8ef89",
+    "slug": "shaiba-uplotnitelnaia",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Шланги топливной системы",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": null,
+    "id": "086b9079-96b8-423a-a5ee-067433eb322e",
+    "slug": "shlangi-toplivnoi-sistemy",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Вакуумные насосы и усилители",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "36abd44d-b4df-4e89-911c-8ffffdc0045b",
+    "slug": "vakuumnye-nasosy-i-usiliteli",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Главные тормозные цилиндры",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "91a31666-4074-44b4-9793-58ef8c3e9e7b",
+    "slug": "glavnye-tormoznye-tsilindry",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Диски тормозные",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "2ccf0a11-b9a2-45f5-9726-c8906454bf82",
+    "slug": "diski-tormoznye",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Колодки тормозные барабанные",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "93ab4daf-dc1b-4538-bbd1-d47a665f42c7",
+    "slug": "kolodki-tormoznye-barabannye",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Колодки тормозные дисковые",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "917e7aab-d859-4e2d-84bf-9a1c844e428e",
+    "slug": "kolodki-tormoznye-diskovye",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Компоненты тормозной системы",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "1a56eec0-4d67-493d-889b-4fb36a2bd798",
+    "slug": "komponenty-tormoznoi-sistemy",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Направляющая суппорта",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "2c8a3cc4-f0bb-453e-9fed-0da1c55b1287",
+    "slug": "napravliaiushchaia-supporta",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Рабочие тормозные цилиндры",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "75b318ab-5356-4e7a-9c81-6622a99efdec",
+    "slug": "rabochie-tormoznye-tsilindry",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Ремкомплекты Суппорта",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "8bacd729-7fc1-4ec5-9e84-ba906812531f",
+    "slug": "remkomplekty-supporta",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Ремкомплекты тормозных цилиндров",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "983b546a-e8ab-493a-9342-4a8cdabd335c",
+    "slug": "remkomplekty-tormoznykh-tsilindrov",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Тормозные барабаны",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "61292185-fd38-4780-b6d4-c0bab6ed632b",
+    "slug": "tormoznye-barabany",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Тормозные суппорта",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "ee29ac98-ea79-42ac-9f28-74c1b3fcf25b",
+    "slug": "tormoznye-supporta",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Тормозные шланги и трубки",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "b4f40aa6-b629-4d7d-8a8f-f42066bf11c5",
+    "slug": "tormoznye-shlangi-i-trubki",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Тросики ручного тормоза",
+    "category_id": "3361aed5-0b14-4ca2-87cd-9b2cb14edc8b",
+    "image_url": null,
+    "id": "759582b5-49a9-487c-a61e-37caa0fa846c",
+    "slug": "trosiki-ruchnogo-tormoza",
+    "category_slug": "sistema-tormoznaya-ford",
+    "category_name": "Система тормозная"
+  },
+  {
+    "name": "Фильтр салона_",
+    "category_id": "6ba2e599-5456-4a38-9474-e475531cf961",
+    "image_url": null,
+    "id": "9b655ba4-f809-4ea4-ab74-a493df643ec7",
+    "slug": "filtr-salona",
+    "category_slug": "filtry-ford",
+    "category_name": "Фильтры"
+  },
+  {
+    "name": "Выключатели, переключатели, кнопки",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "4389c701-2eae-4753-91fe-b1a400c0e964",
+    "slug": "vykliuchateli-perekliuchateli-knopki",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Датчик положения коленвала",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "37c37879-a845-476b-a454-41042191c9a3",
+    "slug": "datchik-polozheniia-kolenvala",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Датчик положения распредвала",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "79abdc67-0c62-443b-9679-e8e4c3effa64",
+    "slug": "datchik-polozheniia-raspredvala",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Датчики / Модули МКПП / АКПП",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "c54762f5-2cd9-4125-8ff6-a07416bbc1e5",
+    "slug": "datchiki-moduli-mkpp-akpp",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Датчики и др.устр-ва тормозной системы",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "567d93d7-5df7-473f-b729-508be180e784",
+    "slug": "datchiki-i-dr-ustr-va-tormoznoi-sistemy",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Датчики масла",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "ac342352-a2c4-455d-b8cd-ac9e3e107b17",
+    "slug": "datchiki-masla",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Датчики системы охлаждения и кондиционера",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "f2d99646-8073-4f26-a02f-4cc86e888059",
+    "slug": "datchiki-sistemy-okhlazhdeniia-i-konditsionera",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Датчики топливной системы",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "ae4de403-2118-465c-90f6-719337d1c96c",
+    "slug": "datchiki-toplivnoi-sistemy",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Компоненты электрооборудования",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "66de60f8-5d3e-4a21-8641-6ca1220797a1",
+    "slug": "komponenty-elektrooborudovaniia",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Лямбда",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "349f85ef-081d-41e8-ba6a-7d1af59d3ee2",
+    "slug": "liambda",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Переключатель на педали сцепления",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "0117079f-4881-4ab2-808c-a4f31e76eec8",
+    "slug": "perekliuchatel-na-pedali-stsepleniia",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Предохранители",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "9967dbb3-f2f9-4cfa-8b42-6a7cd8472d9d",
+    "slug": "predokhraniteli",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Реле",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "5c6a878e-2014-4b8b-ab20-75deb48afaa3",
+    "slug": "rele",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Реостат печки",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "989347a5-e364-4858-acf7-0f9a8f969ced",
+    "slug": "reostat-pechki",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Электромагнитные клапана",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "b53136b9-12e6-4caf-83c2-d655eeca9531",
+    "slug": "elektromagnitnye-klapana",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Электромоторчики",
+    "category_id": "5ba332d6-9d3c-4d8b-86aa-0ca3f85edbde",
+    "image_url": null,
+    "id": "a6bed8ff-4991-43cd-ba74-268c9fcb06c4",
+    "slug": "elektromotorchiki",
+    "category_slug": "elektrooborudovanie-ford",
+    "category_name": "Электрооборудование"
+  },
+  {
+    "name": "Вкладыши коленвала",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/crankshaft_liners.webp",
+    "id": "75a4b44e-df01-4258-ae3d-afdb621e58b4",
+    "slug": "vkladyshi-kolenvala",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Вкладыши распредвала",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/the_liners_camshaft.webp",
+    "id": "cb8336de-6e78-4842-be96-2ffd6cfea1b9",
+    "slug": "vkladyshi-raspredvala",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Втулка поршневого пальца / палец поршня",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/piston_finger_s_sleeve_finger_of_the_piston.webp",
+    "id": "0d9f38f1-2ba1-45da-8eaa-e650249fd55e",
+    "slug": "vtulka-porshnevogo-paltsa-palets-porshnia",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Гильзы",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/sleeves.webp",
+    "id": "fea29607-4a23-4aa9-a8b1-525ae64fd73f",
+    "slug": "gilzy",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Головка блока",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/block_head.webp",
+    "id": "fa4a5942-867a-4c82-9278-47455f17e0eb",
+    "slug": "golovka-bloka",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "К-т болтов головки",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/kt_bolts_of_the_head.webp",
+    "id": "6fc9e5b7-b1d5-4ba6-8526-8a45f16b4163",
+    "slug": "k-t-boltov-golovki",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Клапана,направляющие,пружины",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/valves_guides_springs.webp",
+    "id": "bf4e7bbe-dbda-4bd8-aa03-e92e8234e212",
+    "slug": "klapana-napravliaiushchie-pruzhiny",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Клапанная крышка",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/valve_cover.webp",
+    "id": "5e026f7c-9a89-42a6-ba54-a3196e6f22eb",
+    "slug": "klapannaia-kryshka",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Коленвал",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/crankshaft.webp",
+    "id": "f812d672-2fc0-4782-819b-38bb5b72fbec",
+    "slug": "kolenval",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Кольца поршневые",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/the_rings_are_piston.webp",
+    "id": "46455d8f-2971-4802-b86b-e04d98f77bc8",
+    "slug": "koltsa-porshnevye",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Комплект прокладок",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/set_of_gaskets.webp",
+    "id": "066f8ba8-1417-4ac1-b5e0-4485aff9c122",
+    "slug": "komplekt-prokladok",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Комплект распредвалов",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/set_of_camshafts.webp",
+    "id": "d412f2ac-789e-4302-82c3-91b59f0b2191",
+    "slug": "komplekt-raspredvalov",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Комплекты Цепей ГРМ",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/sets_of_timing_chains.webp",
+    "id": "5c2bdfbd-1127-4538-be22-ff8f0a8f5706",
+    "slug": "komplekty-tsepei-grm",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Компоненты двигателя",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/engine_components.webp",
+    "id": "53365f90-1486-426a-ab67-54ae14b939af",
+    "slug": "komponenty-dvigatelia",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Маслонасос и система смазки",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/oil_pump_and_lubrication_system.webp",
+    "id": "7a2c25f9-a5f7-4ade-8bbd-256d722422c0",
+    "slug": "maslonasos-i-sistema-smazki",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Опоры и подушки двигателя",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/engine_supports_and_pillows.webp",
+    "id": "b7cc74fc-1068-4996-93eb-4231a0b48fa6",
+    "slug": "opory-i-podushki-dvigatelia",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Патрубок воздушного фильтра",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/air_filter_pipe.webp",
+    "id": "db51d2f8-b13c-4540-bbf1-7509737d5b2e",
+    "slug": "patrubok-vozdushnogo-filtra",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Поддон ДВС",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/dvs_tray.webp",
+    "id": "229ef63f-a53a-4734-8476-f8e93c85ba8c",
+    "slug": "poddon-dvs",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Полукольца коленвала",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/half_rings_of_the_crankshaft.webp",
+    "id": "e1b00015-f9a1-4753-9543-19295c6cc492",
+    "slug": "polukoltsa-kolenvala",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Поршень ДВС",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/dis_piston.webp",
+    "id": "d3b72ba4-8b57-40e3-85fe-32487b21a161",
+    "slug": "porshen-dvs",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Прокладка Крышки двигателя",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/model_cover.webp",
+    "id": "18805de1-d731-4d57-848f-b45f0446ed60",
+    "slug": "prokladka-kryshki-dvigatelia",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Прокладка под головку",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/laying_under_the_head.webp",
+    "id": "e1fa7d76-767e-456b-bafb-6ee4df6524b7",
+    "slug": "prokladka-pod-golovku",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Прокладки Кл. крышки",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/gaskets_cl_covers.webp",
+    "id": "f5a2e7d0-1ac3-47c2-bb1f-82bdece05aa9",
+    "slug": "prokladki-kl-kryshki",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Прокладки впускного колектора",
+    "category_id": "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/lading_of_the_inlet_collector.webp",
+    "id": "02caf8cf-45ca-461d-a9e8-b19a96f767ac",
+    "slug": "prokladki-vpusknogo-kolektora",
+    "category_slug": "dvigatel-ford",
+    "category_name": "Двигатель"
+  },
+  {
+    "name": "Карданный вал",
+    "category_id": "b5fe5a3b-dfa2-43d3-a81e-34404d8f75d4",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/cardan_shaft.webp",
+    "id": "0005a6cf-48ce-4d9f-b135-265463cd01a4",
+    "slug": "kardannyi-val",
+    "category_slug": "kardannyy-val-ford",
+    "category_name": "Карданный вал"
+  },
+  {
+    "name": "Бампера и их части",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/bumper_and_their_parts.webp",
+    "id": "738adef2-3cba-4d4f-9c42-a60ab2bafaaf",
+    "slug": "bampera-i-ikh-chasti",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Двери и сопутствующие детали",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/doors_and_related_details.webp",
+    "id": "6887b3e8-86d7-47dd-801b-81f1d5a80896",
+    "slug": "dveri-i-soputstvuiushchie-detali",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Дефлектор капота, окон (Тюнинг)",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/kapot_deflector_windows_tuning.webp",
+    "id": "160cce8c-c408-4291-9901-439d722c76b8",
+    "slug": "deflektor-kapota-okon-tiuning",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Капоты и сопутствующие детали",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/hoods_and_related_details.webp",
+    "id": "2df27093-3b62-4f66-83a2-6dc54e061945",
+    "slug": "kapoty-i-soputstvuiushchie-detali",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Личинки / К-т замков (личинок)",
+    "category_id": "368aa0a4-ff3f-4a8b-9b9b-c6bb73a9efce",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/larvae_k_t_locks_larvae.webp",
+    "id": "8f0632b5-cd76-43bd-8fae-d7edef94f345",
+    "slug": "lichinki-k-t-zamkov-lichinok",
+    "category_slug": "kuzov-ford",
+    "category_name": "Кузов"
+  },
+  {
+    "name": "Главные цилиндры сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/the_main_clutch_cylinders.webp",
+    "id": "e661d2a2-646e-47ec-b930-45460c490d35",
+    "slug": "glavnye-tsilindry-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Подвесной подшипник полуоси",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/suspending_bearing_of_the_half_axis.webp",
+    "id": "cdb9e5ab-3a6c-4bac-b14a-b668a1022cd5",
+    "slug": "podvesnoi-podshipnik-poluosi",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "Подшипники редуктора",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/gearbox_bearings.webp",
+    "id": "df0624d4-aefd-462b-a5f4-ba6a048414e7",
+    "slug": "podshipniki-reduktora",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "Полуоси",
+    "category_id": "1b9f06ee-257c-4419-bd15-64ad5dd9afa6",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/pennials.webp",
+    "id": "049a6f7c-0a1a-407f-96c2-115770e96bbd",
+    "slug": "poluosi",
+    "category_slug": "reduktor-i-privoda-ford",
+    "category_name": "Редуктор и привода"
+  },
+  {
+    "name": "Зубчатые ремни",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/rosted_belts.webp",
+    "id": "960b62be-ecb8-4530-a3ca-b2335d05d654",
+    "slug": "zubchatye-remni",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "К-т ремней генератора",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/kt_belts_of_the_generator.webp",
+    "id": "276ee202-affc-474b-95a5-37c168fb5b7e",
+    "slug": "k-t-remnei-generatora",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Клиновидные ремни",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/cleem_belts.webp",
+    "id": "a1e3d07e-4338-4fe6-897c-b18cdb9730a5",
+    "slug": "klinovidnye-remni",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Ролики ДВС (ГРМ + генераторные)",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/dis_videos_timing_generator.webp",
+    "id": "e7b09df0-a181-4116-884c-00d3589883ab",
+    "slug": "roliki-dvs-grm-generatornye",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Ручейковые ремни 4PK",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/brook_belts_4pk.webp",
+    "id": "d63a8d0d-805e-4eda-b740-1868435127c1",
+    "slug": "rucheikovye-remni-4pk",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Ручейковые ремни 5PK",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/brook_belts_5pk.webp",
+    "id": "169552f9-1868-41dd-9bb6-1e4104440b1e",
+    "slug": "rucheikovye-remni-5pk",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Ручейковые ремни 6PK",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/broke_belts_6pk.webp",
+    "id": "63eff99a-8462-45e2-b644-b0b67fbd03a9",
+    "slug": "rucheikovye-remni-6pk",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Ручейковые ремни 7PK",
+    "category_id": "f85029ea-f3e3-4783-a699-66b736e1dd54",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/brook_belts_7pk.webp",
+    "id": "508f3fb7-c71c-41d3-a6bf-bed00583db46",
+    "slug": "rucheikovye-remni-7pk",
+    "category_slug": "remni-ford",
+    "category_name": "Ремни и ролики"
+  },
+  {
+    "name": "Водяная помпа / прокладки водяной помпы",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/water_pump_laying_of_a_water_pump.webp",
+    "id": "83a11d8b-d46d-45e5-922b-10c1411a910f",
+    "slug": "vodianaia-pompa-prokladki-vodianoi-pompy",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Крыльчатки вентиляторов",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/party_wings.webp",
+    "id": "1e49b05f-7531-4c35-994e-53ac3f7b3dfe",
+    "slug": "krylchatki-ventiliatorov",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Маслянный радиаторы",
+    "category_id": "19c5580f-2659-4e51-a4e7-1fab84619819",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/oil_radiators.webp",
+    "id": "36b663a6-85f1-4680-a6a8-7630770b1a1e",
+    "slug": "masliannyi-radiatory",
+    "category_slug": "sistema-ohlazhdeniya-ford",
+    "category_name": "Система охлаждения"
+  },
+  {
+    "name": "Датчик дроссельной заслонки",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/the_sensor_of_the_throttle.webp",
+    "id": "26ca6ed0-ecc2-4d24-ab50-c26094453fd3",
+    "slug": "datchik-drosselnoi-zaslonki",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Клапан электронной форсунки",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/electronic_nozzle_valve.webp",
+    "id": "3e85b567-1849-4fcb-aca0-f7492cfed3c4",
+    "slug": "klapan-elektronnoi-forsunki",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Расходомер",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/certure.webp",
+    "id": "035fc91f-a5ae-4c7b-b1e7-fe12ab4f8122",
+    "slug": "raskhodomer",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Регулятор холостого хода",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/idle_regulator.webp",
+    "id": "e13d20b6-2fa3-4e09-99d0-93e7b3b4ee0a",
+    "slug": "reguliator-kholostogo-khoda",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Топливные насосы / Датчики бензобака (уровня топлива)",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/fuel_pumps_tanning_sensors_fuel_level.webp",
+    "id": "38d974ab-9f2c-4cbd-a554-9ff5c9a7fb8d",
+    "slug": "toplivnye-nasosy-datchiki-benzobaka-urovnia-topliva",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Форсунки и распылители",
+    "category_id": "8b7456e9-e1ad-42fa-8cc1-353f252cefda",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/nozzles_and_sprayers.webp",
+    "id": "97aeb700-b92e-4ccb-9306-18a75f60916b",
+    "slug": "forsunki-i-raspyliteli",
+    "category_slug": "sistema-toplivnaya-ford",
+    "category_name": "Система топливная"
+  },
+  {
+    "name": "Бендиксы стартера",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/bendixes_of_the_starter.webp",
+    "id": "af0d3801-e267-4d5e-a689-ff01ebd4c222",
+    "slug": "bendiksy-startera",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Втулки / подшипники стартера",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/starter_bushes_bearings.webp",
+    "id": "49f4f54b-f62d-48e8-b3d2-25214bf3cf6c",
+    "slug": "vtulki-podshipniki-startera",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Втягивающая катушка",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/drawing_coil.webp",
+    "id": "fc4a9eab-c847-41bd-be31-bab5756f026c",
+    "slug": "vtiagivaiushchaia-katushka",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Компоненты стартера",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/starter_components.webp",
+    "id": "b1276a55-7732-4984-9c3b-92d9b196a85c",
+    "slug": "komponenty-startera",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Крепление щеток",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/fastening_the_brushes.webp",
+    "id": "3f3dbb87-a685-4fc0-82c3-f0d6e00f3cbb",
+    "slug": "kreplenie-shchetok",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Стартеры в сборе",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/starters_assembly.webp",
+    "id": "33d30581-342d-420f-bae9-9327226a4f57",
+    "slug": "startery-v-sbore",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Шестерни стартера",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/the_gear_of_the_starter.webp",
+    "id": "1da49eed-7522-49e2-be6c-efb23e5aef5d",
+    "slug": "shesterni-startera",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Щётки стартера",
+    "category_id": "1d757534-de45-459f-9a4d-b88f340964f5",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/starter_brushes.webp",
+    "id": "5bd05322-c1ed-452d-9b9d-2abd1903f315",
+    "slug": "shchetki-startera",
+    "category_slug": "startery-i-ih-komponenty-ford",
+    "category_name": "Стартеры и их компоненты"
+  },
+  {
+    "name": "Выжимной подшипник",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/squeezing_bearing.webp",
+    "id": "5ce27dcc-701c-441a-9e10-6109e03edd20",
+    "slug": "vyzhimnoi-podshipnik",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Диски сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_discs.webp",
+    "id": "716f4adb-092a-4678-bc84-bcb9f3283ebf",
+    "slug": "diski-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Комплект сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_kit.webp",
+    "id": "aa9441c3-b0fe-4e63-9a4c-0d6904d85319",
+    "slug": "komplekt-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Комплект сцепления + маховик",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_set_flywheel.webp",
+    "id": "473b9778-df72-4806-9055-a2f2b14fd016",
+    "slug": "komplekt-stsepleniia-makhovik",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Компоненты сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_components.webp",
+    "id": "789c58f4-dd9d-4089-a26f-706dd1a6fa4a",
+    "slug": "komponenty-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Корзины сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_baskets.webp",
+    "id": "541371c2-4e92-4116-bd6d-60cb15639934",
+    "slug": "korziny-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Маховик",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/flywheel.webp",
+    "id": "306e43a1-feb5-4397-99a9-91544a8dccf3",
+    "slug": "makhovik",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Натяжители сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_tensioners.webp",
+    "id": "56749a59-229c-4dd6-996f-8338e27d1838",
+    "slug": "natiazhiteli-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Рабочий цилиндр сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_working_cylinder.webp",
+    "id": "c7cd1587-0d0b-47dd-872e-48c2c22713b3",
+    "slug": "rabochii-tsilindr-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Тросики сцепления",
+    "category_id": "812c112b-e2f8-473e-8362-7c0574e7a78e",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/clutch_cables.webp",
+    "id": "de8e9ab0-388c-460c-90a3-faf58be3058f",
+    "slug": "trosiki-stsepleniia",
+    "category_slug": "sceplenie-ford",
+    "category_name": "Сцепление"
+  },
+  {
+    "name": "Воздушные фильтра",
+    "category_id": "6ba2e599-5456-4a38-9474-e475531cf961",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/air_filter.webp",
+    "id": "206bfa6c-b51e-49f0-8fbb-11e06db520f1",
+    "slug": "vozdushnye-filtra",
+    "category_slug": "filtry-ford",
+    "category_name": "Фильтры"
+  },
+  {
+    "name": "Топливные фильтра",
+    "category_id": "6ba2e599-5456-4a38-9474-e475531cf961",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/fuel_filters.webp",
+    "id": "0d978e92-4c2a-48ec-bbc7-30b73e169a23",
+    "slug": "toplivnye-filtra",
+    "category_slug": "filtry-ford",
+    "category_name": "Фильтры"
+  },
+  {
+    "name": "Фильтр АКПП, ГУР, раздатки и пр.",
+    "category_id": "6ba2e599-5456-4a38-9474-e475531cf961",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/akp_filter_gur_handouts_etc.webp",
+    "id": "e571d4eb-8615-4913-b159-b75600ce2e71",
+    "slug": "filtr-akpp-gur-razdatki-i-pr",
+    "category_slug": "filtry-ford",
+    "category_name": "Фильтры"
+  },
+  {
+    "name": "Фильтр масляный",
+    "category_id": "6ba2e599-5456-4a38-9474-e475531cf961",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/oil_filter.webp",
+    "id": "d30854a1-cf71-4313-9f96-709bf9eb54f3",
+    "slug": "filtr-maslianyi",
+    "category_slug": "filtry-ford",
+    "category_name": "Фильтры"
+  },
+  {
+    "name": "sub-category",
+    "category_id": "1b314496-edd6-4946-8d25-8ff0bd07c091",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/sub_categories/69feb028c63849dea5d959f5b9572f23.png",
+    "id": "3f98eacc-a107-4b13-b319-71efd96d6ac1",
+    "slug": "sub-category",
+    "category_slug": "inferior",
+    "category_name": "inferior"
+  },
+  {
+    "name": "Свечи зажигания",
+    "category_id": "2b3fb1a9-f13b-430f-a78e-94041fb0ed44",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/62d84dd0-4275-4784-8c01-5b6a0be9fe2c.webp",
+    "id": "62d84dd0-4275-4784-8c01-5b6a0be9fe2c",
+    "slug": "svechi-zazhiganiia",
+    "category_slug": "svechi",
+    "category_name": "Свечи"
+  },
+  {
+    "name": "Свечи накала",
+    "category_id": "2b3fb1a9-f13b-430f-a78e-94041fb0ed44",
+    "image_url": "https://storage.yandexcloud.net/tcf-images/images/categories/c9ce04fe-ed38-4006-8e5d-629d8503a90a.webp",
+    "id": "c9ce04fe-ed38-4006-8e5d-629d8503a90a",
+    "slug": "svechi-nakala",
+    "category_slug": "svechi",
+    "category_name": "Свечи"
+  }
+]

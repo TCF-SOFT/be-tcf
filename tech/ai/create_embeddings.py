@@ -7,7 +7,7 @@ from pgvector.psycopg2 import register_vector
 from psycopg2.extras import execute_values
 from sqlalchemy import create_engine
 from sqlalchemy.engine.url import make_url
-from src.config.config import settings
+from src.config import settings
 
 client = OpenAI(api_key=settings.OPENAI_API_KEY)
 

@@ -6,7 +6,7 @@ from aioboto3 import Session
 from aiohttp import ClientError
 from pydantic import HttpUrl
 
-from src.config.config import settings
+from src.config import settings
 from utils.logging import logger
 
 

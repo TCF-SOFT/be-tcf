@@ -3,7 +3,7 @@ from email.message import EmailMessage
 import aiosmtplib
 from pydantic import EmailStr
 
-from src.config.config import settings
+from src.config import settings
 from src.utils.logging import logger
 
 

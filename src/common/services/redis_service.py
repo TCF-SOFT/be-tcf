@@ -1,7 +1,7 @@
 from redis.asyncio import ConnectionPool
 from redis.asyncio.client import Redis
 
-from src.config.config import settings
+from src.config import settings
 
 
 class RedisService:

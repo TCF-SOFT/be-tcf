@@ -1,18 +1,15 @@
 from collections.abc import AsyncGenerator
 
 from sqlalchemy import NullPool
-from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from src.config.config import settings
+from config.config import settings
 from utils.logging import logger
 
-if settings.MODE == "TEST":
-    # Use the test database
-    DATABASE_URL = settings.DB.TEST_PSQL_URL
-    DATABASE_PARAMS = {"poolclass": NullPool}
-else:
-    DATABASE_URL = settings.DB.PSQL_URL
-    DATABASE_PARAMS = {}
+DATABASE_URL = settings.DB.PSQL_URL
+
+
+DATABASE_PARAMS = {"poolclass": NullPool} if settings.MODE == "TEST" else {}
 
 engine = create_async_engine(
     DATABASE_URL,
@@ -30,10 +27,12 @@ AsyncSessionFactory = async_sessionmaker(
     expire_on_commit=False,
 )
 
+
 # Dependency for FastAPI Users
 async def get_auth_db() -> AsyncGenerator[AsyncSession, None]:
     async with AsyncSessionFactory() as session:
         yield session
+
 
 # Dependency for DAO
 async def get_db() -> AsyncGenerator:

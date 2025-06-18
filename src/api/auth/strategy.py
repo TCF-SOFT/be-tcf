@@ -4,7 +4,7 @@ from fastapi_users.authentication.strategy import AccessTokenDatabase, DatabaseS
 
 from src.api.auth.dependencies import get_access_tokens_db
 from src.api.di.di import ResourceModule
-from src.config.config import settings
+from src.config import settings
 from src.models.access_token import AccessToken
 
 

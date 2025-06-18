@@ -10,7 +10,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import DeclarativeBase, Mapped, declared_attr, mapped_column
 
-from src.config.config import settings
+from src.config import settings
 from src.utils.case_converter import camel_case_to_snake_case
 
 # Annotations
