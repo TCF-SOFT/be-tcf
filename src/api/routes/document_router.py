@@ -103,6 +103,7 @@ async def get_price(
         if ext == "xlsx"
         else "text/csv",
         filename=f"price.{ext}" if price_type == "retail" else "price_wholesale.csv",
+        headers={"Access-Control-Expose-Headers": "Content-Disposition"},
     )
 
 

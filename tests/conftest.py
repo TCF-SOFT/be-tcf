@@ -1,6 +1,5 @@
 import asyncio
 import json
-import os
 from pathlib import Path
 from typing import AsyncGenerator, Generator
 from unittest import mock
@@ -40,13 +39,6 @@ def db_engine(postgres_container) -> Generator[AsyncEngine, None, None]:
     db = postgres_container.dbname
     host = postgres_container.get_container_host_ip()
     port = postgres_container.get_exposed_port(postgres_container.port)
-
-    os.environ["MODE"] = "TEST"
-    os.environ["TEST_PSQL_DB"] = db
-    os.environ["TEST_PSQL_HOST"] = host
-    os.environ["TEST_PSQL_PORT"] = str(port)
-    os.environ["TEST_PSQL_USER"] = user
-    os.environ["TEST_PSQL_PASS"] = password
 
     url = f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db}"
 
