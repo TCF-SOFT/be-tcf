@@ -22,7 +22,6 @@ class WaybillService:
 
     @staticmethod
     async def commit(db: AsyncSession, waybill_id: UUID, user_id: UUID) -> Waybill:
-        # Waybill async with db.begin():
         return await WaybillDAO.commit_waybill(db, waybill_id, user_id)
 
     @staticmethod
@@ -39,6 +38,7 @@ class WaybillService:
             brand=waybill_offer.brand,
             manufacturer_number=waybill_offer.manufacturer_number,
             price_rub=waybill_offer.price_rub,
+
         )
 
     @staticmethod
@@ -62,6 +62,7 @@ class WaybillService:
                         "category_name": offer.category_name,
                         "sub_category_slug": offer.sub_category_slug,
                         "sub_category_name": offer.sub_category_name,
+                        "product_id": offer.product_id
                     }
                 )
             )

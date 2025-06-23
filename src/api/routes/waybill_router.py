@@ -113,9 +113,9 @@ async def create_waybill(
 async def commit_waybill(
     waybill_id: UUID,
     db_session: AsyncSession = Depends(get_db),
-    user_id=Depends(current_active_user),
+    user=Depends(current_active_user),
 ):
-    return await WaybillService.commit(db_session, waybill_id, user_id)
+    return await WaybillService.commit(db_session, waybill_id, user.id)
 
 
 @router.post(
@@ -148,6 +148,7 @@ async def add_offer_to_waybill(
     return WaybillOfferSchema(
         id=waybill_offer_obj.id,
         waybill_id=waybill_id,
+        address_id=offer.address_id,
         offer_id=offer.id,
         quantity=waybill_offer_obj.quantity,
         brand=waybill_offer_obj.brand,
@@ -157,6 +158,9 @@ async def add_offer_to_waybill(
         image_url=product.image_url,
         category_slug=product.sub_category.category_slug,
         sub_category_slug=product.sub_category_slug,
+        category_name=product.sub_category.category_name,
+        sub_category_name=product.sub_category.name,
+        product_id=product.id,
     )
 
 

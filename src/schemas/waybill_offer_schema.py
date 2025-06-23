@@ -27,3 +27,4 @@ class WaybillOfferSchema(_WaybillOfferBaseSchema):
     category_name: str = Field(..., examples=["Свечи"])
     sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
     sub_category_name: str = Field(..., examples=["Свечи зажигания"])
+    product_id: UUID
