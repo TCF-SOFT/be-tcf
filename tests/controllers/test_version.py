@@ -1,7 +1,7 @@
 from httpx import AsyncClient
 
 
-class TestHealthCheck:
+class TestVersion:
     async def test_version(self, client: AsyncClient):
         response = await client.get("/-/version")
         assert response.status_code == 200
