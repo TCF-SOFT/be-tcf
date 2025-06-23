@@ -61,7 +61,12 @@ async def get_waybill(
     """
     Get waybill by ID
     """
-    return await WaybillDAO.find_by_id(db_session, waybill_id)
+    res = await WaybillDAO.find_by_id(db_session, waybill_id)
+    if not res:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Waybill not found"
+        )
+    return res
 
 
 @router.get(

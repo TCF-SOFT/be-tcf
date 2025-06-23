@@ -44,12 +44,17 @@ async def get_category_by_slug(
     slug: str,
     db_session: AsyncSession = Depends(get_db),
 ):
-    return await CategoryDAO.find_by_slug(db_session, slug)
+    res = await CategoryDAO.find_by_slug(db_session, slug)
+    if not res:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+        )
+    return res
 
 
 @router.get(
     "/{category_id}",
-    response_model=CategorySchema | None,
+    response_model=CategorySchema,
     summary="Get category by id",
     status_code=status.HTTP_200_OK,
 )
@@ -57,7 +62,12 @@ async def get_category_by_id(
     category_id: UUID,
     db_session: AsyncSession = Depends(get_db),
 ):
-    return await CategoryDAO.find_by_id(db_session, category_id)
+    res = await CategoryDAO.find_by_id(db_session, category_id)
+    if not res:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Category not found"
+        )
+    return res
 
 
 @router.post(

@@ -43,6 +43,11 @@ async def get_sub_categories(
         )
         if category:
             filters["category_id"] = category.id
+        else:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Category not found",
+            )
     if category_id:
         filters["category_id"] = category_id
 
@@ -58,7 +63,12 @@ async def get_sub_category_by_slug(
     slug: str,
     db_session: AsyncSession = Depends(get_db),
 ):
-    return await SubCategoryDAO.find_by_slug(db_session, slug)
+    res = await SubCategoryDAO.find_by_slug(db_session, slug)
+    if not res:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Sub Category not found"
+        )
+    return res
 
 
 @router.post(
