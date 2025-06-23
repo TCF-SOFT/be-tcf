@@ -51,7 +51,7 @@ class JSONLogFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord, *args, **kwargs) -> str:
         """
-        Formating LogRecord to json
+        Formatting LogRecord to json
 
         :param record: logging.LogRecord
         :return: json string

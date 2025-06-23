@@ -48,7 +48,7 @@ async def get_category_by_slug(
 
 
 @router.get(
-    "/{id}",
+    "/{category_id}",
     response_model=CategorySchema | None,
     summary="Get category by id",
     status_code=status.HTTP_200_OK,
