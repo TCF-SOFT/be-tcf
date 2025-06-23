@@ -64,7 +64,7 @@ class Offer(Base):
     @property
     def category_name(self) -> str:
         """
-        WaybillOffer and Offer uss this to display category name.
+        WaybillOffer and Offer use this to display category name.
         """
         return self.product.sub_category.category.name
 
