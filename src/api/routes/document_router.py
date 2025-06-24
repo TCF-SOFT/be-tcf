@@ -11,10 +11,10 @@ from api.controllers.pricing_controller import generate_price, serve_price
 from api.dao.waybill_dao import WaybillDAO
 from api.di.database import get_db
 from api.services.waybill_service import WaybillService
-from new_print import InvoiceGenerator
 from schemas.waybill_offer_schema import WaybillOfferSchema
 from schemas.waybill_schema import WaybillSchema
 from tasks.mailing import send_pricing_email
+from tasks.waybills.print_waybill import create_document
 
 router = APIRouter(tags=["Documents"], prefix="/documents")
 
@@ -25,7 +25,7 @@ router = APIRouter(tags=["Documents"], prefix="/documents")
 )
 async def print_waybill(
     waybill_id: UUID,
-    printer: InvoiceGenerator = Depends(InvoiceGenerator),
+    # printer: InvoiceGenerator = Depends(InvoiceGenerator),
     db_session: AsyncSession = Depends(get_db),
 ):
     waybill_raw = await WaybillDAO.find_by_id(db_session, waybill_id)
@@ -36,46 +36,18 @@ async def print_waybill(
     offers_raw = await WaybillService.fetch_waybill_offers(waybill_raw)
 
     try:
-        WaybillSchema.model_validate(waybill_raw)
+        waybill = WaybillSchema.model_validate(waybill_raw)
         offers = [WaybillOfferSchema.model_validate(o) for o in offers_raw]
-        sum(o.price_rub * o.quantity for o in offers)
+        total_sum = sum(o.price_rub * o.quantity for o in offers)
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Can't generate PDF",
+            detail="Can't generate Word",
         )
 
-    invoice_data = {
-        "number": "51240 13793277",
-        "fio": "2 Менеджер",
-        "phone": "+7 (999) 042-46-66",
-        "city": "Не заполнен у пользователя",
-        "delivery": "Самовывоз",
-        "items": [
-            {
-                "name": "Прокладки клапанной крышки",
-                "brand": "Transit BSG",
-                "number": "AR893",
-                "price": 500,
-                "quantity": 10,
-            },
-            {
-                "name": "Прокладки клапанной крышки",
-                "brand": "Transit пробка",
-                "number": "AR806",
-                "price": 300,
-                "quantity": 5,
-            },
-        ],
-        "total": 9999,
-    }
-
     return FileResponse(
-        path=printer.create_invoice(invoice_data),
+        path=create_document(waybill, offers, total_sum),
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        headers={
-            "Content-Disposition": f"attachment; filename=waybill_{waybill_id}.docx"
-        },
     )
 
 
