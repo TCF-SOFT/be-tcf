@@ -36,3 +36,21 @@ async def get_users(
         filters["role"] = role
 
     return await UserDAO.find_all(db_session, filters)
+
+@router.get(
+    "/meta/count",
+    response_model=dict[str, int],
+    status_code=status.HTTP_200_OK,
+    summary="Return count of users",
+    dependencies=[Depends(require_employee)],
+)
+async def get_users(
+    db_session: AsyncSession = Depends(get_db),
+    role: Literal["admin", "employee", "user"] | None = None,
+):
+    filters = {}
+
+    if role:
+        filters["role"] = role
+
+    return await UserDAO.count_all(db_session, filters)

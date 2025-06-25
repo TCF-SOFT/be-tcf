@@ -70,6 +70,27 @@ async def get_waybill(
 
 
 @router.get(
+    "/meta/count",
+    response_model=dict[str, int],
+    summary="Return count of waybills",
+    status_code=status.HTTP_200_OK,
+)
+async def count_offers(
+    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"] | None = None,
+    is_pending: bool | None = None,
+    db_session: AsyncSession = Depends(get_db),
+):
+    filters = {}
+
+    if waybill_type:
+        filters["waybill_type"] = waybill_type
+    if is_pending is not None:
+        filters["is_pending"] = is_pending
+
+    return await WaybillDAO.count_all(db_session, filter_by=filters)
+
+
+@router.get(
     "/{waybill_id}/offers",
     status_code=status.HTTP_200_OK,
     response_model=list[WaybillOfferSchema],

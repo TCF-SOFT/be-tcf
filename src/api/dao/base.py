@@ -1,7 +1,7 @@
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import delete as sa_delete
+from sqlalchemy import delete as sa_delete, func
 from sqlalchemy import select
 from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
@@ -51,10 +51,10 @@ class BaseDAO:
         :param filter_by:
         :return:
         """
-        query = select(cls.model).filter_by(**filter_by)
+        query = select(func.count()).select_from(cls.model).filter_by(**filter_by)
         result = await db_session.execute(query)
-        res = result.scalars().all()
-        return {"count": len(res)}
+        count = result.scalar_one()
+        return {"count": count}
 
     # ---------------------------------------
     #            POST Methods
