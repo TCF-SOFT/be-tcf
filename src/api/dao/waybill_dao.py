@@ -66,6 +66,4 @@ class WaybillDAO(BaseDAO):
             )
             db_session.add(movement)
 
-        await db_session.commit()
-        await db_session.refresh(waybill)
         return waybill
