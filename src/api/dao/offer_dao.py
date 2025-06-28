@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from src.api.dao.base import BaseDAO
-from src.models.models import Offer, Product
+from src.models import Offer, Product
 from src.schemas.offer_schema import OfferSchema
 
 

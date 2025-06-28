@@ -3,9 +3,9 @@ from typing import Literal
 
 
 class ShippingMethod(str, Enum):
-    SELF_PICKUP = "self_pickup"
-    CARGO = "cargo"
-    OTHER = "other"
+    SELF_PICKUP = "SELF_PICKUP"
+    CARGO = "CARGO"
+    OTHER = "OTHER"
 
 
 class CustomerType(str, Enum):
@@ -21,9 +21,9 @@ class WaybillType(str, Enum):
 
 
 class Role(str, Enum):
-    ADMIN = "admin"
-    EMPLOYEE = "employee"
-    USER = "user"
+    ADMIN = "ADMIN"
+    EMPLOYEE = "EMPLOYEE"
+    USER = "USER"
 
 
 class PriceListExt(str, Enum):

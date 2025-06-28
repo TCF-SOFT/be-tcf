@@ -7,7 +7,7 @@ from sqlalchemy import func, or_, select
 from api.dao.base import BaseDAO
 from common.microservices.open_ai_service import get_embedding
 from schemas.product_schema import ProductSchema
-from src.models.models import Product
+from src.models import Product
 
 
 class ProductDAO(BaseDAO):

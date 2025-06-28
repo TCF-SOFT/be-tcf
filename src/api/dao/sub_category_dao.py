@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
 from api.dao.base import BaseDAO
-from src.models.models import SubCategory
+from src.models import SubCategory
 
 
 class SubCategoryDAO(BaseDAO):

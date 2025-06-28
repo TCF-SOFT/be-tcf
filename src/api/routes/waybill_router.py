@@ -14,7 +14,7 @@ from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.di.database import get_db
 from src.api.services.waybill_service import WaybillService
-from src.models.models import Product, Waybill
+from src.models import Product, Waybill
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
 

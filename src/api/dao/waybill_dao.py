@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from schemas.waybill_schema import WaybillSchema
 from src.api.dao.base import BaseDAO
-from src.models.models import Offer, StockMovement, Waybill
+from src.models import Offer, StockMovement, Waybill
 
 
 class WaybillDAO(BaseDAO):
