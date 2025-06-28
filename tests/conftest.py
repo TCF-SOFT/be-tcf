@@ -1,17 +1,19 @@
 import asyncio
 import json
 from pathlib import Path
-from typing import AsyncGenerator, Generator
+from typing import AsyncGenerator
 from unittest import mock
 
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
-from sqlalchemy.ext.asyncio import AsyncEngine, async_sessionmaker, create_async_engine
+from src.api.di.db_helper import DatabaseHelper  # класс
 from src.models import Category, Offer, Product, SubCategory
 from src.models.base import Base
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
+
+from config import settings
 
 
 # -------------------------------
@@ -19,7 +21,14 @@ from testcontainers.redis import RedisContainer
 # -------------------------------
 @pytest.fixture(scope="session")
 def postgres_container():
-    with PostgresContainer("postgres:17") as postgres:
+    with PostgresContainer(
+        image="postgres:17",
+        username=settings.DB.TEST_PSQL_USER,
+        password=settings.DB.TEST_PSQL_PASS,
+        dbname=settings.DB.TEST_PSQL_DB,
+        port=settings.DB.PSQL_PORT,
+    ).with_bind_ports(settings.DB.PSQL_PORT, settings.DB.PSQL_PORT) as postgres:
+        # sleep(600)
         yield postgres
 
 
@@ -29,37 +38,37 @@ def redis_container():
         yield redis
 
 
-# -------------------------------
-# 🛠 DB Engine & Session factory
-# -------------------------------
-@pytest.fixture(scope="session")
-def db_engine(postgres_container) -> Generator[AsyncEngine, None, None]:
-    user = postgres_container.username
-    password = postgres_container.password
-    db = postgres_container.dbname
-    host = postgres_container.get_container_host_ip()
-    port = postgres_container.get_exposed_port(postgres_container.port)
+@pytest.fixture(scope="session", autouse=True)
+def patch_db_helper(postgres_container):
+    # 1. строим URL контейнера
+    url = postgres_container.get_connection_url(driver="asyncpg")
 
-    url = f"postgresql+asyncpg://{user}:{password}@{host}:{port}/{db}"
+    # 2. создаём новый helper, указывая is_test=True (NullPool и т.д.)
+    test_helper = DatabaseHelper(url, is_test=True)
 
-    engine = create_async_engine(url, echo=False, future=True)
-    yield engine
-    asyncio.get_event_loop().run_until_complete(engine.dispose())
+    # 3. подменяем глобальную переменную *в самом модуле* db_helper
+    import importlib
 
+    helper_module = importlib.import_module("src.api.di.db_helper")
+    helper_module.db_helper = test_helper  # <-- ключевая строка
 
-@pytest.fixture(scope="session")
-def db_session_factory(db_engine):
-    return async_sessionmaker(bind=db_engine, expire_on_commit=False)
+    yield
+
+    # 4. аккуратно закрываем в конце сессии
+    asyncio.get_event_loop().run_until_complete(test_helper.dispose())
 
 
 # -------------------------------
 # DB Schema Setup & Seeding
 # -------------------------------
 @pytest.fixture(scope="session", autouse=True)
-async def setup_test_db(db_engine, db_session_factory):
-    assert db_engine.url.database == "test", "Not test DB is using, aborting!"
+async def setup_test_db(patch_db_helper):
+    from src.api.di.db_helper import db_helper
 
-    async with db_engine.begin() as conn:
+    # safety check
+    assert "test" in str(db_helper.engine.url), "Using non-test DB!"
+
+    async with db_helper.engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
         await conn.run_sync(Base.metadata.create_all)
 
@@ -82,28 +91,12 @@ async def setup_test_db(db_engine, db_session_factory):
         "offers": Offer,
     }
 
-    async with db_session_factory() as session:
+    async with db_helper.AsyncSessionFactory() as session:
         for name, model in model_map.items():
             if raw_data := mocks.get(name):
                 data = filter_insertable_fields(raw_data, model)
                 await session.execute(insert(model).values(data))
         await session.commit()
-
-
-# -------------------------------
-# 🔁 Override get_db for FastAPI
-# -------------------------------
-@pytest.fixture(scope="session", autouse=True)
-def override_app_db(db_session_factory):
-    from src.__main__ import app
-    from src.api.di.database import get_db
-
-    async def override_get_db():
-        async with db_session_factory() as session:
-            yield session
-
-    app.dependency_overrides[get_db] = override_get_db
-    print("🔄 Overridden get_db dependency for FastAPI")
 
 
 # -------------------------------

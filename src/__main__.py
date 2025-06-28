@@ -14,9 +14,9 @@ from fastapi_pagination import add_pagination
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.middleware.cors import CORSMiddleware
 
+from api.di.db_helper import db_helper
 from api.routes import router
 from src.api.controllers.api_microservice_version import get_microservice_version
-from src.api.di.database import dispose
 from src.api.di.di import ResourceModule
 from src.api.middleware.logging_middleware import LoggingMiddleware
 from src.common.services.redis_service import RedisService
@@ -78,7 +78,7 @@ async def lifespan(app: FastAPI):
     finally:
         logger.info("[!] Shutting down the application...")
         await app.state.redis_service.close()
-        await dispose()  # Close the database connection pool
+        await db_helper.dispose()  # Close the database connection pool
 
 
 # Datadog tracing (should be initialized before the app creation)

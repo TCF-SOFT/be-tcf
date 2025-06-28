@@ -11,7 +11,7 @@ from src.api.controllers.update_entity_controller import (
 )
 from src.api.dao.product_dao import ProductDAO
 from src.api.dao.sub_category_dao import SubCategoryDAO
-from src.api.di.database import get_db
+from src.api.di.db_helper import db_helper
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 from src.schemas.product_schema import (
@@ -32,7 +32,7 @@ router = APIRouter(tags=["Products"], prefix="/products")
 )
 # @cache(expire=60, coder=ORJsonCoder)
 async def get_products(
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     sub_category_id: UUID | None = None,
     sub_category_slug: str | None = None,
     is_deleted: bool = False,
@@ -59,7 +59,7 @@ async def get_products(
 )
 async def get_product(
     product_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ProductDAO.find_by_id(db_session, product_id)
 
@@ -72,7 +72,7 @@ async def get_product(
 )
 async def search_products_by_name(
     search_term: str,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ProductDAO.wildcard_search(db_session, search_term)
 
@@ -85,7 +85,7 @@ async def search_products_by_name(
 )
 async def full_text_search_products(
     search_term: str,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await ProductDAO.full_text_search(db_session, search_term)
 
@@ -99,7 +99,7 @@ async def full_text_search_products(
 # @cache(expire=60, coder=ORJsonCoder)
 # async def semantic_search_products(
 #     search_term: str,
-#     db_session: AsyncSession = Depends(get_db),
+#     db_session: AsyncSession = Depends(db_helper.session_getter),
 # ):
 #     return await ProductDAO.vector_search(db_session, search_term)
 
@@ -114,7 +114,7 @@ async def full_text_search_products(
 async def post_product(
     product: ProductPostSchema,
     image_blob: UploadFile = File(...),
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await create_entity_with_image(
@@ -139,7 +139,7 @@ async def put_product(
     product_id: UUID,
     product: ProductPutSchema,
     image_blob: UploadFile | None = File(None),
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await update_entity_with_optional_image(
@@ -161,7 +161,7 @@ async def put_product(
 )
 async def delete_product(
     product_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     success = await ProductDAO.delete_by_id(db_session, product_id)
     if not success:

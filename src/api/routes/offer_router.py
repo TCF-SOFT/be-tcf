@@ -12,7 +12,7 @@ from src.api.controllers.update_entity_controller import (
     update_entity,
 )
 from src.api.dao.offer_dao import OfferDAO
-from src.api.di.database import get_db
+from src.api.di.db_helper import db_helper
 from src.schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
 
 router = APIRouter(tags=["Offers"], prefix="/offers")
@@ -26,7 +26,7 @@ router = APIRouter(tags=["Offers"], prefix="/offers")
 )
 # @cache(expire=60, coder=ORJsonCoder)
 async def get_offers(
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     product_id: UUID | None = None,
     is_deleted: bool = False,
 ):
@@ -46,7 +46,7 @@ async def get_offers(
 )
 async def get_offer(
     offer_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await OfferDAO.find_by_id(db_session, offer_id)
 
@@ -63,7 +63,7 @@ async def count_offers(
     # sub_category_slug: str | None = None,
     product_id: UUID | None = None,
     # in_stock: bool | None = None,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     filters = {}
 
@@ -83,7 +83,7 @@ async def count_offers(
 )
 async def search_offers(
     search_term: str,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await OfferDAO.smart_offer_search(db_session, search_term)
 
@@ -96,7 +96,7 @@ async def search_offers(
 )
 async def full_text_search_offers(
     search_term: str,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await OfferDAO.full_text_search(db_session, search_term)
 
@@ -110,7 +110,7 @@ async def full_text_search_offers(
 )
 async def post_offer(
     offer: OfferPostSchema,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await create_entity(
         payload=offer,
@@ -130,7 +130,7 @@ async def post_offer(
 async def put_offer(
     offer_id: UUID,
     offer: OfferPutSchema,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await update_entity(
         entity_id=offer_id, payload=offer, dao=OfferDAO, db_session=db_session
@@ -145,7 +145,7 @@ async def put_offer(
 )
 async def delete_offer(
     offer_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     success = await OfferDAO.delete_by_id(db_session, offer_id)
     if not success:

@@ -13,7 +13,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from schemas.enums import CustomerType, Role, ShippingMethod
+from schemas.common.enums import CustomerType, Role, ShippingMethod
 from src.models.base import Base, str_uniq, uuid_pk
 
 if TYPE_CHECKING:

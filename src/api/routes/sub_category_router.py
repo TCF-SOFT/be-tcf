@@ -9,7 +9,6 @@ from api.controllers.create_entity_controller import create_entity_with_image
 from api.controllers.update_entity_controller import update_entity_with_optional_image
 from api.dao.category_dao import CategoryDAO
 from api.dao.sub_category_dao import SubCategoryDAO
-from api.di.database import get_db
 from api.routes.fastapi_users_router import require_employee
 from common.deps.s3_service import get_s3_service
 from common.services.s3_service import S3Service
@@ -19,6 +18,7 @@ from schemas.sub_category_schema import (
     SubCategoryPutSchema,
     SubCategorySchema,
 )
+from src.api.di.db_helper import db_helper
 from utils.cache_coder import ORJsonCoder
 
 router = APIRouter(tags=["Sub-Categories"], prefix="/sub-categories")
@@ -32,7 +32,7 @@ router = APIRouter(tags=["Sub-Categories"], prefix="/sub-categories")
 )
 @cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_sub_categories(
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     category_id: UUID | None = None,
     category_slug: str = None,
 ):
@@ -61,7 +61,7 @@ async def get_sub_categories(
 )
 async def get_sub_category_by_slug(
     slug: str,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     res = await SubCategoryDAO.find_by_slug(db_session, slug)
     if not res:
@@ -80,7 +80,7 @@ async def get_sub_category_by_slug(
 async def post_sub_category(
     sub_category: SubCategoryPostSchema,
     image_blob: UploadFile = File(...),
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await create_entity_with_image(
@@ -105,7 +105,7 @@ async def put_sub_category(
     sub_category_id: UUID,
     sub_category: SubCategoryPutSchema,
     image_blob: UploadFile | None = File(None),
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await update_entity_with_optional_image(
@@ -127,7 +127,7 @@ async def put_sub_category(
 )
 async def delete_sub_category(
     sub_category_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     success = await SubCategoryDAO.delete_by_id(db_session, sub_category_id)
     if not success:

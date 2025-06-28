@@ -9,8 +9,8 @@ from typing import cast
 import loguru
 import stackprinter
 
+from schemas.common.json_logs import BaseJsonLogSchema
 from src.config import settings
-from src.schemas.json_logs import BaseJsonLogSchema
 
 # Set stackprinter as the default exception printer
 stackprinter.set_excepthook(style="darkbg2")

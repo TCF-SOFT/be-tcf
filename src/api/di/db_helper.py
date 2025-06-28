@@ -26,19 +26,28 @@ class DatabaseHelper:
         database_params: dict = {}
 
         if is_test:
-            url = settings.DB.TEST_PSQL_URL
             database_params = {"poolclass": NullPool}
+            self.engine: AsyncEngine = create_async_engine(
+                url=settings.DB.TEST_PSQL_URL,
+                future=future,
+                echo=echo,
+                pool_pre_ping=pool_pre_ping,
+                echo_pool=echo_pool,
+                **database_params,
+            )
 
-        self.engine: AsyncEngine = create_async_engine(
-            url=url,
-            future=future,
-            echo=echo,
-            pool_pre_ping=pool_pre_ping,
-            echo_pool=echo_pool,
-            pool_size=pool_size,
-            max_overflow=max_overflow,
-            **database_params,
-        )
+        else:
+            self.engine: AsyncEngine = create_async_engine(
+                url=url,
+                future=future,
+                echo=echo,
+                pool_pre_ping=pool_pre_ping,
+                echo_pool=echo_pool,
+                pool_size=pool_size,
+                max_overflow=max_overflow,
+                **database_params,
+            )
+
         self.AsyncSessionFactory: async_sessionmaker[AsyncSession] = async_sessionmaker(
             bind=self.engine,
             autoflush=False,
@@ -49,19 +58,22 @@ class DatabaseHelper:
     async def dispose(self) -> None:
         await self.engine.dispose()
 
-    @property
-    async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
+    async def session_getter_auth(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.AsyncSessionFactory() as session:
             yield session
 
+    async def session_getter(self) -> AsyncGenerator[AsyncSession, None]:
+        async with self.AsyncSessionFactory() as session, session.begin():
+            yield session
 
-# db_helper = DatabaseHelper(
-#     url=settings.DB.PSQL_URL,
-#     is_test=settings.MODE == "TEST",
-#     future=True,
-#     echo=settings.DB.echo,
-#     pool_pre_ping=True,
-#     echo_pool=settings.DB.echo_pool,
-#     pool_size=settings.DB.pool_size,
-#     max_overflow=settings.DB.max_overflow,
-# )
+
+db_helper = DatabaseHelper(
+    url=settings.DB.PSQL_URL,
+    is_test=settings.MODE == "TEST",
+    future=True,
+    echo=settings.DB.echo,
+    pool_pre_ping=True,
+    echo_pool=settings.DB.echo_pool,
+    pool_size=settings.DB.pool_size,
+    max_overflow=settings.DB.max_overflow,
+)

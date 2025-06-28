@@ -1,8 +1,9 @@
 # Use a Python image with uv pre-installed
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-RUN apt-get update && apt-get install -y \
-    libmagic-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libmagic-dev=1:5.46-5 \
+ && rm -rf /var/lib/apt/lists/*
 
 # Install the project into `/src`
 WORKDIR /src
@@ -25,7 +26,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # Then, add the rest of the project source code and install it
 # Installing separately from its dependencies allows optimal layer caching
-ADD src/ src/
+COPY src/ src/
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
 

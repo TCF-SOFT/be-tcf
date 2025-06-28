@@ -7,7 +7,7 @@ from pydantic import (
     Field,
 )
 
-from schemas.enums import WaybillType
+from schemas.common.enums import WaybillType
 
 
 class _WaybillBaseSchema(BaseModel):

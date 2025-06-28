@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.routes.fastapi_users_router import fastapi_users_router, require_employee
-from schemas.enums import Role
+from schemas.common.enums import Role
 from schemas.user_schema import UserUpdate
 from src.api.dao.user_dao import UserDAO
-from src.api.di.database import get_db
+from src.api.di.db_helper import db_helper
 from src.schemas.user_schema import UserRead
 
 # Create the router
@@ -26,7 +26,7 @@ router.include_router(
     dependencies=[Depends(require_employee)],
 )
 async def get_users(
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     role: Role | None = None,
 ):
     filters = {}
@@ -45,7 +45,7 @@ async def get_users(
     dependencies=[Depends(require_employee)],
 )
 async def count_users(
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     role: Role | None = None,
 ):
     filters = {}

@@ -5,7 +5,7 @@ from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from schemas.enums import WaybillType
+from schemas.common.enums import WaybillType
 from src.models.base import Base, uuid_pk
 
 

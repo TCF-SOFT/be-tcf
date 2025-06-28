@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 from sqlalchemy import create_engine, text
 
-from schemas.enums import PriceListExt, PriceListType
+from schemas.common.enums import PriceListExt, PriceListType
 from src.config import settings
 
 

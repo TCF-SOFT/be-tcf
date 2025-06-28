@@ -8,11 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.controllers.pricing_controller import generate_price, serve_price
 from api.dao.waybill_dao import WaybillDAO
-from api.di.database import get_db
 from api.services.waybill_service import WaybillService
-from schemas.enums import PriceListExt, PriceListType
+from schemas.common.enums import PriceListExt, PriceListType
 from schemas.waybill_offer_schema import WaybillOfferSchema
 from schemas.waybill_schema import WaybillSchema
+from src.api.di.db_helper import db_helper
 from tasks.mailing import send_pricing_email
 from tasks.waybills.print_waybill import create_document
 
@@ -26,7 +26,7 @@ router = APIRouter(tags=["Documents"], prefix="/documents")
 async def print_waybill(
     waybill_id: UUID,
     # printer: InvoiceGenerator = Depends(InvoiceGenerator),
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     waybill_raw = await WaybillDAO.find_by_id(db_session, waybill_id)
     if not waybill_raw:

@@ -2,19 +2,23 @@ from fastapi import BackgroundTasks, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.user_manager import UserManager
-from src.api.di.database import get_auth_db
+from src.api.di.db_helper import db_helper
 from src.models.access_token import AccessToken
 from src.models.user import User
 
 
-async def get_users_db(db_session: AsyncSession = Depends(get_auth_db)):
+async def get_users_db(
+    db_session: AsyncSession = Depends(db_helper.session_getter_auth),
+):
     """
     Dependency to get the User database adapter.
     """
     return User.get_db(db_session)
 
 
-async def get_access_tokens_db(db_session: AsyncSession = Depends(get_auth_db)):
+async def get_access_tokens_db(
+    db_session: AsyncSession = Depends(db_helper.session_getter_auth),
+):
     """
     Dependency to get the Access Token database adapter.
     """

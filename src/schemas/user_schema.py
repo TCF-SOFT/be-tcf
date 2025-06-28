@@ -4,7 +4,7 @@ from fastapi_users import schemas
 from pydantic import BaseModel, Field, HttpUrl, field_serializer
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
-from schemas.enums import CustomerType, Role, ShippingMethod
+from schemas.common.enums import CustomerType, Role, ShippingMethod
 
 
 class _BaseUser(BaseModel):

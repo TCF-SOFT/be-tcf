@@ -8,11 +8,11 @@ from api.routes.fastapi_users_router import (
     current_active_user,
     require_employee,
 )
-from schemas.enums import WaybillType
+from schemas.common.enums import WaybillType
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO
-from src.api.di.database import get_db
+from src.api.di.db_helper import db_helper
 from src.api.services.waybill_service import WaybillService
 from src.models import Product, Waybill
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
@@ -29,7 +29,7 @@ router = APIRouter(
     response_model=Page[WaybillSchema],
 )
 async def get_waybills(
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     waybill_type: WaybillType | None = None,
     is_pending: bool | None = None,
     user_id: UUID | None = None,
@@ -56,7 +56,7 @@ async def get_waybills(
     response_model=WaybillSchema,
 )
 async def get_waybill(
-    waybill_id: UUID, db_session: AsyncSession = Depends(get_db)
+    waybill_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
 ) -> WaybillSchema | None:
     """
     Get waybill by ID
@@ -78,7 +78,7 @@ async def get_waybill(
 async def count_offers(
     waybill_type: WaybillType | None = None,
     is_pending: bool | None = None,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     filters = {}
 
@@ -96,7 +96,7 @@ async def count_offers(
     response_model=list[WaybillOfferSchema],
 )
 async def get_waybill_offers(
-    waybill_id: UUID, db_session: AsyncSession = Depends(get_db)
+    waybill_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
 ):
     """
     Get all offers in waybill
@@ -116,7 +116,8 @@ async def get_waybill_offers(
     response_model=WaybillSchema,
 )
 async def create_waybill(
-    waybill: WaybillPostSchema, db_session: AsyncSession = Depends(get_db)
+    waybill: WaybillPostSchema,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await create_entity(
         payload=waybill,
@@ -133,7 +134,7 @@ async def create_waybill(
 )
 async def commit_waybill(
     waybill_id: UUID,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     user=Depends(current_active_user),
 ):
     return await WaybillService.commit(db_session, waybill_id, user.id)
@@ -147,7 +148,7 @@ async def commit_waybill(
 async def add_offer_to_waybill(
     waybill_id: UUID,
     waybill_offer: WaybillOfferPostSchema,
-    db_session: AsyncSession = Depends(get_db),
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     # получаем текущие данные из offers — для валидации
     offer = await OfferDAO.find_by_id(db_session, waybill_offer.offer_id)
@@ -189,7 +190,9 @@ async def add_offer_to_waybill(
     "/{waybill_id}",
     status_code=status.HTTP_204_NO_CONTENT,
 )
-async def delete_waybill(waybill_id: UUID, db_session: AsyncSession = Depends(get_db)):
+async def delete_waybill(
+    waybill_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
+):
     deleted = await WaybillDAO.delete_by_id(db_session, waybill_id)
     if not deleted:
         raise HTTPException(

@@ -3,7 +3,7 @@ import uuid
 from fastapi import Depends, HTTPException, status
 from fastapi_users import FastAPIUsers
 
-from schemas.enums import Role
+from schemas.common.enums import Role
 from src.api.auth.backend import authentication_backend
 from src.api.auth.dependencies import get_user_manager
 from src.models import User
