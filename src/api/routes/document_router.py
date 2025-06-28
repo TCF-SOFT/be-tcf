@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status
@@ -11,6 +10,7 @@ from api.controllers.pricing_controller import generate_price, serve_price
 from api.dao.waybill_dao import WaybillDAO
 from api.di.database import get_db
 from api.services.waybill_service import WaybillService
+from schemas.enums import PriceListExt, PriceListType
 from schemas.waybill_offer_schema import WaybillOfferSchema
 from schemas.waybill_schema import WaybillSchema
 from tasks.mailing import send_pricing_email
@@ -55,8 +55,8 @@ async def print_waybill(
     "/price/{price_type}", status_code=status.HTTP_200_OK, response_class=FileResponse
 )
 async def get_price(
-    price_type: Literal["retail", "wholesale"],
-    ext: Literal["xlsx", "csv"],
+    price_type: PriceListType,
+    ext: PriceListExt,
     cache: bool = True,
 ) -> FileResponse:
     """
@@ -80,8 +80,8 @@ async def get_price(
 
 @router.post("/send/{email}", status_code=status.HTTP_201_CREATED)
 async def send_price_email(
-    price_type: Literal["retail", "wholesale"],
-    ext: Literal["xlsx", "csv"],
+    price_type: PriceListType,
+    ext: PriceListExt,
     email: EmailStr,
     background_tasks: BackgroundTasks,
 ) -> None:

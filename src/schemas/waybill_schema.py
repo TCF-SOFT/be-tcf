@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Literal
 from uuid import UUID
 
 from pydantic import (
@@ -8,10 +7,12 @@ from pydantic import (
     Field,
 )
 
+from schemas.enums import WaybillType
+
 
 class _WaybillBaseSchema(BaseModel):
     user_id: UUID
-    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]
+    waybill_type: WaybillType = Field(..., examples=[WaybillType.WAYBILL_OUT])
     is_pending: bool = Field(..., examples=[True])
     counterparty_name: str = Field(..., examples=["ООО Рога и Копыта"])
 

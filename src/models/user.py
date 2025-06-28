@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Literal, Optional
+from typing import TYPE_CHECKING
 
 from fastapi_users_db_sqlalchemy import (
     SQLAlchemyBaseUserTableUUID,
@@ -8,8 +8,12 @@ from sqlalchemy import (
     Boolean,
     String,
 )
+from sqlalchemy import (
+    Enum as SQLEnum,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from schemas.enums import CustomerType, Role, ShippingMethod
 from src.models.base import Base, str_uniq, uuid_pk
 
 if TYPE_CHECKING:
@@ -26,29 +30,43 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
 
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[str] = mapped_column(String, nullable=True)
-    avatar_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    avatar_url: Mapped[str | None] = mapped_column(String, nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     is_superuser: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     is_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
-    role: Mapped[Literal["admin", "employee", "user"]] = mapped_column(
-        String, nullable=False, default="user"
+    role: Mapped[Role] = mapped_column(
+        SQLEnum(Role, native_enum=False),
+        nullable=False,
+        default=Role.USER,
     )
 
-    position: Mapped[Literal["Менеджер", "Кладовщик"]] = mapped_column(
-        String, nullable=True
+    # --------------------------------------------------
+    #            Customer Only Fields
+    # --------------------------------------------------
+    customer_type: Mapped[CustomerType] = mapped_column(
+        SQLEnum(CustomerType, native_enum=False),
+        nullable=False,
+        default=CustomerType.USER_RETAIL,
     )
 
-    # TODO: Customer only fields
-    # loyalty_lvl: Mapped[int]
-    customer_type: Mapped[
-        Literal["USER_RETAIL", "USER_WHOLESALE", "USER_SUPER_WHOLESALE"]
-    ] = mapped_column(String, nullable=False, default="USER_RETAIL")
     mailing: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+
+    phone: Mapped[str | None] = mapped_column(String, nullable=True)
+    city: Mapped[str | None] = mapped_column(String, nullable=True)
+    notes: Mapped[str | None] = mapped_column(String, nullable=True)
+
+    shipping_method: Mapped[ShippingMethod | None] = mapped_column(
+        SQLEnum(ShippingMethod, native_enum=False),
+        default=None,
+        nullable=True,
+    )
+    shipping_company: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
     waybills = relationship("Waybill", back_populates="user", lazy="joined")
+    addresses = relationship("Address", back_populates="user", lazy="joined")
 
     @classmethod
     def get_db(cls, session: "AsyncSession"):

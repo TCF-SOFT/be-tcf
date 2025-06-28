@@ -50,19 +50,20 @@ async def get_offer(
 ):
     return await OfferDAO.find_by_id(db_session, offer_id)
 
+
 @router.get(
     "/meta/count",
     response_model=dict[str, int],
     summary="Return count of offers",
-    status_code=status.HTTP_200_OK
+    status_code=status.HTTP_200_OK,
 )
 async def count_offers(
-        # TODO: add counts by categories
-        # category_slug: str | None = None,
-        # sub_category_slug: str | None = None,
-        product_id: UUID | None = None,
-        # in_stock: bool | None = None,
-        db_session: AsyncSession = Depends(get_db),
+    # TODO: add counts by categories
+    # category_slug: str | None = None,
+    # sub_category_slug: str | None = None,
+    product_id: UUID | None = None,
+    # in_stock: bool | None = None,
+    db_session: AsyncSession = Depends(get_db),
 ):
     filters = {}
 
@@ -72,6 +73,7 @@ async def count_offers(
     #     filters["in_stock"] = in_stock
 
     return await OfferDAO.count_all(db_session, filter_by=filters)
+
 
 @router.get(
     "/search/wildcard",

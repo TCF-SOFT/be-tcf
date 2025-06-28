@@ -1,26 +1,32 @@
 import uuid
-from typing import Literal
 
 from fastapi_users import schemas
 from pydantic import BaseModel, Field, HttpUrl, field_serializer
+from pydantic_extra_types.phone_numbers import PhoneNumber
+
+from schemas.enums import CustomerType, Role, ShippingMethod
 
 
 class _BaseUser(BaseModel):
     first_name: str = Field(..., examples=["Vasilii"])
     last_name: str | None = Field(None, examples=["Pinov"])
-    role: Literal["admin", "employee", "user"] = Field("user", examples=["user"])
-    position: Literal["Менеджер", "Кладовщик"] | None = Field(
-        None, examples=["Менеджер"]
-    )
+    role: Role = Field("user", examples=["user"])
     avatar_url: HttpUrl | None = Field(
         None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
     )
 
     # Customer only fields:
-    customer_type: Literal["USER_RETAIL", "USER_WHOLESALE", "USER_SUPER_WHOLESALE"] = (
-        Field("USER_RETAIL", examples=["USER_RETAIL"])
+    customer_type: CustomerType = Field(
+        default="USER_RETAIL", examples=[CustomerType.USER_RETAIL]
     )
     mailing: bool = False
+    phone: PhoneNumber | None
+    city: str | None = Field(None, examples=["Sevastopol"])
+    notes: str | None
+    shipping_method: ShippingMethod | None = Field(
+        None, examples=[ShippingMethod.CARGO]
+    )
+    shipping_company: str | None = Field(None, examples=["КИТ"])
 
     @field_serializer("avatar_url")
     def serialize_avatar_url(self, v):

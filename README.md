@@ -1,5 +1,30 @@
 # TCF Back-end API
 
+## Table of Contents
+
+
+## Overview
+### DB Layer
+- PostgreSQL - main database (sqlalchemy, alembic, asyncpg)
+- Redis - cache, async tasks, etc.
+- Elasticsearch - search engine (not used yet)
+
+### API Layer
+`dao` - data access objects, used to interact with the database.
+`services` - business logic, used to interact with the `dao` layer and perform operations on the data.
+`common/deps` - common dependencies, used to inject dependencies into the API endpoints.
+`common/services` - common services: redis, S3, etc. Used in `deps` layer.
+`common/microservices` - common microservices: openai
+
+
+## Installation
+1. Clone the repository
+2. Create a VENV and install packages with UV, python 3.12+
+    ```bash
+   uv sync --python 3.12
+   ```
+3. Create a `.env` file in the root directory and add the required environment variables. You can use the `.env.example` as a reference.
+
 
 ## Tests
 ### General

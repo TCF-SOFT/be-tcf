@@ -1,4 +1,40 @@
+from enum import Enum
 from typing import Literal
+
+
+class ShippingMethod(str, Enum):
+    SELF_PICKUP = "self_pickup"
+    CARGO = "cargo"
+    OTHER = "other"
+
+
+class CustomerType(str, Enum):
+    USER_RETAIL = "USER_RETAIL"
+    USER_WHOLESALE = "USER_WHOLESALE"
+    USER_SUPER_WHOLESALE = "USER_SUPER_WHOLESALE"
+
+
+class WaybillType(str, Enum):
+    WAYBILL_IN = "WAYBILL_IN"
+    WAYBILL_OUT = "WAYBILL_OUT"
+    WAYBILL_RETURN = "WAYBILL_RETURN"
+
+
+class Role(str, Enum):
+    ADMIN = "admin"
+    EMPLOYEE = "employee"
+    USER = "user"
+
+
+class PriceListExt(str, Enum):
+    EXCEL = ".xlsx"
+    CSV = ".csv"
+
+
+class PriceListType(str, Enum):
+    RETIAL = "retail"
+    WHOLESALE = "wholesale"
+
 
 Categories = Literal[
     "Система тормозная",

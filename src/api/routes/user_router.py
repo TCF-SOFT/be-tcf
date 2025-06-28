@@ -1,9 +1,8 @@
-from typing import Literal
-
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.routes.fastapi_users_router import fastapi_users_router, require_employee
+from schemas.enums import Role
 from schemas.user_schema import UserUpdate
 from src.api.dao.user_dao import UserDAO
 from src.api.di.database import get_db
@@ -28,7 +27,7 @@ router.include_router(
 )
 async def get_users(
     db_session: AsyncSession = Depends(get_db),
-    role: Literal["admin", "employee", "user"] | None = None,
+    role: Role | None = None,
 ):
     filters = {}
 
@@ -37,6 +36,7 @@ async def get_users(
 
     return await UserDAO.find_all(db_session, filters)
 
+
 @router.get(
     "/meta/count",
     response_model=dict[str, int],
@@ -44,9 +44,9 @@ async def get_users(
     summary="Return count of users",
     dependencies=[Depends(require_employee)],
 )
-async def get_users(
+async def count_users(
     db_session: AsyncSession = Depends(get_db),
-    role: Literal["admin", "employee", "user"] | None = None,
+    role: Role | None = None,
 ):
     filters = {}
 

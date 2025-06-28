@@ -1,22 +1,22 @@
 from pathlib import Path
-from typing import Literal
 
 import pandas as pd
 from sqlalchemy import create_engine, text
 
+from schemas.enums import PriceListExt, PriceListType
 from src.config import settings
 
 
-async def serve_price(
-    price_type: Literal["retail", "wholesale"], ext: Literal["xlsx", "csv"] = "csv"
-) -> Path:
+async def serve_price(price_type: PriceListType, ext: PriceListExt = "csv") -> Path:
     """
     Serve a price list in the specified format (CSV or XLSX).
     If the file already exists, return its path.
     If not, generate the price list and return the new path.
     """
     file_name: str = (
-        f"price_retail.{ext}" if price_type == "retail" else f"price_wholesale.{ext}"
+        f"price_retail.{ext}"
+        if price_type == PriceListType.RETIAL
+        else f"price_wholesale.{ext}"
     )
     folder = Path("tmp/")
     folder.mkdir(parents=True, exist_ok=True)
@@ -28,9 +28,7 @@ async def serve_price(
         return await generate_price(price_type, ext)
 
 
-async def generate_price(
-    price_type: Literal["retail", "wholesale"], ext: Literal["xlsx", "csv"] = "csv"
-) -> Path:
+async def generate_price(price_type: PriceListType, ext: PriceListExt = "csv") -> Path:
     """
     Generate a price list in the specified format (CSV or XLSX).
     """
@@ -62,13 +60,15 @@ async def generate_price(
     # df = pd.DataFrame([offer.model_dump() for offer in offers])
 
     file_name: str = (
-        f"price_retail.{ext}" if price_type == "retail" else f"price_wholesale.{ext}"
+        f"price_retail.{ext}"
+        if price_type == PriceListType.RETIAL
+        else f"price_wholesale.{ext}"
     )
     folder = Path("tmp/")
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / file_name
 
-    if ext == "xlsx":
+    if ext == PriceListExt.EXCEL:
         df.to_excel(path, index=False, sheet_name="Прайс-лист", freeze_panes=(1, 0))
     else:
         df.to_csv(path, index=False)

@@ -1,8 +1,8 @@
 from typing import Any
 from uuid import UUID
 
-from sqlalchemy import delete as sa_delete, func
-from sqlalchemy import select
+from sqlalchemy import delete as sa_delete
+from sqlalchemy import func, select
 from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
