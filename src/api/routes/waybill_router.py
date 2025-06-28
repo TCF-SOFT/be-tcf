@@ -1,4 +1,3 @@
-from typing import Literal
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
@@ -9,6 +8,7 @@ from api.routes.fastapi_users_router import (
     current_active_user,
     require_employee,
 )
+from schemas.enums import WaybillType
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO
@@ -30,7 +30,7 @@ router = APIRouter(
 )
 async def get_waybills(
     db_session: AsyncSession = Depends(get_db),
-    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"] | None = None,
+    waybill_type: WaybillType | None = None,
     is_pending: bool | None = None,
     user_id: UUID | None = None,
     search_term: str = "",
@@ -76,7 +76,7 @@ async def get_waybill(
     status_code=status.HTTP_200_OK,
 )
 async def count_offers(
-    waybill_type: Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"] | None = None,
+    waybill_type: WaybillType | None = None,
     is_pending: bool | None = None,
     db_session: AsyncSession = Depends(get_db),
 ):

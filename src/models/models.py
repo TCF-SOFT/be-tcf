@@ -1,15 +1,11 @@
 import uuid
-from typing import Literal, Optional
+from typing import Optional
 
-from sqlalchemy import (
-    Boolean,
-    ForeignKey,
-    Integer,
-    Numeric,
-    String,
-)
+from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String
+from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from schemas.enums import WaybillType
 from src.models.base import Base, uuid_pk
 
 
@@ -21,8 +17,9 @@ class StockMovement(Base):
         ForeignKey("waybills.id"), nullable=True
     )
 
-    waybill_type: Mapped[Literal["WAYBILL_IN", "WAYBILL_OUT", "WAYBILL_RETURN"]] = (
-        mapped_column(String, nullable=False)
+    waybill_type: Mapped[WaybillType] = mapped_column(
+        SQLEnum(WaybillType, native_enum=False),
+        nullable=False,
     )
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
