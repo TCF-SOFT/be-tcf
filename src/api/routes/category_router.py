@@ -4,18 +4,20 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from api.controllers.create_entity_controller import create_entity_with_image
-from api.controllers.update_entity_controller import update_entity_with_optional_image
-from api.dao.category_dao import CategoryDAO
-from api.routes.fastapi_users_router import require_employee
-from common.deps.s3_service import get_s3_service
-from common.services.s3_service import S3Service
-from schemas.category_schema import (
+from src.api.controllers.create_entity_controller import create_entity_with_image
+from src.api.controllers.update_entity_controller import (
+    update_entity_with_optional_image,
+)
+from src.api.dao.category_dao import CategoryDAO
+from src.api.di.db_helper import db_helper
+from src.api.routes.fastapi_users_router import require_employee
+from src.common.deps.s3_service import get_s3_service
+from src.common.services.s3_service import S3Service
+from src.schemas.category_schema import (
     CategoryPostSchema,
     CategoryPutSchema,
     CategorySchema,
 )
-from src.api.di.db_helper import db_helper
 
 router = APIRouter(tags=["Categories"], prefix="/categories")
 

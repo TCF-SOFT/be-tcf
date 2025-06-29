@@ -95,7 +95,7 @@ docstring-code-format = true
 quote-style = "double"
 
 [tool.ruff.lint]
-extend-select = ["I", "C4", "SIM"]
+extend-select = ["I", "C4", "SIM", "TID252"]
 ignore = []
 
 [tool.ruff]
