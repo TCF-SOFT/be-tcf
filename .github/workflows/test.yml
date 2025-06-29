@@ -6,6 +6,41 @@ jobs:
     name: "tests"
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:17.5-bookworm
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U test_user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: bitnami/redis:8.0.2
+        env:
+          ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 6379:6379
+
+      mailhog:
+        image: mailhog/mailhog:v1.0.1
+        ports:
+          - 1025:1025
+          - 8025:8025
+
+      moto:
+        image: motoserver/moto:5.1.6
+        env:
+          MOTO_PORT: 3000
+        ports:
+          - 3000:3000
+
     steps:
       - uses: actions/checkout@v4
 
