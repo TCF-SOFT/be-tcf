@@ -65,8 +65,8 @@ class AWSConfig(BaseModel):
     Represents the configuration settings for the AWS Resources.
     """
 
-    S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY")
-    S3_SECRET_KEY: str = env.str("S3_SECRET_KEY")
+    S3_ACCESS_KEY: str = env.str("S3_ACCESS_KEY", "test")
+    S3_SECRET_KEY: str = env.str("S3_SECRET_KEY", "test")
     S3_DEFAULT_REGION: str = env.str("S3_DEFAULT_REGION", "storage")
 
     S3_BUCKET_NAME: str = env.str("S3_BUCKET_NAME", "tcf-images")
