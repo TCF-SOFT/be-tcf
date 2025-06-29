@@ -16,7 +16,7 @@ from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 
 # from common.services.s3_service import S3Service
-from config import settings
+from src.config import settings
 
 
 # @pytest.fixture(scope="session")
@@ -144,7 +144,7 @@ mock.patch("fastapi_cache.decorator.cache", lambda *args, **kwargs: lambda f: f)
 
 @pytest.fixture(scope="session")
 async def client(
-    setup_test_db, localstack_container
+    setup_test_db
 ) -> AsyncGenerator[AsyncClient, None]:
     from src.__main__ import app
 

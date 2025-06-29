@@ -152,8 +152,8 @@ class Settings(BaseSettings):
     SAVE_LOGS_TO_FILE: bool = env.bool("SAVE_LOGS_TO_FILE", False)
     PROJECT_NAME: str = env.str("PROJECT_NAME", "be-tcf")
 
-    # OpenAI
-    OPENAI_API_KEY: str = env.str("OPENAI_API_KEY")
+    # OpenAI (Not used yet)
+    OPENAI_API_KEY: str = env.str("OPENAI_API_KEY", "")
 
 
 settings = Settings()
