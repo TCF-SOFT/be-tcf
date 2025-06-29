@@ -42,7 +42,6 @@ dependencies = [
     "aiosmtplib>=4.0.1",
     "ddtrace>=3.9.1",
     "python-docx>=1.1.2",
-    "testcontainers[postgres,redis]>=4.10.0",
     "pydantic-extra-types>=2.10.5",
     "phonenumbers>=9.0.8",
 ]
@@ -54,7 +53,9 @@ dev = [
     "pre-commit>=4.0.1",
     "psycopg2-binary>=2.9.10",
     "pytest-asyncio>=0.25.0",
+    "pytest-env>=1.1.5",
     "ruff>=0.8.4",
+    "testcontainers[localstack,postgres,redis]>=4.10.0",
 ]
 
 [tool.uv]
@@ -65,6 +66,21 @@ testpaths = ["tests", "app"]
 asyncio_mode = "auto"
 # https://github.com/pytest-dev/pytest-asyncio/issues/924
 asyncio_default_fixture_loop_scope = "session"
+env = [
+    "PSQL_USER=test",
+    "PSQL_PASS=test",
+    "PSQL_HOST=localhost",
+    "PSQL_DB=test",
+    "PSQL_PORT=5432",
+
+    "REDIS_HOST=localhost",
+
+    "S3_ACCESS_KEY",
+    "S3_SECRET_KEY",
+    "S3_DEFAULT_REGION",
+    "S3_BUCKET_NAME",
+    "S3_ENDPOINT_URL"
+]
 
 [tool.ruff.format]
 docstring-code-format = true

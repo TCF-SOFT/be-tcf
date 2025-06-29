@@ -6,7 +6,6 @@ from aioboto3 import Session
 from aiohttp import ClientError
 from pydantic import HttpUrl
 
-from src.config import settings
 from utils.logging import logger
 
 
@@ -18,14 +17,21 @@ class S3Service:
     Compatible with FastAPI, AWS S3 and Yandex Cloud Storage.
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        access_key: str,
+        secret_key: str,
+        region: str,
+        endpoint: str,
+        bucket: str,
+    ) -> None:
         self._session: Session = Session(
-            aws_access_key_id=settings.AWS.S3_ACCESS_KEY,
-            aws_secret_access_key=settings.AWS.S3_SECRET_KEY,
-            region_name=settings.AWS.S3_DEFAULT_REGION,
+            aws_access_key_id=access_key,
+            aws_secret_access_key=secret_key,
+            region_name=region,
         )
-        self._endpoint: str = settings.AWS.S3_ENDPOINT_URL
-        self._bucket: str = settings.AWS.S3_BUCKET_NAME
+        self._endpoint: str = endpoint
+        self._bucket: str = bucket
 
     # ------------------------------------------------------------
     # Private factory – returns a *fresh* client every call

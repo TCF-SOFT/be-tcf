@@ -28,12 +28,15 @@ class DatabaseHelper:
         if is_test:
             database_params = {"poolclass": NullPool}
             self.engine: AsyncEngine = create_async_engine(
-                url=settings.DB.TEST_PSQL_URL,
+                url=settings.DB.PSQL_URL,
                 future=future,
                 echo=echo,
                 pool_pre_ping=pool_pre_ping,
                 echo_pool=echo_pool,
                 **database_params,
+            )
+            assert self.engine.url.database == "test", (
+                "Database URL must point to the test database."
             )
 
         else:

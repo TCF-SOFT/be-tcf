@@ -7,13 +7,50 @@ from unittest import mock
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
-from src.api.di.db_helper import DatabaseHelper  # класс
+# from src.__main__ import app
+from src.api.di.db_helper import DatabaseHelper
 from src.models import Category, Offer, Product, SubCategory
 from src.models.base import Base
+# from testcontainers.localstack import LocalStackContainer
 from testcontainers.postgres import PostgresContainer
 from testcontainers.redis import RedisContainer
 
+# from common.services.s3_service import S3Service
 from config import settings
+
+
+# @pytest.fixture(scope="session")
+# def localstack_container():
+#     with LocalStackContainer(image="localstack/localstack:4.4.0").with_services(
+#         "s3"
+#     ) as localstack:
+#         endpoint = localstack.get_url()
+#
+#         s3 = S3Service(
+#             endpoint=endpoint,
+#             access_key="test",
+#             secret_key="test",
+#             region="eu-north-1",
+#             bucket="test-bucket",
+#         )
+#
+#     app.state.s3 = s3
+#
+#     # создаём бакет в localstack
+#     import asyncio
+#
+#     async def create_bucket():
+#         async with s3._client() as client:
+#             await client.create_bucket(
+#                 Bucket=s3._bucket,
+#                 CreateBucketConfiguration={
+#                     "LocationConstraint": localstack.region_name
+#                 },
+#             )
+#
+#     asyncio.get_event_loop().run_until_complete(create_bucket())
+#
+#     yield
 
 
 # -------------------------------
@@ -23,9 +60,9 @@ from config import settings
 def postgres_container():
     with PostgresContainer(
         image="postgres:17",
-        username=settings.DB.TEST_PSQL_USER,
-        password=settings.DB.TEST_PSQL_PASS,
-        dbname=settings.DB.TEST_PSQL_DB,
+        username=settings.DB.PSQL_USER,
+        password=settings.DB.PSQL_PASS,
+        dbname=settings.DB.PSQL_DB,
         port=settings.DB.PSQL_PORT,
     ).with_bind_ports(settings.DB.PSQL_PORT, settings.DB.PSQL_PORT) as postgres:
         # sleep(600)
@@ -106,7 +143,9 @@ mock.patch("fastapi_cache.decorator.cache", lambda *args, **kwargs: lambda f: f)
 
 
 @pytest.fixture(scope="session")
-async def client(setup_test_db) -> AsyncGenerator[AsyncClient, None]:
+async def client(
+    setup_test_db, localstack_container
+) -> AsyncGenerator[AsyncClient, None]:
     from src.__main__ import app
 
     async with AsyncClient(

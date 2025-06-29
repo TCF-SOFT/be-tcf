@@ -20,13 +20,7 @@ class DatabaseConfig(BaseModel):
     PSQL_DB: str = env.str("PSQL_DB")
     PSQL_PORT: int = 5432
 
-    TEST_PSQL_USER: str = "test"
-    TEST_PSQL_HOST: str = "localhost"
-    TEST_PSQL_PASS: str = "test"
-    TEST_PSQL_DB: str = "test"
-
     PSQL_URL: str = f"postgresql+asyncpg://{PSQL_USER}:{PSQL_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"
-    TEST_PSQL_URL: str = f"postgresql+asyncpg://{TEST_PSQL_USER}:{TEST_PSQL_PASS}@{TEST_PSQL_HOST}:{PSQL_PORT}/{TEST_PSQL_DB}"
 
     echo: bool = False
     echo_pool: bool = False

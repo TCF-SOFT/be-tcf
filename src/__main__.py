@@ -64,7 +64,13 @@ async def lifespan(app: FastAPI):
     app.state.resources = ResourceModule(redis_service=RedisService())
     app.state.redis_service = app.state.resources.get_redis_service()
     app.state.redis = app.state.redis_service.get_redis()
-    app.state.s3 = S3Service()
+    app.state.s3 = S3Service(
+        access_key=settings.S3.S3_ACCESS_KEY,
+        secret_key=settings.S3.S3_SECRET_KEY,
+        region=settings.S3.S3_DEFAULT_REGION,
+        endpoint=settings.S3.S3_ENDPOINT_URL,
+        bucket=settings.S3.S3_BUCKET_NAME,
+    )
     logger.info("[+] Resources initialized successfully")
 
     # Redis Cache

@@ -127,10 +127,10 @@ class LoggingMiddleware:
         ).model_dump()
 
         message = (
-            f'{"Error" if exception_object else "Answer"} '
-            f'code: {response.status_code} '
+            f"{'Error' if exception_object else 'Answer'} "
+            f"code: {response.status_code} "
             f'request url: {request.method} "{str(request.url)}" '
-            f'duration: {duration} ms '
+            f"duration: {duration} ms "
         )
         logger.info(
             message,
