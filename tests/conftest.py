@@ -9,6 +9,7 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
 from testcontainers.core.container import DockerContainer
+from testcontainers.localstack import LocalStackContainer
 
 from src.api.di.db_helper import DatabaseHelper
 from src.api.di.di import ResourceModule
@@ -21,6 +22,12 @@ from testcontainers.redis import RedisContainer
 
 from src.config import settings
 from src.utils.logging import logger
+
+@pytest.fixture(scope="session")
+def moto_container():
+    with (DockerContainer(image="motoserver/moto:5.1.6").with_bind_ports(3000, 3000).with_env("MOTO_PORT", "3000")
+        as moto):
+        yield moto
 
 
 @pytest.fixture(scope="session")
@@ -127,7 +134,8 @@ mock.patch("fastapi_cache.decorator.cache", lambda *args, **kwargs: lambda f: f)
 async def client(
     setup_test_db,
     mailhog_container,
-    redis_container
+    redis_container,
+    moto_container
 ) -> AsyncGenerator[AsyncClient, None]:
     from src.__main__ import app
 
