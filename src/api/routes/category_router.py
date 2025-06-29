@@ -1,6 +1,7 @@
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -80,7 +81,7 @@ async def get_category_by_id(
     dependencies=[Depends(require_employee)],
 )
 async def post_category(
-    category_payload: CategoryPostSchema,
+    category_payload: Annotated[CategoryPostSchema, Depends(CategoryPostSchema.as_form)],
     image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
