@@ -5,9 +5,10 @@ from pydantic import BaseModel
 from pydantic_settings import BaseSettings
 
 env = Env()
-env.read_env()
-DEV_ENV = env.bool("DEV_ENV", True)
 
+# Decide which .env file to use based on the PYTHON_ENV environment variable
+env_file = ".env.test" if env.str("PYTHON_ENV", "dev") == "test" else ".env"
+env.read_env(env_file)
 
 class DatabaseConfig(BaseModel):
     """

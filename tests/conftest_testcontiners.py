@@ -1,3 +1,4 @@
+import asyncio
 import json
 from pathlib import Path
 from typing import AsyncGenerator
@@ -6,28 +7,87 @@ from unittest import mock
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
+from src.api.di.db_helper import DatabaseHelper
 from src.common.services.s3_service import S3Service
 from src.config import settings
 from src.models import Category, Offer, Product, SubCategory
 from src.models.base import Base
 from src.utils.logging import logger
+from testcontainers.core.container import DockerContainer
+from testcontainers.postgres import PostgresContainer
+from testcontainers.redis import RedisContainer
 
 
-@pytest.fixture(scope="function")
-async def patch_db(monkeypatch):
-    from src.api.di.db_helper import DatabaseHelper
+@pytest.fixture(scope="session")
+def moto_container():
+    with (
+        DockerContainer(image="motoserver/moto:5.1.6")
+        .with_bind_ports(3000, 3000)
+        .with_env("MOTO_PORT", "3000") as moto
+    ):
+        yield moto
 
-    test_helper = DatabaseHelper(settings.DB.PSQL_URL, is_test=True)
-    logger.warning(settings.DB.PSQL_URL)
-    monkeypatch.setattr("src.api.di.db_helper.db_helper", test_helper)
+
+@pytest.fixture(scope="session")
+def mailhog_container():
+    """
+    SMTP testing container using MailHog.
+    """
+    with (
+        DockerContainer("mailhog/mailhog:v1.0.1")
+        .with_bind_ports(8025, 8025)
+        .with_bind_ports(1025, 1025) as mailhog
+    ):
+        # sleep(3)
+        yield mailhog
+
+
+@pytest.fixture(scope="session")
+def redis_container():
+    with RedisContainer("redis:7") as redis:
+        yield redis
+
+
+# -------------------------------
+# 🔌 Database container and Patch
+# -------------------------------
+@pytest.fixture(scope="session")
+def postgres_container():
+    with PostgresContainer(
+        image="postgres:17",
+        username=settings.DB.PSQL_USER,
+        password=settings.DB.PSQL_PASS,
+        dbname=settings.DB.PSQL_DB,
+        port=settings.DB.PSQL_PORT,
+    ).with_bind_ports(settings.DB.PSQL_PORT, settings.DB.PSQL_PORT) as postgres:
+        yield postgres
+
+
+@pytest.fixture(scope="session", autouse=True)
+def patch_db_helper(postgres_container):
+    # 1. строим URL контейнера
+    url = postgres_container.get_connection_url(driver="asyncpg")
+
+    # 2. создаём новый helper, указывая is_test=True (NullPool и т.д.)
+    test_helper = DatabaseHelper(url, is_test=True)
+
+    # 3. подменяем глобальную переменную *в самом модуле* db_helper
+    import importlib
+
+    helper_module = importlib.import_module("src.api.di.db_helper")
+    helper_module.db_helper = test_helper  # <-- ключевая строка
+
     yield
-    await test_helper.dispose()
+
+    # 4. аккуратно закрываем в конце сессии
+    asyncio.get_event_loop().run_until_complete(test_helper.dispose())
+
 
 # -------------------------------
 # DB Schema Setup & Seeding
 # -------------------------------
-@pytest.fixture(scope="function", autouse=True)
-async def setup_test_db(patch_db):
+@pytest.fixture(scope="session", autouse=True)
+async def setup_test_db(patch_db_helper):
     from src.api.di.db_helper import db_helper
 
     # safety check
@@ -70,8 +130,9 @@ async def setup_test_db(patch_db):
 mock.patch("fastapi_cache.decorator.cache", lambda *args, **kwargs: lambda f: f).start()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 async def client(
+    setup_test_db, mailhog_container, redis_container, moto_container
 ) -> AsyncGenerator[AsyncClient, None]:
     from src.__main__ import app
 

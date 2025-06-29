@@ -6,8 +6,8 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyUserDatabase
 
 from src.config import settings
 from src.models.user import User
-from src.utils.logging import logger
 from src.tasks.mailing import send_verification_email
+from src.utils.logging import logger
 
 
 class UserManager(UUIDIDMixin, BaseUserManager[User, uuid.UUID]):

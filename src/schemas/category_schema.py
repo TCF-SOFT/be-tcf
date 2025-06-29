@@ -1,5 +1,5 @@
 import json
-from typing import Any, Optional, Annotated
+from typing import Annotated, Any, Optional
 from uuid import UUID
 
 from fastapi import Form

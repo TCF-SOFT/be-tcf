@@ -1,14 +1,14 @@
-import json
 from pathlib import Path
 
 from httpx import AsyncClient
-
-from src.utils.logging import logger
 
 
 class TestCategoryRoutes:
     ENDPOINT = "/categories"
     mock_dir = Path(__file__).parent.parent / "mock"
+
+    with open(mock_dir / "candles.webp", "rb") as f:
+        image_blob: bytes = f.read()
 
     async def test_get_all_returns_200(self, client: AsyncClient):
         res = await client.get(self.ENDPOINT)
@@ -31,17 +31,17 @@ class TestCategoryRoutes:
         res = await client.get(f"{self.ENDPOINT}/{category_id}")
         assert res.status_code == 422, "Expected 422 for invalid ID format"
 
-
     async def test_unauthorized_post_category_returns_401(self, client: AsyncClient):
         payload = {
             "name": "candles test category",
         }
         image = {
-            "image_blob": open(self.mock_dir / "candles.webp", "rb"),
+            "image_blob": self.image_blob,
         }
         res = await client.post(self.ENDPOINT, data=payload, files=image)
-        assert res.status_code == 401, "Expected 401 Unauthorized for unauthenticated request"
-
+        assert res.status_code == 401, (
+            "Expected 401 Unauthorized for unauthenticated request"
+        )
 
     async def test_post_category_creates_category(self, auth_client: AsyncClient):
         pass

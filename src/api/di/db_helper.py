@@ -35,7 +35,7 @@ class DatabaseHelper:
                 echo_pool=echo_pool,
                 **database_params,
             )
-            assert self.engine.url.database == "test", (
+            assert self.engine.url.database == "test_db", (
                 "Database URL must point to the test database."
             )
 
