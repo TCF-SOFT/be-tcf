@@ -21,7 +21,7 @@ repos:
       - id: hadolint-docker
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.8.4  # Ruff version to use.
+    rev: v0.12.1  # Ruff version to use.
     hooks:
       # Run the linter.
       - id: ruff
