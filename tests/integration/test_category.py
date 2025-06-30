@@ -2,6 +2,8 @@ from pathlib import Path
 
 from httpx import AsyncClient
 
+from src.utils.logging import logger
+
 
 class TestCategoryRoutes:
     ENDPOINT = "/categories"
@@ -44,29 +46,27 @@ class TestCategoryRoutes:
         )
 
     async def test_post_category_creates_category(self, auth_client: AsyncClient):
-        pass
+        auth_client.headers.pop("Content-Type", None)
         # TODO: разобраться с form-data, multipart и тд + Фронт
-        # data = {
-        #     "name": "candles test category"  # <- это поле Form(...)
-        # }
-        # files = {
-        #     "image_blob": (
-        #         "candles.webp",
-        #         open(self.mock_dir / "candles.webp", "rb"),
-        #         "image/webp",
-        #     )
-        # }
-        #
-        # res = await auth_client.post("/categories", data=data, files=files)
-        # logger.warning("[POST] Category response: %s", res.text)
-        # assert res.status_code == 201
-        #
-        # response = res.json()
-        #
-        # assert isinstance(response, dict), "Response body is not valid"
-        # assert "id" in response, "ID is not present in response body"
-        # assert "slug" in response, "Slug is not present in response body"
-        # assert "image" in response, "Image is not present in response body"
+        files = {
+            "image_blob": (
+                "candles.webp",
+                self.image_blob,
+                "image/webp",
+            ),
+            "name": (None, "candles test category", "text/plain"),
+        }
+
+        res = await auth_client.post("/categories", files=files)
+        logger.warning("[POST] Category response: %s", res.text)
+        assert res.status_code == 201
+
+        response = res.json()
+
+        assert isinstance(response, dict), "Response body is not valid"
+        assert "id" in response, "ID is not present in response body"
+        assert "slug" in response, "Slug is not present in response body"
+        assert "image" in response, "Image is not present in response body"
 
     async def test_patch_category_updates_existing(self, client: AsyncClient):
         pass
