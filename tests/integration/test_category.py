@@ -66,7 +66,7 @@ class TestCategoryRoutes:
         assert isinstance(response, dict), "Response body is not valid"
         assert "id" in response, "ID is not present in response body"
         assert "slug" in response, "Slug is not present in response body"
-        assert "image" in response, "Image is not present in response body"
+        assert "image_url" in response, "Image is not present in response body"
 
     async def test_patch_category_updates_existing(self, client: AsyncClient):
         pass
