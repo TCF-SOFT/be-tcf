@@ -41,11 +41,7 @@ jobs:
           MINIO_ROOT_PASSWORD: test_secret_key
         ports:
           - 9000:9000          # API
-          - 9001:9001          # (опц.) web-console
-        options: >-
-          --health-cmd "wget -qO- http://localhost:9000/minio/health/ready || exit 1"
-          --health-interval 5s
-          --health-retries 10
+          - 9001:9001          # (opt) web-console
 
     steps:
       - uses: actions/checkout@v4
