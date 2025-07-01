@@ -30,11 +30,11 @@ class SubCategorySchema(_SubCategoryBase):
     category_slug: str = Field(..., examples=["svechi-ford"])
     category_name: str = Field(..., examples=["Свечи"])
 
-    image_url: HttpUrl
+    image_url: HttpUrl | None = Field(settings.IMAGE_PLACEHOLDER_URL)
 
     @field_serializer("image_url")
     def serialize_image_url(self, v):
-        return str(v or settings.IMAGE_PLACEHOLDER_URL)
+        return str(v)
 
 
 class SubCategoryPostSchema(_SubCategoryBase):

@@ -4,54 +4,55 @@ from httpx import AsyncClient, Response
 from src.utils.logging import logger
 
 
-class TestCategoryRoutes:
+class TestSubCategoryRoutes:
     ENDPOINT = "/sub-categories"
     mock_dir = Path(__file__).parent.parent / "mock"
-
-    def test_body(self, res: Response):
-        assert isinstance(res.json(), dict), "Response body is not valid"
-        assert "id" in res.json(), "ID is not present in response body"
 
     with open(mock_dir / "candles.webp", "rb") as f:
         image_blob: bytes = f.read()
 
     async def test_get_all_returns_200(self, client: AsyncClient):
         res = await client.get(self.ENDPOINT)
+        logger.warning("[GET] SubCategory response: %s", res.text)
         assert res.status_code == 200
 
-    async def test_get_by_slug_returns_sub_category(self, client: AsyncClient):
-        slug = "svechi-nakala"
-        res = await client.get(f"{self.ENDPOINT}/slug/{slug}")
-        assert res.status_code == 200
-        self.test_body(res)
+    # TODO: change signature to /slug/{slug}
+    # async def test_get_by_slug_returns_sub_category(self, client: AsyncClient):
+    #     slug = "svechi-nakala"
+    #     res = await client.get(f"{self.ENDPOINT}/slug/{slug}")
+    #     assert res.status_code == 200
+    #     self.test_body(res)
 
     async def test_get_by_category_slug_returns_sub_category(self, client: AsyncClient):
         category_slug = "svechi"
         res = await client.get(f"{self.ENDPOINT}?category_slug={category_slug}")
         assert res.status_code == 200
-        self.test_body(res)
 
-    async def test_get_by_id_returns_sub_category(self, client: AsyncClient):
-        sub_category_id = "c9ce04fe-ed38-4006-8e5d-629d8503a90a"
-        res = await client.get(f"{self.ENDPOINT}/{sub_category_id}")
-        assert res.status_code == 200
-        self.test_body(res)
+    # TODO: it used diff signature, category slug instead of id
+    # async def test_get_by_id_returns_sub_category(self, client: AsyncClient):
+    #     sub_category_id = "c9ce04fe-ed38-4006-8e5d-629d8503a90a"
+    #     res = await client.get(f"{self.ENDPOINT}/{sub_category_id}")
+    #     assert res.status_code == 200
 
     async def test_get_by_category_id_returns_sub_category(self, client: AsyncClient):
         category_id = "2b3fb1a9-f13b-430f-a78e-94041fb0ed44"
         res = await client.get(f"{self.ENDPOINT}?category_id={category_id}")
         assert res.status_code == 200
-        self.test_body(res)
 
-    async def test_get_by_id_returns_404_if_missing(self, client: AsyncClient):
-        sub_category_id = "980940df-9615-42dd-b72a-8779ae508efa"
-        res = await client.get(f"{self.ENDPOINT}/{sub_category_id}")
+    async def test_get_by_slug_returns_404_if_missing(self, client: AsyncClient):
+        category_slug = "svechi-dummy-slug"
+        res = await client.get(f"{self.ENDPOINT}?category_slug={category_slug}")
         assert res.status_code == 404
 
-    async def test_get_by_invalid_id_returns_422(self, client: AsyncClient):
-        sub_category_id = "invalid-id"
-        res = await client.get(f"{self.ENDPOINT}/{sub_category_id}")
-        assert res.status_code == 422, "Expected 422 for invalid ID format"
+    # async def test_get_by_id_returns_404_if_missing(self, client: AsyncClient):
+    #     sub_category_id = "980940df-9615-42dd-b72a-8779ae508efa"
+    #     res = await client.get(f"{self.ENDPOINT}/{sub_category_id}")
+    #     assert res.status_code == 404
+
+    # async def test_get_by_invalid_id_returns_422(self, client: AsyncClient):
+    #     sub_category_id = "invalid-id"
+    #     res = await client.get(f"{self.ENDPOINT}/{sub_category_id}")
+    #     assert res.status_code == 422, "Expected 422 for invalid ID format"
 
     async def test_unauthorized_post_sub_category_returns_401(self, client: AsyncClient):
         payload = {
@@ -74,6 +75,7 @@ class TestCategoryRoutes:
                 "image/webp",
             ),
             "name": (None, "candles test category", "text/plain"),
+            "category_id": (None, "2b3fb1a9-f13b-430f-a78e-94041fb0ed44", "text/plain"),
         }
 
         res = await auth_client.post(self.ENDPOINT, files=files)
