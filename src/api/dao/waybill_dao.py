@@ -5,7 +5,7 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.waybill_schema import WaybillSchema
+from src.schemas.waybill_schema import WaybillSchema
 from src.api.dao.base import BaseDAO
 from src.models import Offer, StockMovement, Waybill
 

@@ -55,7 +55,7 @@ class TestCategoryRoutes:
             "name": (None, "candles test category", "text/plain"),
         }
 
-        res = await auth_client.post("/categories", files=files)
+        res = await auth_client.post(self.ENDPOINT, files=files)
         logger.warning("[POST] Category response: %s", res.text)
         assert res.status_code == 201
 

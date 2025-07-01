@@ -6,15 +6,15 @@ from fastapi.responses import FileResponse
 from pydantic import EmailStr
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.controllers.pricing_controller import generate_price, serve_price
-from api.dao.waybill_dao import WaybillDAO
-from api.services.waybill_service import WaybillService
-from schemas.common.enums import PriceListExt, PriceListType
-from schemas.waybill_offer_schema import WaybillOfferSchema
-from schemas.waybill_schema import WaybillSchema
+from src.api.controllers.pricing_controller import generate_price, serve_price
+from src.api.dao.waybill_dao import WaybillDAO
+from src.api.services.waybill_service import WaybillService
+from src.schemas.common.enums import PriceListExt, PriceListType
+from src.schemas.waybill_offer_schema import WaybillOfferSchema
+from src.schemas.waybill_schema import WaybillSchema
 from src.api.di.db_helper import db_helper
-from tasks.mailing import send_pricing_email
-from tasks.waybills.print_waybill import create_document
+from src.tasks.mailing import send_pricing_email
+from src.tasks.waybills.print_waybill import create_document
 
 router = APIRouter(tags=["Documents"], prefix="/documents")
 
