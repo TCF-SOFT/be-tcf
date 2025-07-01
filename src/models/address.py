@@ -4,8 +4,8 @@ from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.schemas.common.enums import ShippingMethod
 from src.models.base import Base, uuid_pk
+from src.schemas.common.enums import ShippingMethod
 
 
 class Address(Base):

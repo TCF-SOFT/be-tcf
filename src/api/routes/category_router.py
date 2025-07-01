@@ -81,15 +81,13 @@ async def get_category_by_id(
     dependencies=[Depends(require_employee)],
 )
 async def post_category(
-    category_payload: Annotated[
-        CategoryPostSchema, Depends(CategoryPostSchema.as_form)
-    ],
+    payload: Annotated[CategoryPostSchema, Depends(CategoryPostSchema.as_form)],
     image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await create_entity_with_image(
-        payload=category_payload,
+        payload=payload,
         image_blob=image_blob,
         upload_path="images/tmp",
         db_session=db_session,

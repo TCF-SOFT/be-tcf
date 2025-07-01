@@ -10,6 +10,7 @@ env = Env()
 env_file = ".env.test" if env.str("PYTHON_ENV", "dev") == "test" else ".env"
 env.read_env(env_file)
 
+
 class DatabaseConfig(BaseModel):
     """
     Represents the configuration settings for the database.
@@ -155,6 +156,9 @@ class Settings(BaseSettings):
 
     # OpenAI (Not used yet)
     OPENAI_API_KEY: str = env.str("OPENAI_API_KEY", "")
+    IMAGE_PLACEHOLDER_URL: str = (
+        "https://storage.yandexcloud.net/tcf-images/default.svg"
+    )
 
 
 settings = Settings()

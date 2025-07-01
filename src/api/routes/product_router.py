@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
@@ -112,13 +113,13 @@ async def full_text_search_products(
     dependencies=[Depends(require_employee)],
 )
 async def post_product(
-    product: ProductPostSchema,
+    payload: Annotated[ProductPostSchema, Depends(ProductPostSchema.as_form)],
     image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await create_entity_with_image(
-        payload=product,
+        payload=payload,
         image_blob=image_blob,
         upload_path="images/tmp",
         db_session=db_session,

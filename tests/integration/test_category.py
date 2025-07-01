@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from httpx import AsyncClient
-
 from src.utils.logging import logger
 
 
@@ -47,7 +46,6 @@ class TestCategoryRoutes:
 
     async def test_post_category_creates_category(self, auth_client: AsyncClient):
         auth_client.headers.pop("Content-Type", None)
-        # TODO: разобраться с form-data, multipart и тд + Фронт
         files = {
             "image_blob": (
                 "candles.webp",

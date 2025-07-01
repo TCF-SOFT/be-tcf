@@ -30,10 +30,13 @@ async def create_entity_with_image(
         )
 
     image_key = s3.generate_key(image_blob.filename, upload_path)
-    payload.image_url = s3.get_file_url(key=image_key)
+    image_url = s3.get_file_url(key=image_key)
+
+    data = payload.model_dump()
+    data["image_url"] = image_url
 
     try:
-        instance = await dao.add(**payload.model_dump(), db_session=db_session)
+        instance = await dao.add(**data, db_session=db_session)
 
         if refresh_fields:
             await db_session.refresh(instance, list(refresh_fields))

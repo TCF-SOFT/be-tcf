@@ -23,6 +23,7 @@ async def patch_db(monkeypatch):
     yield
     await test_helper.dispose()
 
+
 # -------------------------------
 # DB Schema Setup & Seeding
 # -------------------------------
@@ -71,8 +72,7 @@ mock.patch("fastapi_cache.decorator.cache", lambda *args, **kwargs: lambda f: f)
 
 
 @pytest.fixture(scope="function")
-async def client(
-) -> AsyncGenerator[AsyncClient, None]:
+async def client() -> AsyncGenerator[AsyncClient, None]:
     from src.__main__ import app
 
     async with AsyncClient(

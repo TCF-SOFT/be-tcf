@@ -1,5 +1,5 @@
 import json
-from typing import Annotated, Any, Optional
+from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import Form
@@ -14,16 +14,11 @@ from pydantic import (
 )
 from slugify import slugify
 
+from config import settings
+
 
 class _CategoryBaseSchema(BaseModel):
     name: str = Field(..., examples=["Свечи"])
-    image_url: Optional[HttpUrl] = Field(
-        None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]
-    )
-
-    @field_serializer("image_url")
-    def serialize_image_url(self, v):
-        return str(v) if v else None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -31,6 +26,11 @@ class _CategoryBaseSchema(BaseModel):
 class CategorySchema(_CategoryBaseSchema):
     id: UUID
     slug: str = Field(..., examples=["svechi-ford"])
+    image_url: HttpUrl = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
+
+    @field_serializer("image_url")
+    def serialize_image_url(self, v):
+        return str(v)
 
 
 class CategoryPostSchema(_CategoryBaseSchema):

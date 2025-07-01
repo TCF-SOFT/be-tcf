@@ -50,3 +50,51 @@ And run the hooks on all files (optional), automatically run on every commit:
 ```bash
 $ pre-commit run --all-files
 ```
+
+## What's new?
+### Async DB and DAOs
+1. 2 clients: with async with and default one where add commit is allowed
+2. Service Layer - business logic
+3. DAO unification (TODO)
+
+### HTTP
+Formats:
+```
+1. multipart/form-data - Files (no header)
+2. application/x-www-form-urlencoded - Data from forms
+3. application/json - JSON (could be header)
+```
+
+Working with `multipart/form-data` in FastAPI:
+```python
+async def post_category(
+    payload: Annotated[
+        CategoryPostSchema, Depends(CategoryPostSchema.as_form)
+    ]
+):
+    return payload
+```
+Pydantic:
+```python
+class CategoryPostSchema(_CategoryBaseSchema):
+    @classmethod
+    def as_form(cls, name: Annotated[str, Form(...)]) -> "CategoryPostSchema":
+        return cls(name=name)
+```
+
+HTTPX:
+```python
+async def test_post_category_creates_category(self, auth_client: AsyncClient):
+    auth_client.headers.pop("Content-Type", None)
+    files = {
+        "image_blob": (
+            "candles.webp",
+            self.image_blob,
+            "image/webp",
+        ),
+        "name": (None, "candles test category", "text/plain"),
+    }
+
+
+res = await auth_client.post("/categories", files=files)
+```

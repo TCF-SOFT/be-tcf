@@ -1,3 +1,4 @@
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
@@ -80,13 +81,13 @@ async def get_sub_category_by_slug(
     dependencies=[Depends(require_employee)],
 )
 async def post_sub_category(
-    sub_category: SubCategoryPostSchema,
+    payload: Annotated[SubCategoryPostSchema, Depends(SubCategoryPostSchema.as_form)],
     image_blob: UploadFile = File(...),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await create_entity_with_image(
-        payload=sub_category,
+        payload=payload,
         image_blob=image_blob,
         upload_path="images/tmp",
         db_session=db_session,

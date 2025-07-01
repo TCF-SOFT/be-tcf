@@ -47,4 +47,3 @@ services:
       /usr/bin/mc mb dockerminio/test-bucket;
       exit 0;
       "
-
