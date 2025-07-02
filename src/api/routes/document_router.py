@@ -8,11 +8,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.controllers.pricing_controller import generate_price, serve_price
 from src.api.dao.waybill_dao import WaybillDAO
+from src.api.di.db_helper import db_helper
 from src.api.services.waybill_service import WaybillService
 from src.schemas.common.enums import PriceListExt, PriceListType
 from src.schemas.waybill_offer_schema import WaybillOfferSchema
 from src.schemas.waybill_schema import WaybillSchema
-from src.api.di.db_helper import db_helper
 from src.tasks.mailing import send_pricing_email
 from src.tasks.waybills.print_waybill import create_document
 

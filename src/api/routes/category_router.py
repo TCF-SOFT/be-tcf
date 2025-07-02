@@ -39,7 +39,7 @@ async def get_categories(
 
 @router.get(
     "/slug/{slug}",
-    response_model=CategorySchema | None,
+    response_model=CategorySchema,
     summary="Get category by slug",
     status_code=status.HTTP_200_OK,
 )

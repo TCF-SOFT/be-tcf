@@ -7,6 +7,7 @@ from src.utils.logging import logger
 class TestCategoryRoutes:
     ENDPOINT = "/categories"
     mock_dir = Path(__file__).parent.parent / "mock"
+    fake_category_id = "980940df-9615-42dd-b72a-8779ae508efa"
 
     with open(mock_dir / "candles.webp", "rb") as f:
         image_blob: bytes = f.read()
@@ -27,8 +28,7 @@ class TestCategoryRoutes:
         pass
 
     async def test_get_by_id_returns_404_if_missing(self, client: AsyncClient):
-        category_id = "980940df-9615-42dd-b72a-8779ae508efa"
-        res = await client.get(f"{self.ENDPOINT}/{category_id}")
+        res = await client.get(f"{self.ENDPOINT}/{self.fake_category_id}")
         assert res.status_code == 404
 
     async def test_get_by_invalid_id_returns_422(self, client: AsyncClient):
@@ -73,7 +73,6 @@ class TestCategoryRoutes:
         assert "slug" in response, "Slug is not present in response body"
         assert "image_url" in response, "Image is not present in response body"
 
-
     async def test_unauthorized_patch_category_returns_401(self, client: AsyncClient):
         client.headers.pop("Content-Type", None)
         category_id = "2b3fb1a9-f13b-430f-a78e-94041fb0ed44"
@@ -95,7 +94,9 @@ class TestCategoryRoutes:
         category_id = "2b3fb1a9-f13b-430f-a78e-94041fb0ed44"
         new_name = "test patch"
         new_slug = "test-patch"
-        old_image_url = "https://storage.yandexcloud.net/tcf-images/images/categories/candles.webp"
+        old_image_url = (
+            "https://storage.yandexcloud.net/tcf-images/images/categories/candles.webp"
+        )
         files = {
             "image_blob": (
                 "candles.webp",
@@ -115,12 +116,26 @@ class TestCategoryRoutes:
         assert "slug" in response, "Slug is not present in response body"
         assert "image_url" in response, "Image is not present in response body"
 
-        assert response['id'] == category_id
+        assert response["id"] == category_id
         assert response["name"] == new_name
         assert response["slug"] == new_slug
         assert response["image_url"] != old_image_url
 
-
-
-    async def test_delete_category_deletes_and_returns_204(self, client: AsyncClient):
+    async def test_unauthorized_delete_category_returns_401(self, client: AsyncClient):
         pass
+
+    async def test_delete_category_returns_404_if_missing(
+        self, auth_client: AsyncClient
+    ):
+        res = await auth_client.delete(f"{self.ENDPOINT}/{self.fake_category_id}")
+        assert res.status_code == 404
+
+    # TODO: if the category has subcategories, it should not be deleted
+    # async def test_delete_category_deletes_and_returns_204(self, auth_client: AsyncClient):
+    #     category_id = "2b3fb1a9-f13b-430f-a78e-94041fb0ed44"
+    #     res = await auth_client.delete(f"{self.ENDPOINT}/{category_id}")
+    #     assert res.status_code == 204, "Expected 204 No Content for successful deletion"
+    #
+    #     # Verify that the category is no longer available
+    #     res = await auth_client.get(f"{self.ENDPOINT}/{category_id}")
+    #     assert res.status_code == 404, "Expected 404 Not Found for deleted category"

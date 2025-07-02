@@ -1,5 +1,4 @@
-import json
-from typing import Annotated, Any
+from typing import Annotated
 from uuid import UUID
 
 from fastapi import Form
@@ -10,7 +9,6 @@ from pydantic import (
     HttpUrl,
     computed_field,
     field_serializer,
-    model_validator,
 )
 from slugify import slugify
 
@@ -61,10 +59,13 @@ class SubCategoryPutSchema(_SubCategoryBase):
     def slug(self) -> str:
         return slugify(self.name, word_boundary=True, lowercase=True)
 
-    @model_validator(mode="before")
     @classmethod
-    def to_py_dict(cls, data: Any):
-        """
-        Transform the input data to a dictionary.
-        """
-        return json.loads(data)
+    def as_form(
+        cls,
+        name: Annotated[str, Form(...)],
+        category_id: Annotated[UUID, Form(...)],
+    ) -> "SubCategoryPutSchema":
+        return cls(
+            name=name,
+            category_id=category_id,
+        )

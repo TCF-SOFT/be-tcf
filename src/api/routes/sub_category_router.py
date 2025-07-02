@@ -58,8 +58,25 @@ async def get_sub_categories(
 
 
 @router.get(
-    "/{slug}",
-    response_model=SubCategorySchema | None,
+    "/{sub_category_id}",
+    response_model=SubCategorySchema,
+    status_code=status.HTTP_200_OK,
+)
+async def get_sub_category_by_id(
+    sub_category_id: UUID,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    res = await SubCategoryDAO.find_by_id(db_session, sub_category_id)
+    if not res:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Sub Category not found"
+        )
+    return res
+
+
+@router.get(
+    "/slug/{slug}",
+    response_model=SubCategorySchema,
     status_code=status.HTTP_200_OK,
 )
 async def get_sub_category_by_slug(
@@ -97,7 +114,7 @@ async def post_sub_category(
     )
 
 
-@router.put(
+@router.patch(
     "/{sub_category_id}",
     response_model=SubCategorySchema,
     summary="Update a sub_category by id",
@@ -106,14 +123,14 @@ async def post_sub_category(
 )
 async def put_sub_category(
     sub_category_id: UUID,
-    sub_category: SubCategoryPutSchema,
+    payload: Annotated[SubCategoryPutSchema, Depends(SubCategoryPutSchema.as_form)],
     image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await update_entity_with_optional_image(
         entity_id=sub_category_id,
-        payload=sub_category,
+        payload=payload,
         dao=SubCategoryDAO,
         upload_path="images/sub_categories",
         db_session=db_session,
