@@ -50,10 +50,6 @@ class CategoryPutSchema(_CategoryBaseSchema):
     def slug(self) -> str:
         return slugify(self.name, word_boundary=True, lowercase=True)
 
-    @model_validator(mode="before")
     @classmethod
-    def to_py_dict(cls, data: Any):
-        """
-        Transform the input data to a dictionary.
-        """
-        return json.loads(data)
+    def as_form(cls, name: Annotated[str, Form(...)]) -> "CategoryPutSchema":
+        return cls(name=name)

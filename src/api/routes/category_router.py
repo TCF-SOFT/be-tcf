@@ -105,14 +105,14 @@ async def post_category(
 )
 async def patch_category(
     category_id: UUID,
-    category_payload: CategoryPutSchema,
+    payload: Annotated[CategoryPostSchema, Depends(CategoryPutSchema.as_form)],
     image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await update_entity_with_optional_image(
         entity_id=category_id,
-        payload=category_payload,
+        payload=payload,
         dao=CategoryDAO,
         upload_path="images/tmp",
         db_session=db_session,
