@@ -108,9 +108,9 @@ app = FastAPI(
     servers=docs.servers,
     version="1.2.0",
     contact=docs.contact,
-    openapi_url="/docs/openapi.json",
-    # docs_url=docs.DOCS_URL,
-    # redoc_url=docs.REDOC_URL,
+    openapi_url=settings.SERVER.OPENAPI_URL,
+    docs_url=settings.SERVER.DOCS_URL,
+    redoc_url=settings.SERVER.REDOC_URL,
     lifespan=lifespan,
 )
 
@@ -161,4 +161,6 @@ def validation_exception_handler(
 app.include_router(router)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080, log_config=None)
+    uvicorn.run(
+        app, host=settings.SERVER.HOST, port=settings.SERVER.PORT, log_config=None
+    )

@@ -20,7 +20,7 @@ class TestCategoryRoutes:
         slug = "svechi"
         res = await client.get(f"{self.ENDPOINT}/slug/{slug}")
         assert res.status_code == 200
-        response  = res.json()
+        response = res.json()
         assert isinstance(response, dict), "Response body is not valid"
         assert "id" in response, "ID is not present in response body"
         assert "image_url" in response, "Image is not present in response body"

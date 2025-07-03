@@ -6,9 +6,7 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    HttpUrl,
     computed_field,
-    field_serializer,
 )
 from slugify import slugify
 

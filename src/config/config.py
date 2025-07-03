@@ -1,7 +1,7 @@
-from typing import Literal
+from enum import Enum
 
 from environs import Env
-from pydantic import BaseModel
+from pydantic import BaseModel, PostgresDsn, computed_field
 from pydantic_settings import BaseSettings
 
 env = Env()
@@ -9,6 +9,12 @@ env = Env()
 # Decide which .env file to use based on the PYTHON_ENV environment variable
 env_file = ".env.test" if env.str("PYTHON_ENV", "dev") == "test" else ".env"
 env.read_env(env_file)
+
+
+class ServerEnv(str, Enum):
+    TEST = "TEST"
+    DEV = "DEV"
+    PROD = "PROD"
 
 
 class DatabaseConfig(BaseModel):
@@ -22,7 +28,7 @@ class DatabaseConfig(BaseModel):
     PSQL_DB: str = env.str("PSQL_DB")
     PSQL_PORT: int = 5432
 
-    PSQL_URL: str = f"postgresql+asyncpg://{PSQL_USER}:{PSQL_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"
+    PSQL_URL: PostgresDsn = f"postgresql+asyncpg://{PSQL_USER}:{PSQL_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"
 
     echo: bool = False
     echo_pool: bool = False
@@ -106,17 +112,12 @@ class ServerConfig(BaseModel):
 
     HOST: str = "0.0.0.0"
     PORT: int = 8080
-    ENV: Literal["DEV", "PROD"] = env.str("ENV", "DEV").upper()
+    ENV: ServerEnv = env.str("ENV", "DEV").upper()
 
     # CORS settings
     ALLOW_ORIGINS: list[str] = [
-        "http://localhost:8080",
         "https://tcf.eucalytics.uk",
         "http://localhost:3000",
-        # Vercel TMP
-        "https://nextjs-dashboard-git-main-utikpuhliks-projects.vercel.app/",
-        "https://nextjs-dashboard-xi-rouge-64.vercel.app/",
-        "https://nextjs-dashboard-utikpuhliks-projects.vercel.app/",
     ]
     ALLOW_CREDENTIALS: bool = True
     ALLOW_METHODS: list[str] = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
@@ -127,6 +128,22 @@ class ServerConfig(BaseModel):
         "Access-Control-Allow-Headers",
         "Access-Control-Allow-Origin",
     ]
+
+    @computed_field
+    def DOCS_URL(self) -> str | None:
+        return "/docs" if self.ENV in (ServerEnv.DEV, ServerEnv.TEST) else None
+
+    @computed_field
+    def REDOC_URL(self) -> str | None:
+        return "/redoc" if self.ENV in (ServerEnv.DEV, ServerEnv.TEST) else None
+
+    @computed_field
+    def OPENAPI_URL(self) -> str | None:
+        return (
+            "/docs/openapi.json"
+            if self.ENV in (ServerEnv.DEV, ServerEnv.TEST)
+            else None
+        )
 
 
 class Settings(BaseSettings):
