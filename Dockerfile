@@ -1,8 +1,7 @@
 # Use a Python image with uv pre-installed
 FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    libmagic-dev=1:5.46-5 \
+RUN apt-get update && apt-get install -y --no-install-recommends libmagic-dev \
  && rm -rf /var/lib/apt/lists/*
 
 # Install the project into `/src`
