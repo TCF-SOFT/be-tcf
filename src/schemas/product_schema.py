@@ -9,6 +9,7 @@ from pydantic import (
     HttpUrl,
     computed_field,
     field_serializer,
+    field_validator,
 )
 from slugify import slugify
 
@@ -43,11 +44,11 @@ class ProductSchema(_ProductBase):
 
     is_deleted: bool = Field(..., examples=[False])
 
-    image_url: HttpUrl
+    image_url: HttpUrl = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
 
-    @field_serializer("image_url")
-    def serialize_image_url(self, v):
-        return str(v or settings.IMAGE_PLACEHOLDER_URL)
+    @field_validator("image_url", mode="before")
+    def _default_image(cls, v: str | None) -> str:
+        return v if v else settings.IMAGE_PLACEHOLDER_URL
 
 
 class ProductPostSchema(_ProductBase):

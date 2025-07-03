@@ -24,11 +24,7 @@ class _CategoryBaseSchema(BaseModel):
 class CategorySchema(_CategoryBaseSchema):
     id: UUID
     slug: str = Field(..., examples=["svechi-ford"])
-    image_url: HttpUrl = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
-
-    @field_serializer("image_url")
-    def serialize_image_url(self, v):
-        return str(v)
+    image_url: str = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
 
 
 class CategoryPostSchema(_CategoryBaseSchema):

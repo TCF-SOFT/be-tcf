@@ -17,7 +17,7 @@ class SubCategory(Base):
     id: Mapped[uuid_pk]
     name: Mapped[str] = mapped_column(String, nullable=False)
     slug: Mapped[str] = mapped_column(String, nullable=False)
-    image_url: Mapped[Optional[str]] = mapped_column(String, nullable=True)
+    image_url: Mapped[str | None] = mapped_column(String, nullable=True)
 
     category_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("categories.id"))
 

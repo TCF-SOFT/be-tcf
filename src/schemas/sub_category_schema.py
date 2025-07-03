@@ -9,6 +9,7 @@ from pydantic import (
     HttpUrl,
     computed_field,
     field_serializer,
+    field_validator,
 )
 from slugify import slugify
 
@@ -27,12 +28,11 @@ class SubCategorySchema(_SubCategoryBase):
     slug: str = Field(..., examples=["svechi-zazhiganiia"])
     category_slug: str = Field(..., examples=["svechi-ford"])
     category_name: str = Field(..., examples=["Свечи"])
+    image_url: HttpUrl = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
 
-    image_url: HttpUrl | None = Field(settings.IMAGE_PLACEHOLDER_URL)
-
-    @field_serializer("image_url")
-    def serialize_image_url(self, v):
-        return str(v)
+    @field_validator("image_url", mode="before")
+    def _default_image(cls, v: str | None) -> str:
+        return v if v else settings.IMAGE_PLACEHOLDER_URL
 
 
 class SubCategoryPostSchema(_SubCategoryBase):

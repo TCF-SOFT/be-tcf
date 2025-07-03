@@ -8,6 +8,8 @@ from pydantic import (
     computed_field,
 )
 
+from src.config import settings
+
 
 class _OfferBase(BaseModel):
     address_id: str | None = Field(None, examples=["AA-TEST"])
@@ -41,7 +43,7 @@ class OfferSchema(_OfferBase):
             "6962492, 1048310, 97AG2K021BA, 1133750, 1048308, 6180371, 94AB2K021AB, 6704271, 1130753"
         ],
     )
-    image_url: HttpUrl
+    image_url: HttpUrl = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
     is_deleted: bool = Field(..., examples=[False])
 
     @computed_field
