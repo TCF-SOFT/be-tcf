@@ -20,8 +20,11 @@ class TestCategoryRoutes:
         slug = "svechi"
         res = await client.get(f"{self.ENDPOINT}/slug/{slug}")
         assert res.status_code == 200
-        assert isinstance(res.json(), dict), "Response body is not valid"
-        assert "id" in res.json(), "ID is not present in response body"
+        response  = res.json()
+        assert isinstance(response, dict), "Response body is not valid"
+        assert "id" in response, "ID is not present in response body"
+        assert "image_url" in response, "Image is not present in response body"
+        assert response["image_url"] is not None, "Image couldn't be null"
 
     async def test_get_by_id_returns_category(self, client: AsyncClient):
         # TODO:
@@ -120,6 +123,7 @@ class TestCategoryRoutes:
         assert response["name"] == new_name
         assert response["slug"] == new_slug
         assert response["image_url"] != old_image_url
+        assert response["image_url"] is not None, "Image couldn't be null"
 
     async def test_unauthorized_delete_category_returns_401(self, client: AsyncClient):
         pass

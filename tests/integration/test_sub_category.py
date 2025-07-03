@@ -94,6 +94,7 @@ class TestSubCategoryRoutes:
         assert "id" in response, "ID is not present in response body"
         assert "slug" in response, "Slug is not present in response body"
         assert "image_url" in response, "Image is not present in response body"
+        assert response["image_url"] is not None, "Image couldn't be null"
 
     async def test_unauthorized_patch_sub_category_returns_401(
         self, client: AsyncClient
@@ -148,6 +149,7 @@ class TestSubCategoryRoutes:
         assert response["slug"] == new_slug
         assert response["image_url"] != old_image_url
         assert response["category_id"] == category_id
+        assert response["image_url"] is not None, "Image couldn't be null"
 
     async def test_delete_sub_category_returns_404_if_missing(
         self, auth_client: AsyncClient
