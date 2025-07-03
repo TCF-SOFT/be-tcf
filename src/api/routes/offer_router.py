@@ -4,7 +4,6 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.routes.fastapi_users_router import require_employee
 from src.api.controllers.create_entity_controller import (
     create_entity,
 )
@@ -13,6 +12,7 @@ from src.api.controllers.update_entity_controller import (
 )
 from src.api.dao.offer_dao import OfferDAO
 from src.api.di.db_helper import db_helper
+from src.api.routes.fastapi_users_router import require_employee
 from src.schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
 
 router = APIRouter(tags=["Offers"], prefix="/offers")
@@ -120,14 +120,14 @@ async def post_offer(
     )
 
 
-@router.put(
+@router.patch(
     "/{offer_id}",
     response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
     dependencies=[Depends(require_employee)],
 )
-async def put_offer(
+async def patch_offer(
     offer_id: UUID,
     offer: OfferPutSchema,
     db_session: AsyncSession = Depends(db_helper.session_getter),

@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.routes.fastapi_users_router import require_employee
 from src.api.controllers.create_entity_controller import create_entity_with_image
 from src.api.controllers.update_entity_controller import (
     update_entity_with_optional_image,
@@ -13,6 +12,7 @@ from src.api.controllers.update_entity_controller import (
 from src.api.dao.product_dao import ProductDAO
 from src.api.dao.sub_category_dao import SubCategoryDAO
 from src.api.di.db_helper import db_helper
+from src.api.routes.fastapi_users_router import require_employee
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 from src.schemas.product_schema import (
@@ -54,15 +54,34 @@ async def get_products(
 
 @router.get(
     "/{product_id}",
-    response_model=ProductSchema | None,
+    response_model=ProductSchema,
     summary="Return product by id",
     status_code=status.HTTP_200_OK,
 )
-async def get_product(
+async def get_product_by_id(
     product_id: UUID,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    return await ProductDAO.find_by_id(db_session, product_id)
+    res = await ProductDAO.find_by_id(db_session, product_id)
+    if not res:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return res
+
+
+@router.get(
+    "/slug/{slug}",
+    response_model=ProductSchema,
+    summary="Return product by slug",
+    status_code=status.HTTP_200_OK,
+)
+async def get_product_by_slug(
+    slug: UUID,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    res = await ProductDAO.find_by_slug(db_session, slug)
+    if not res:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return res
 
 
 @router.get(
@@ -129,23 +148,23 @@ async def post_product(
     )
 
 
-@router.put(
+@router.patch(
     "/{product_id}",
     response_model=ProductSchema,
     summary="Update product by id",
     status_code=status.HTTP_200_OK,
     dependencies=[Depends(require_employee)],
 )
-async def put_product(
+async def patch_product(
     product_id: UUID,
-    product: ProductPutSchema,
+    payload: Annotated[ProductPutSchema, Depends(ProductPutSchema.as_form)],
     image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),
 ):
     return await update_entity_with_optional_image(
         entity_id=product_id,
-        payload=product,
+        payload=payload,
         dao=ProductDAO,
         upload_path="images/tmp",
         db_session=db_session,

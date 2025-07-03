@@ -121,7 +121,7 @@ async def post_sub_category(
     status_code=status.HTTP_200_OK,
     dependencies=[Depends(require_employee)],
 )
-async def put_sub_category(
+async def patch_sub_category(
     sub_category_id: UUID,
     payload: Annotated[SubCategoryPutSchema, Depends(SubCategoryPutSchema.as_form)],
     image_blob: UploadFile | None = File(None),
