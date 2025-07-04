@@ -16,6 +16,12 @@ class OrderStatus(str, Enum):
     CANCELLED = "CANCELLED"
 
 
+class CartStatus(str, Enum):
+    DRAFT = "DRAFT"
+    ORDERED = "ORDERED"
+    ABANDONED = "ABANDONED"
+
+
 class CustomerType(str, Enum):
     USER_RETAIL = "USER_RETAIL"
     USER_WHOLESALE = "USER_WHOLESALE"

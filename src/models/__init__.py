@@ -11,6 +11,7 @@ __all__ = (
     "StockMovement",
     "Address",
     "Order",
+    "Cart",
     "CartOffer",
     "OrderOffer",
 )
@@ -18,6 +19,7 @@ __all__ = (
 from .access_token import AccessToken
 from .address import Address
 from .base import Base
+from .cart import Cart
 from .cart_offer import CartOffer
 from .category import Category
 from .offer import Offer

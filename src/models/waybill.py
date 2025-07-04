@@ -1,4 +1,5 @@
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
@@ -6,6 +7,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, uuid_pk
 from src.schemas.common.enums import WaybillType
+
+if TYPE_CHECKING:
+    from src.models.user import User
+    from src.models.waybill_offer import WaybillOffer
 
 
 class Waybill(Base):
@@ -19,8 +24,10 @@ class Waybill(Base):
     counterparty_name: Mapped[str] = mapped_column(String, nullable=False)
 
     # Relationships
-    user = relationship("User", back_populates="waybills", lazy="joined")
-    waybill_offers = relationship(
+    user: Mapped["User"] = relationship(
+        "User", back_populates="waybills", lazy="joined"
+    )
+    waybill_offers: Mapped[list["WaybillOffer"]] = relationship(
         "WaybillOffer", back_populates="waybill", lazy="joined"
     )
 

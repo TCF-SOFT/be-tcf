@@ -22,6 +22,7 @@ if TYPE_CHECKING:
 
 class Offer(Base):
     id: Mapped[uuid_pk]
+    # TODO: rename to SKU (pydantic + zod)
     address_id: Mapped[str] = mapped_column(String, nullable=True)
     product_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey("products.id"), nullable=False

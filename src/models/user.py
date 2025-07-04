@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
     from src.models.address import Address
+    from src.models.cart import Cart
     from src.models.order import Order
     from src.models.waybill import Waybill
 
@@ -77,6 +78,9 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     )
     orders: Mapped[list["Order"]] = relationship(
         "Order", back_populates="user", lazy="joined"
+    )
+    carts: Mapped[list["Cart"]] = relationship(
+        "Cart", back_populates="user", lazy="joined"
     )
 
     @classmethod
