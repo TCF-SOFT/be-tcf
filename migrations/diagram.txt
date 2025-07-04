@@ -93,3 +93,40 @@ Table stock_movements {
   user_id uuid [ref: > users.id]
   reverted boolean
 }
+
+
+
+Table orders {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+  address_id uuid
+  status varchar // pending, paid, shipped, cancelled
+  note text
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table carts {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+  status varchar
+}
+
+Table cart_offers {
+  id uuid [pk]
+  user_id uuid [ref: > users.id]
+  cart_id uuid [ref: > carts.id]
+  quantity int
+}
+
+Table order_offers {
+  id uuid [pk]
+  order_id uuid [ref: > orders.id]
+  offer_id uuid [ref: > offers.id]
+  quantity int
+  brand varchar
+  manufacturer_number varchar
+  price_rub numeric(12,4)
+}
+
+
