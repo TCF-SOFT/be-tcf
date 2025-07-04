@@ -1,3 +1,4 @@
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 from sqlalchemy import Boolean, ForeignKey, String
@@ -6,6 +7,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, uuid_pk
 from src.schemas.common.enums import ShippingMethod
+
+if TYPE_CHECKING:
+    from src.models.order import Order
+    from src.models.user import User
 
 
 class Address(Base):
@@ -31,4 +36,7 @@ class Address(Base):
     is_default: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Relationships
-    user = relationship("User", back_populates="addresses", lazy="joined")
+    user: Mapped["User"] = relationship(
+        "User", back_populates="addresses", lazy="joined"
+    )
+    orders: Mapped[list["Order"]] = relationship("Order", back_populates="address")

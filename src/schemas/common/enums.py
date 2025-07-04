@@ -8,6 +8,14 @@ class ShippingMethod(str, Enum):
     OTHER = "OTHER"
 
 
+class OrderStatus(str, Enum):
+    NEW = "NEW"
+    IN_PROGRESS = "IN_PROGRESS"
+    SHIPPING = "SHIPPING"
+    COMPLETED = "COMPLETED"
+    CANCELLED = "CANCELLED"
+
+
 class CustomerType(str, Enum):
     USER_RETAIL = "USER_RETAIL"
     USER_WHOLESALE = "USER_WHOLESALE"

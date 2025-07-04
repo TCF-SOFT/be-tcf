@@ -2,7 +2,7 @@ from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 
 from src.api.dao.base import BaseDAO
-from src.models.models import WaybillOffer
+from src.models.waybill_offer import WaybillOffer
 
 
 class WaybillOfferDAO(BaseDAO):

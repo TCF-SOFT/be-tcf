@@ -12,7 +12,7 @@ from pydantic import (
 )
 from slugify import slugify
 
-from config import settings
+from src.config import settings
 
 
 class _ProductBase(BaseModel):

@@ -4,8 +4,8 @@ from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from schemas.common.enums import WaybillType
 from src.models.base import Base, uuid_pk
+from src.schemas.common.enums import WaybillType
 
 
 class Waybill(Base):

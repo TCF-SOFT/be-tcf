@@ -13,12 +13,16 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from schemas.common.enums import CustomerType, Role, ShippingMethod
 from src.models.base import Base, str_uniq, uuid_pk
+from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 if TYPE_CHECKING:
     # Do not import, just use type with `session: "AsyncSession"`
     from sqlalchemy.ext.asyncio import AsyncSession
+
+    from src.models.address import Address
+    from src.models.order import Order
+    from src.models.waybill import Waybill
 
 
 class User(Base, SQLAlchemyBaseUserTableUUID):
@@ -65,8 +69,15 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     shipping_company: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
-    waybills = relationship("Waybill", back_populates="user", lazy="joined")
-    addresses = relationship("Address", back_populates="user", lazy="joined")
+    waybills: Mapped[list["Waybill"]] = relationship(
+        "Waybill", back_populates="user", lazy="joined"
+    )
+    addresses: Mapped[list["Address"]] = relationship(
+        "Address", back_populates="user", lazy="joined"
+    )
+    orders: Mapped[list["Order"]] = relationship(
+        "Order", back_populates="user", lazy="joined"
+    )
 
     @classmethod
     def get_db(cls, session: "AsyncSession"):

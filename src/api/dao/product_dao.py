@@ -4,10 +4,10 @@ from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
 
-from api.dao.base import BaseDAO
-from common.microservices.open_ai_service import get_embedding
-from schemas.product_schema import ProductSchema
+from src.api.dao.base import BaseDAO
+from src.common.microservices.open_ai_service import get_embedding
 from src.models import Product
+from src.schemas.product_schema import ProductSchema
 
 
 class ProductDAO(BaseDAO):

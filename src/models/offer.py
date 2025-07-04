@@ -1,5 +1,5 @@
 import uuid
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from sqlalchemy import (
     Boolean,
@@ -12,6 +12,12 @@ from sqlalchemy import (
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models.base import Base, uuid_pk
+from src.models.order_offer import OrderOffer
+
+if TYPE_CHECKING:
+    from src.models import Product
+    from src.models.cart_offer import CartOffer
+    from src.models.waybill_offer import WaybillOffer
 
 
 class Offer(Base):
@@ -36,8 +42,18 @@ class Offer(Base):
     is_deleted: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     # Relationships
-    product = relationship("Product", back_populates="offers", lazy="joined")
-    waybill_offers = relationship("WaybillOffer", back_populates="offer")
+    product: Mapped["Product"] = relationship(
+        "Product", back_populates="offers", lazy="joined"
+    )
+    waybill_offers: Mapped[list["WaybillOffer"]] = relationship(
+        "WaybillOffer", back_populates="offer", lazy="joined"
+    )
+    order_offers: Mapped[list["OrderOffer"]] = relationship(
+        "OrderOffer", back_populates="offer", lazy="joined"
+    )
+    cart_offers: Mapped[list["CartOffer"]] = relationship(
+        "CartOffer", back_populates="offer", lazy="joined"
+    )
 
     # <-- Pydantic tiny helpers ------------------------------
     @property
