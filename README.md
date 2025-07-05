@@ -4,10 +4,11 @@
 
 
 ## Overview
-### DB Layer
-- PostgreSQL - main database (sqlalchemy, alembic, asyncpg)
+### Services Layer
+- Postgres - main database (sqlalchemy, alembic, asyncpg)
 - Redis - cache, async tasks, etc.
-- Elasticsearch - search engine (not used yet)
+- S3 - file storage for assets (aioboto3)
+- SMTP - email service (aiosmtplib)
 
 ### API Layer
 `dao` - data access objects, used to interact with the database.
@@ -15,6 +16,96 @@
 `common/deps` - common dependencies, used to inject dependencies into the API endpoints.
 `common/services` - common services: redis, S3, etc. Used in `deps` layer.
 `common/microservices` - common microservices: openai
+
+### API Endpoints
+Endpoints such as `/categories`, `/sub-categories`, `/products`, `/offers` are using the same flow:
+```mermaid
+sequenceDiagram
+    title API Flow for GET Requests
+    actor User
+    participant Router
+    participant Redis as Cache
+    participant DAO
+    participant Postgres as DB
+    
+    User->>+Router: GET /categories
+    Router->>+Redis: Check cache for categories
+    alt is cached
+        Redis-->>-Router: Return cached categories
+        Router-->>-User: Return categories from cache
+    else not cached
+        Router->>+DAO: Fetch categories from DB
+        DAO->>+Postgres: Query categories
+        Postgres-->>-DAO: Return categories
+        DAO-->>-Router: Return categories
+        Router->>Redis: Cache categories
+        Router-->>User: Return categories
+    end
+```
+
+```mermaid
+---
+title: API Flow for POST Requests
+---
+graph LR
+    A[Client] --> B[API POST /categories]
+    B --> C[Validate input]
+    C --> D[Upload image to S3]
+    D --> E[Save Entity to DB]
+    E --> F[Return created entity]
+```
+
+PATCH:
+```mermaid
+---
+title: API Flow for PATCH Requests
+---
+graph LR
+    A[Client] --> B[API PATCH /categories]
+    B --> C1[Validate input]
+    C1 --> C{Image was sent?}
+    C -- Yes --> D[Save image to S3]
+    D --> E[Update DB with image URL]
+    C -- No --> F[Update DB without image]
+    F --> G[Return updated category]
+
+```
+
+DELETE:
+```mermaid
+sequenceDiagram
+    title API Flow for DELETE Requests
+    actor User
+    participant Router
+    participant DAO
+    participant Postgres as DB
+    
+    User->>+Router: DELETE /categories/{id}
+    Router->>+DAO: Delete category from DB
+    DAO->>+Postgres: Delete category by ID
+    alt category exists
+        Postgres-->>-DAO: Return true
+        DAO-->>-Router: Return true
+        Router-->>User: Return 204 success
+    else category not found
+        Postgres-->>DAO: Return false
+        DAO-->>Router: Return false
+        Router-->>User: Return 404 not found
+    end
+```    
+
+### Waybills
+
+
+### Cart, Orders, and Payments
+
+
+
+### Background jobs
+1. Celery Stack: celery, redis, flower - complex
+2. FastAPI Stack: background tasks, [fastapi mail](https://sabuhish.github.io/fastapi-mail/getting-started/#:~:text=,the%20mail%20defaults%20to%20plain) - simple (using)
+3. Dramatiq [link](https://dramatiq.io/guide.html) - simple
+
 
 
 ## Installation
@@ -28,19 +119,15 @@
 
 ## Tests
 ### General
-In gitlab we are using the `services` to run the dependencies services (Redis, ES) in a containerized environment.
+For infrastructure mock we're using the GitHub `services` to run the dependencies services (Postgres, Redis, S3, SMTP) in a containerized environment.
 ### Running
 To run the tests, execute the following command from the root directory:
 ```bash
+docker compose up -d
 coverage run -m pytest -s tests
 OR
-pytest tests/
+uv run pytest
 ```
-## Background jobs
-1. Celery Stack: celery, redis, flower - complex
-2. FastAPI Stack: background tasks, [fastapi mail](https://sabuhish.github.io/fastapi-mail/getting-started/#:~:text=,the%20mail%20defaults%20to%20plain) - simple (using)
-3. Dramatiq [link](https://dramatiq.io/guide.html) - simple
-
 
 ### Install pre-commit hooks (Linters, formatters, etc.)
 ```bash

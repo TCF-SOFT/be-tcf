@@ -13,7 +13,6 @@ class TestSubCategoryRoutes:
 
     async def test_get_all_returns_200(self, client: AsyncClient):
         res = await client.get(self.ENDPOINT)
-        logger.warning("[GET] SubCategory response: %s", res.text)
         assert res.status_code == 200
 
     async def test_get_by_slug_returns_sub_category(self, client: AsyncClient):
