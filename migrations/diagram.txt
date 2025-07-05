@@ -54,17 +54,6 @@ Table users {
   mailing boolean
 }
 
-// Table invoices {
-//   id uuid [pk]
-//   user_id uuid [ref: > users.id]
-
-// }
-
-// Table invoices_offers {
-//   invoice_id uuid [ref: > invoices.id]
-//   offer_id uuid [ref: > offers.id]
-// }
-
 Table waybills {
   id uuid [pk]
   user_id uuid [ref: > users.id]
@@ -93,7 +82,6 @@ Table stock_movements {
   user_id uuid [ref: > users.id]
   reverted boolean
 }
-
 
 
 Table orders {

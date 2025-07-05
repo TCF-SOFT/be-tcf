@@ -101,6 +101,71 @@ sequenceDiagram
 
 
 
+
+## DB Schema
+```mermaid
+---
+title: TCF Back-end API Database Schema
+---
+erDiagram
+    USER ||--o{ ORDER : places
+    ORDER ||--|{ ORDER_OFFER : contains
+    ORDER_OFFER }|--|| OFFER : includes
+
+    USER ||--o{ CART : has
+    CART ||--o{ CART_OFFER : contains
+    CART_OFFER }|--|| OFFER : includes
+
+    USER ||..|{ ADDRESS : uses
+
+    USER ||--o{ WAYBILL : has
+    WAYBILL ||--o{ WAYBILL_OFFER : contains
+    WAYBILL_OFFER }|--|| OFFER : includes
+
+    CATEGORY ||--o{ SUBCATEGORY : contains
+    SUBCATEGORY ||--o{ PRODUCT : contains
+    PRODUCT ||--o{ OFFER : has
+
+```
+
+### Project Structure with C4
+
+
+### Deployment Diagram for BE
+```mermaid
+graph TD
+    dev[Developer] -->|Push| github[GitHub Repo]
+
+  github --> github_actions[GitHub Actions]
+  github_actions -->|Lint/Test/Build| dockerhub[(Docker Hub)]
+  dockerhub -->|Image pull| helm[Helm Charts]
+  helm -->|Install/Upgrade| k8s[Kubernetes Cluster]
+
+  subgraph "Kubernetes Cluster"
+    traefik[Traefik Ingress Controller]
+    app_pods(((fa:fa-gear FastAPI App\n  2 replicas)))
+    traefik --> app_pods
+  end
+  app_pods -->|Query| external_postgres
+  app_pods -->|Cache| external_redis
+  app_pods -->|Assets| s3[(S3 Bucket)]
+  app_pods -->|Documents| docx3R((Docx3R\nDocument Service\nPDF, DOCX, XLSX))
+
+ subgraph "External Services - DB VPS"
+     external_postgres[(Postgres)]
+     external_redis[(Redis)]
+ end
+  
+  rolling[RollingUpdate:\nmaxSurge=1\nmaxUnavailable=1]
+  rolling --- app_pods
+
+  style app_pods fill:#dfd,stroke:#333
+  style external_postgres fill:#cde,stroke:#333
+  style external_redis fill:#fdd,stroke:#333
+  style rolling fill:#eee,stroke:#999,stroke-dasharray: 5 5
+
+```
+
 ### Background jobs
 1. Celery Stack: celery, redis, flower - complex
 2. FastAPI Stack: background tasks, [fastapi mail](https://sabuhish.github.io/fastapi-mail/getting-started/#:~:text=,the%20mail%20defaults%20to%20plain) - simple (using)
