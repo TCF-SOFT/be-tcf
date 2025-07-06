@@ -93,7 +93,8 @@ class OfferDAO(BaseDAO):
                     func.similarity(p.cross_number, search_term),
                     func.similarity(o.brand, search_term),
                     func.similarity(o.manufacturer_number, search_term),
-                ).desc()
+                ).desc(),
+                o.id.desc() # Ensure consistent ordering - no duplicates in Pagination
             )
         )
         return await paginate(db_session, query)
