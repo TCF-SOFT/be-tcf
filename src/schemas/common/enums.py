@@ -41,8 +41,8 @@ class Role(str, Enum):
 
 
 class PriceListExt(str, Enum):
-    EXCEL = ".xlsx"
-    CSV = ".csv"
+    EXCEL = "xlsx"
+    CSV = "csv"
 
 
 class PriceListType(str, Enum):

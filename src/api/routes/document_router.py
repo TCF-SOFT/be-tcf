@@ -64,6 +64,11 @@ async def get_price(
     CSV: 5.0mb
     XLSX: 1.8mb
     """
+    if ext == PriceListExt.EXCEL:
+        ext = "xlsx"
+    else:
+        ext = "csv"
+
     path: Path = (
         await serve_price(price_type, ext)
         if cache
@@ -72,7 +77,7 @@ async def get_price(
     return FileResponse(
         path,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        if ext == "xlsx"
+        if ext == PriceListExt.EXCEL
         else "text/csv",
         filename=f"price.{ext}" if price_type == "retail" else "price_wholesale.csv",
     )
