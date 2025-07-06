@@ -64,10 +64,7 @@ async def get_price(
     CSV: 5.0mb
     XLSX: 1.8mb
     """
-    if ext == PriceListExt.EXCEL:
-        ext = "xlsx"
-    else:
-        ext = "csv"
+    ext = "xlsx" if ext == PriceListExt.EXCEL else "csv"
 
     path: Path = (
         await serve_price(price_type, ext)
