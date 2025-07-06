@@ -27,7 +27,7 @@ sequenceDiagram
     participant Redis as Cache
     participant DAO
     participant Postgres as DB
-    
+
     User->>+Router: GET /categories
     Router->>+Redis: Check cache for categories
     alt is cached
@@ -79,7 +79,7 @@ sequenceDiagram
     participant Router
     participant DAO
     participant Postgres as DB
-    
+
     User->>+Router: DELETE /categories/{id}
     Router->>+DAO: Delete category from DB
     DAO->>+Postgres: Delete category by ID
@@ -92,7 +92,7 @@ sequenceDiagram
         DAO-->>Router: Return false
         Router-->>User: Return 404 not found
     end
-```    
+```
 
 ### Waybills
 
@@ -155,7 +155,7 @@ graph TD
      external_postgres[(Postgres)]
      external_redis[(Redis)]
  end
-  
+
   rolling[RollingUpdate:\nmaxSurge=1\nmaxUnavailable=1]
   rolling --- app_pods
 

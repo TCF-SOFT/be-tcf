@@ -116,5 +116,3 @@ Table order_offers {
   manufacturer_number varchar
   price_rub numeric(12,4)
 }
-
-

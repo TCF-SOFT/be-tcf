@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.routes.fastapi_users_router import fastapi_users_router, require_employee
-from src.schemas.common.enums import Role
-from src.schemas.user_schema import UserUpdate
 from src.api.dao.user_dao import UserDAO
 from src.api.di.db_helper import db_helper
-from src.schemas.user_schema import UserRead
+from src.api.routes.fastapi_users_router import fastapi_users_router, require_employee
+from src.schemas.common.enums import Role
+from src.schemas.user_schema import UserRead, UserUpdate
 
 # Create the router
 router = APIRouter(tags=["Users"], prefix="/users")
