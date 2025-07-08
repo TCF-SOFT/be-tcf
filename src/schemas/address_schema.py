@@ -8,8 +8,8 @@ from src.schemas.common.enums import ShippingMethod
 
 class _AddressBase(BaseModel):
     user_id: UUID
-    first_name: str
-    last_name: str
+    first_name: str = Field(..., examples=["Vasilii"])
+    last_name: str = Field(..., examples=["Pinov"])
     phone: PhoneNumber | None = Field(None, examples=["+441234567890"])
 
     city: str | None = Field(None, examples=["Sevastopol"])
@@ -32,6 +32,6 @@ class AddressSchema(_AddressBase):
 class AddressPostSchema(_AddressBase):
     pass
 
+
 class AddressPatchSchema(_AddressBase):
     pass
-

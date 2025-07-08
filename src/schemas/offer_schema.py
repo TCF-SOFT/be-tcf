@@ -56,5 +56,5 @@ class OfferPostSchema(_OfferBase):
     pass
 
 
-class OfferPutSchema(_OfferBase):
+class OfferPatchSchema(_OfferBase):
     pass

@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer
 
+from .address_router import router as address_router
 from .auth_router import router as auth_router
 from .category_router import router as category_router
 from .document_router import router as pricing_router
@@ -29,6 +30,7 @@ router.include_router(offer_router)
 router.include_router(waybill_router)
 router.include_router(waybill_offers_router)
 router.include_router(order_router)
+router.include_router(address_router)
 router.include_router(pricing_router)
 router.include_router(health_check_router)
 router.include_router(version_router)

@@ -13,7 +13,7 @@ from src.api.controllers.update_entity_controller import (
 from src.api.dao.offer_dao import OfferDAO
 from src.api.di.db_helper import db_helper
 from src.api.routes.fastapi_users_router import require_employee
-from src.schemas.offer_schema import OfferPostSchema, OfferPutSchema, OfferSchema
+from src.schemas.offer_schema import OfferPatchSchema, OfferPostSchema, OfferSchema
 
 router = APIRouter(tags=["Offers"], prefix="/offers")
 
@@ -109,11 +109,11 @@ async def full_text_search_offers(
     dependencies=[Depends(require_employee)],
 )
 async def post_offer(
-    offer: OfferPostSchema,
+    payload: OfferPostSchema,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await create_entity(
-        payload=offer,
+        payload=payload,
         db_session=db_session,
         dao=OfferDAO,
         refresh_fields=["product"],
@@ -129,11 +129,11 @@ async def post_offer(
 )
 async def patch_offer(
     offer_id: UUID,
-    offer: OfferPutSchema,
+    payload: OfferPatchSchema,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await update_entity(
-        entity_id=offer_id, payload=offer, dao=OfferDAO, db_session=db_session
+        entity_id=offer_id, payload=payload, dao=OfferDAO, db_session=db_session
     )
 
 

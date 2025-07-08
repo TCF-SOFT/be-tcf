@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.exceptions.exceptions import DuplicateNameError
+from utils.logging import logger
 
 
 class BaseDAO:
@@ -75,6 +76,7 @@ class BaseDAO:
             return new_instance
 
         except IntegrityError as e:
+            logger.error("IntegrityError: %s", e)
             name_value = values.get("name", "N/A")
             raise DuplicateNameError(name=name_value) from e
 
