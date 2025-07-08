@@ -3,10 +3,12 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.controllers.create_entity_controller import create_entity
+from api.controllers.update_entity_controller import update_entity
 from src.api.dao.order_dao import OrderDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.common.enums import OrderStatus
-from src.schemas.order_schema import OrderSchema
+from src.schemas.order_schema import OrderSchema, OrderPostSchema, OrderPatchSchema
 
 # Flow:
 # 1. Create a cart
@@ -54,3 +56,48 @@ async def get_order(
             detail=f"Order with id {offer_id} not found.",
         )
     return res
+
+
+@router.post(
+    "",
+    response_model=OrderSchema,
+    summary="Create a new order",
+    status_code=status.HTTP_201_CREATED,
+)
+async def post_order(
+    payload: OrderPostSchema,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await create_entity(payload=payload, db_session=db_session, dao=OrderDAO)
+
+
+@router.patch(
+    "/{order_id}",
+    response_model=OrderSchema,
+    summary="Update order by id",
+    status_code=status.HTTP_200_OK,
+    # dependencies=[Depends(require_employee)],
+)
+async def patch_order(
+    order_id: UUID,
+    payload: OrderPatchSchema,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await update_entity(
+        entity_id=order_id, payload=payload, dao=OrderDAO, db_session=db_session
+    )
+
+
+@router.delete(
+    "/{order_id}",
+    summary="Delete order by id",
+    status_code=status.HTTP_204_NO_CONTENT,
+    # dependencies=[Depends(require_employee)],
+)
+async def delete_order(
+    order_id: UUID,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    success = await OrderDAO.delete_by_id(db_session, order_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Order not found")

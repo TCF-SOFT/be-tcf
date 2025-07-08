@@ -32,3 +32,26 @@ class Order(Base):
     order_offers: Mapped[list["OrderOffer"]] = relationship(
         "OrderOffer", back_populates="order", lazy="joined"
     )
+
+    @property
+    def user_first_name(self) -> str:
+        return self.user.first_name
+
+    @property
+    def user_last_name(self) -> str:
+        return self.user.last_name
+
+    @property
+    def user_phone(self) -> str | None:
+        return self.user.phone or None
+
+    @property
+    def user_email(self) -> str:
+        return self.user.email
+
+
+    @property
+    def total_sum(self) -> float:
+        return sum([offer.price_rub for offer in self.order_offers])
+
+
