@@ -15,6 +15,7 @@ from src.schemas.order_schema import OrderSchema
 # 4. Flush the cart and cart items
 router = APIRouter(tags=["Orders"], prefix="/orders")
 
+
 @router.get(
     "",
     response_model=list[OrderSchema],
@@ -24,7 +25,7 @@ router = APIRouter(tags=["Orders"], prefix="/orders")
 async def get_orders(
     user_id: UUID | None = None,
     order_status: OrderStatus | None = None,
-    db_session: AsyncSession = Depends(db_helper.session_getter)
+    db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     """
     Get all orders.
