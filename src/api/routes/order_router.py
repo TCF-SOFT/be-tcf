@@ -8,7 +8,7 @@ from api.controllers.update_entity_controller import update_entity
 from src.api.dao.order_dao import OrderDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.common.enums import OrderStatus
-from src.schemas.order_schema import OrderSchema, OrderPostSchema, OrderPatchSchema
+from src.schemas.order_schema import OrderPatchSchema, OrderPostSchema, OrderSchema
 
 # Flow:
 # 1. Create a cart

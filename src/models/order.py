@@ -49,9 +49,6 @@ class Order(Base):
     def user_email(self) -> str:
         return self.user.email
 
-
     @property
     def total_sum(self) -> float:
         return sum([offer.price_rub for offer in self.order_offers])
-
-

@@ -26,6 +26,7 @@ class OrderSchema(_OrderBase):
 
     # maybe add address fields or total_sum
 
+
 class OrderPostSchema(_OrderBase):
     pass
 
