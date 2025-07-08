@@ -4,11 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.routes.fastapi_users_router import (
+from src.api.routes.fastapi_users_router import (
     current_active_user,
     require_employee,
 )
-from schemas.common.enums import WaybillType
+from src.schemas.common.enums import WaybillType
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.waybill_dao import WaybillDAO

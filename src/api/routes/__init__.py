@@ -12,6 +12,7 @@ from .user_router import router as user_router
 from .version_router import router as version_router
 from .waybill_offers_router import router as waybill_offers_router
 from .waybill_router import router as waybill_router
+from .order_router import router as order_router
 
 # TODO: add v1 prefix
 
@@ -27,6 +28,7 @@ router.include_router(product_router)
 router.include_router(offer_router)
 router.include_router(waybill_router)
 router.include_router(waybill_offers_router)
+router.include_router(order_router)
 router.include_router(pricing_router)
 router.include_router(health_check_router)
 router.include_router(version_router)
