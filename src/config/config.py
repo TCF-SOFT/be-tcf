@@ -97,7 +97,7 @@ class AuthConfig(BaseModel):
     Represents the configuration settings for authentication tokens.
     """
 
-    LIFETIME_SECONDS: int = 3600
+    LIFETIME_SECONDS: int = 3600 * 24
     RESET_PASSWORD_TOKEN_SECRET: str = env.str("RESET_PASSWORD_TOKEN_SECRET")
     VERIFICATION_TOKEN_SECRET: str = env.str("VERIFICATION_TOKEN_SECRET")
 

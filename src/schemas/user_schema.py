@@ -9,7 +9,7 @@ from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 class _BaseUser(BaseModel):
     first_name: str = Field(..., examples=["Vasilii"])
-    last_name: str | None = Field(None, examples=["Pinov"])
+    last_name: str = Field(..., examples=["Pinov"])
     role: Role = Field("USER", examples=[Role.EMPLOYEE])
     avatar_url: HttpUrl | None = Field(
         None, examples=["https://storage.yandexcloud.net/tcf-images/default.svg"]

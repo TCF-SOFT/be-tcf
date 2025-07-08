@@ -6,7 +6,6 @@ from src.schemas.common.enums import OrderStatus
 
 
 class _OrderBase(BaseModel):
-    id: UUID
     user_id: UUID
     address_id: UUID
     status: OrderStatus
@@ -16,4 +15,12 @@ class _OrderBase(BaseModel):
 
 
 class OrderSchema(_OrderBase):
+    id: UUID
+
+
+class OrderPostSchema(_OrderBase):
+    pass
+
+
+class OrderPatchSchema(BaseModel):
     pass

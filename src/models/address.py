@@ -18,13 +18,13 @@ class Address(Base):
 
     id: Mapped[uuid_pk]
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-    full_name: Mapped[str] = mapped_column(String, nullable=False)
+    first_name: Mapped[str] = mapped_column(String, nullable=False)
+    last_name: Mapped[str] = mapped_column(String, nullable=False)
     phone: Mapped[str] = mapped_column(String, nullable=True)
 
-    country: Mapped[str] = mapped_column(String, nullable=True)
     city: Mapped[str] = mapped_column(String, nullable=False)
     street: Mapped[str] = mapped_column(String, nullable=False)
-    postal_code: Mapped[str] = mapped_column(String, nullable=True)
+    postal_code: Mapped[str] = mapped_column(String, nullable=False)
 
     shipping_method: Mapped[ShippingMethod] = mapped_column(
         SQLEnum(ShippingMethod, native_enum=False),
@@ -33,7 +33,7 @@ class Address(Base):
     )
     shipping_company: Mapped[str | None] = mapped_column(String, nullable=True)
 
-    is_default: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    is_default: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
 
     # Relationships
     user: Mapped["User"] = relationship(

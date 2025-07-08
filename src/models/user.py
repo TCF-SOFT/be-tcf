@@ -34,7 +34,7 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
 
     first_name: Mapped[str] = mapped_column(String, nullable=False)
-    last_name: Mapped[str] = mapped_column(String, nullable=True)
+    last_name: Mapped[str] = mapped_column(String, nullable=False)
     avatar_url: Mapped[str | None] = mapped_column(String, nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
