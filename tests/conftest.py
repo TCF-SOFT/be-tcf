@@ -101,7 +101,8 @@ async def employee_token(client: AsyncClient) -> str:
         json={
             "email": "employee@test.com",
             "password": "test",
-            "first_name": "Test",
+            "first_name": "Nikola",
+            "last_name": "Makiavelli",
             "role": "EMPLOYEE",
             "is_active": True,  # после регистрации
             "is_superuser": False,  # только админ
