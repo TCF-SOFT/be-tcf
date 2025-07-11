@@ -75,7 +75,7 @@ async def get_waybill(
     summary="Return count of waybills",
     status_code=status.HTTP_200_OK,
 )
-async def count_offers(
+async def count_waybills(
     waybill_type: WaybillType | None = None,
     is_pending: bool | None = None,
     db_session: AsyncSession = Depends(db_helper.session_getter),

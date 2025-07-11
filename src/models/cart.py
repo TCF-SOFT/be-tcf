@@ -24,7 +24,10 @@ class Cart(Base):
     )
 
     # Relationships
-    user: Mapped["User"] = relationship("User", back_populates="carts")
+    user: Mapped["User"] = relationship("User", back_populates="carts", lazy="joined")
     cart_offers: Mapped[list["CartOffer"]] = relationship(
-        "CartOffer", back_populates="cart", cascade="all, delete-orphan"
+        "CartOffer",
+        back_populates="cart",
+        cascade="all, delete-orphan",
+        lazy="selectin",
     )

@@ -1,5 +1,5 @@
 import uuid
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     Boolean,
@@ -47,52 +47,11 @@ class Offer(Base):
         "Product", back_populates="offers", lazy="joined"
     )
     waybill_offers: Mapped[list["WaybillOffer"]] = relationship(
-        "WaybillOffer", back_populates="offer", lazy="joined"
+        "WaybillOffer", back_populates="offer", lazy="select"
     )
     order_offers: Mapped[list["OrderOffer"]] = relationship(
-        "OrderOffer", back_populates="offer", lazy="joined"
+        "OrderOffer", back_populates="offer", lazy="select"
     )
     cart_offers: Mapped[list["CartOffer"]] = relationship(
-        "CartOffer", back_populates="offer", lazy="joined"
+        "CartOffer", back_populates="offer", lazy="select"
     )
-
-    # <-- Pydantic tiny helpers ------------------------------
-    @property
-    def image_url(self) -> Optional[str]:
-        """Proxy `product.image_url` so Pydantic can see it."""
-        return self.product.image_url if self.product else None
-
-    @property
-    def sub_category_slug(self) -> str:
-        return self.product.sub_category_slug
-
-    @property
-    def sub_category_name(self) -> str:
-        """
-        WaybillOffer and Offer use this to display sub-category name.
-        """
-        return self.product.sub_category.name
-
-    @property
-    def category_slug(self) -> str:
-        return self.product.sub_category.category_slug
-
-    @property
-    def category_name(self) -> str:
-        """
-        WaybillOffer and Offer use this to display category name.
-        """
-        return self.product.sub_category.category.name
-
-    @property
-    def product_name(self) -> str:
-        return self.product.name
-
-    @property
-    def cross_number(self) -> Optional[str]:
-        """
-        Proxy `product.cross_number` so Pydantic can see it.
-        """
-        return self.product.cross_number if self.product else None
-
-    # --------------------------------------------------------

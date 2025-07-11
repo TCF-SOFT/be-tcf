@@ -14,13 +14,6 @@ class WaybillDAO(BaseDAO):
     model = Waybill
 
     @classmethod
-    async def find_all(cls, db_session, filter_by: dict, order_by: str = None) -> list:
-        query = select(cls.model).filter_by(**filter_by).order_by(order_by)
-        result = await db_session.execute(query)
-        res = result.unique().scalars().all()
-        return res
-
-    @classmethod
     async def find_all_paginate(
         cls, db_session, filter_by: dict, search_term: str
     ) -> Page[WaybillSchema]:

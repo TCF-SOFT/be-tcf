@@ -35,7 +35,7 @@ class BaseDAO:
     async def find_one_or_none(cls, db_session, filter_by: dict) -> list or None:
         query = select(cls.model).filter_by(**filter_by)
         result = await db_session.execute(query)
-        return result.scalar_one_or_none()
+        return result.unique().scalar_one_or_none()
 
     @classmethod
     async def find_by_id(cls, db_session, _id: UUID) -> Any:

@@ -71,16 +71,16 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
 
     # Relationships
     waybills: Mapped[list["Waybill"]] = relationship(
-        "Waybill", back_populates="user", lazy="joined"
+        "Waybill", back_populates="user", lazy="selectin"
     )
     addresses: Mapped[list["Address"]] = relationship(
-        "Address", back_populates="user", lazy="joined"
+        "Address", back_populates="user", lazy="selectin"
     )
     orders: Mapped[list["Order"]] = relationship(
-        "Order", back_populates="user", lazy="joined"
+        "Order", back_populates="user", lazy="selectin"
     )
     carts: Mapped[list["Cart"]] = relationship(
-        "Cart", back_populates="user", lazy="joined"
+        "Cart", back_populates="user", lazy="selectin"
     )
 
     @classmethod

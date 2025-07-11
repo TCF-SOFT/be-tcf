@@ -32,5 +32,5 @@ class WaybillOffer(Base):
         "Waybill", back_populates="waybill_offers", lazy="joined"
     )
     offer: Mapped["Offer"] = relationship(
-        "Offer", back_populates="waybill_offers", lazy="joined"
+        "Offer", back_populates="waybill_offers", lazy="selectin"
     )

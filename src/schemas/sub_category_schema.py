@@ -13,6 +13,7 @@ from pydantic import (
 from slugify import slugify
 
 from src.config import settings
+from src.schemas.category_schema import CategorySchema
 
 
 class _SubCategoryBase(BaseModel):
@@ -25,9 +26,9 @@ class _SubCategoryBase(BaseModel):
 class SubCategorySchema(_SubCategoryBase):
     id: UUID
     slug: str = Field(..., examples=["svechi-zazhiganiia"])
-    category_slug: str = Field(..., examples=["svechi-ford"])
-    category_name: str = Field(..., examples=["Свечи"])
     image_url: HttpUrl = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
+
+    category: CategorySchema
 
     @field_validator("image_url", mode="before")
     def _default_image(cls, v: str | None) -> str:

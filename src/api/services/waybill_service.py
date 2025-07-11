@@ -2,6 +2,7 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas.offer_schema import OfferSchema
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.models import Offer, Waybill, WaybillOffer
@@ -52,16 +53,10 @@ class WaybillService:
                         "waybill_id": waybill.id,
                         "offer_id": offer.id,
                         "quantity": item.quantity,
-                        "brand": offer.brand,
-                        "manufacturer_number": offer.manufacturer_number,
+                        "brand": item.brand,
+                        "manufacturer_number": item.manufacturer_number,
                         "price_rub": item.price_rub,
-                        "product_name": offer.product_name,
-                        "image_url": offer.image_url if offer else None,
-                        "category_slug": offer.category_slug,
-                        "category_name": offer.category_name,
-                        "sub_category_slug": offer.sub_category_slug,
-                        "sub_category_name": offer.sub_category_name,
-                        "product_id": offer.product_id,
+                        "offer": OfferSchema.model_validate(offer),
                     }
                 )
             )

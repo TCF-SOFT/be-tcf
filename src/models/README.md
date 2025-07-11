@@ -45,6 +45,14 @@ https://www.reddit.com/r/FastAPI/comments/17nnxa0/need_help_fastapi_and_sqlalche
 
 **ATTENTION: `lazy='selectin` может вызвать рекурсию -> заменить на `lazy='select`
 Ошибка появляется когда Pydantic модель состоит из других моделей, одновременно связанных с помощью `lazy='selectin`**
+**ATTENTION: Правила запросов и связей**
+```
+1 → 1   → joined
+1 → M   → selectin
+M → 1   → joined
+M → M   → select / noload
+```
+
 
 Если в M -> M связи используется кол-во, то нужно строить связь не напрямую, а через промежуточную таблицу (пример Cocktails -> Carts)
 ```python

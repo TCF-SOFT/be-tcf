@@ -1,15 +1,15 @@
 from sqlalchemy.exc import SQLAlchemyError
 
 from src.api.dao.base import BaseDAO
-from src.models.waybill_offer import WaybillOffer
-from utils.logging import logger
+from src.models import OrderOffer
+from src.utils.logging import logger
 
 
-class WaybillOfferDAO(BaseDAO):
-    model = WaybillOffer
+class OrderOfferDAO(BaseDAO):
+    model = OrderOffer
 
     @classmethod
-    async def add(cls, db_session, **values) -> WaybillOffer:
+    async def add(cls, db_session, **values) -> OrderOffer:
         """
         More: https://habr.com/ru/articles/828328/, 'Управление транзакциями'
         :param db_session:

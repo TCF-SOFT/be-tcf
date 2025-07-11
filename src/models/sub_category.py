@@ -24,13 +24,5 @@ class SubCategory(Base):
     category = relationship("Category", back_populates="sub_categories", lazy="joined")
     products = relationship("Product", back_populates="sub_category")
 
-    @property
-    def category_slug(self) -> str:
-        return self.category.slug
-
-    @property
-    def category_name(self) -> str:
-        return self.category.name
-
     # Constraints
     __table_args__ = (UniqueConstraint("slug", name="sub_categories_slug_key"),)

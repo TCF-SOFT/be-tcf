@@ -1,14 +1,17 @@
+from datetime import datetime
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
-from pydantic_extra_types.phone_numbers import PhoneNumber
+from pydantic import BaseModel, ConfigDict, Field
 
+from schemas.address_schema import AddressSchema
+from schemas.order_offer_schema import OrderOfferSchema
+from schemas.user_schema import UserRead
 from src.schemas.common.enums import OrderStatus
 
 
 class _OrderBase(BaseModel):
-    user_id: UUID
-    address_id: UUID
+    user_id: UUID = Field(..., examples=["13a6f665-da25-4868-92c3-4e6a39dd3c6f"])
+    address_id: UUID = Field(..., examples=["356f1d6f-0514-4e40-aad5-d59b91674320"])
     status: OrderStatus
     note: str | None = None
 
@@ -17,14 +20,13 @@ class _OrderBase(BaseModel):
 
 class OrderSchema(_OrderBase):
     id: UUID
-    user_first_name: str = Field(..., examples=["Vasilii"])
-    user_last_name: str = Field(..., examples=["Pinov"])
-    user_email: EmailStr
-    user_phone: PhoneNumber | None = Field(None, examples=["+441234567890"])
-
+    user: UserRead
+    address: AddressSchema
+    order_offers: list[OrderOfferSchema]
     total_sum: float
 
-    # maybe add address fields or total_sum
+    created_at: datetime
+    updated_at: datetime
 
 
 class OrderPostSchema(_OrderBase):

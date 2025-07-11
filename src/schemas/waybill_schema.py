@@ -8,6 +8,7 @@ from pydantic import (
 )
 
 from schemas.common.enums import WaybillType
+from schemas.user_schema import UserRead
 
 
 class _WaybillBaseSchema(BaseModel):
@@ -21,9 +22,12 @@ class _WaybillBaseSchema(BaseModel):
 
 class WaybillSchema(_WaybillBaseSchema):
     id: UUID
-    author: str = Field(..., examples=["Vasiliy Pinov"])
+    user: UserRead
+
     created_at: datetime
     updated_at: datetime
+
+    # offers: list[OfferSchema]
 
 
 class WaybillPostSchema(_WaybillBaseSchema):

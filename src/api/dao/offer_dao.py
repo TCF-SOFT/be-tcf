@@ -89,9 +89,9 @@ class OfferDAO(BaseDAO):
             )
             .order_by(
                 func.greatest(
+                    func.similarity(o.brand, search_term),
                     func.similarity(p.name, search_term),
                     func.similarity(p.cross_number, search_term),
-                    func.similarity(o.brand, search_term),
                     func.similarity(o.manufacturer_number, search_term),
                 ).desc(),
                 o.id.desc(),  # Ensure consistent ordering - no duplicates in Pagination

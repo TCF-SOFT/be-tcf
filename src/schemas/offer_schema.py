@@ -4,11 +4,10 @@ from pydantic import (
     BaseModel,
     ConfigDict,
     Field,
-    HttpUrl,
     computed_field,
 )
 
-from src.config import settings
+from src.schemas.product_schema import ProductSchema
 
 
 class _OfferBase(BaseModel):
@@ -32,18 +31,7 @@ class _OfferBase(BaseModel):
 class OfferSchema(_OfferBase):
     id: UUID
     offer_bitrix_id: str | None = Field(None, examples=["278495"])
-    category_slug: str = Field(..., examples=["svechi-ford"])
-    category_name: str = Field(..., examples=["Свечи"])
-    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
-    sub_category_name: str = Field(..., examples=["Свечи зажигания"])
-    product_name: str = Field(..., examples=["Escort 1990-2000"])
-    cross_number: str | None = Field(
-        None,
-        examples=[
-            "6962492, 1048310, 97AG2K021BA, 1133750, 1048308, 6180371, 94AB2K021AB, 6704271, 1130753"
-        ],
-    )
-    image_url: HttpUrl = Field(..., examples=[settings.IMAGE_PLACEHOLDER_URL])
+    product: ProductSchema
     is_deleted: bool = Field(..., examples=[False])
 
     @computed_field

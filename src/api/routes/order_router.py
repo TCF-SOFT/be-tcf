@@ -5,9 +5,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.controllers.update_entity_controller import update_entity
+from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.order_dao import OrderDAO
 from src.api.di.db_helper import db_helper
+from src.api.services.order_service import OrderService
+from src.models import Product
 from src.schemas.common.enums import OrderStatus
+from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
 from src.schemas.order_schema import OrderPatchSchema, OrderPostSchema, OrderSchema
 
 # Flow:
@@ -47,15 +51,37 @@ async def get_orders(
     status_code=status.HTTP_200_OK,
 )
 async def get_order(
-    offer_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
+    order_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
 ):
-    res = await OrderDAO.find_by_id(db_session, offer_id)
+    res = await OrderDAO.find_by_id(db_session, order_id)
     if not res:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"Order with id {offer_id} not found.",
+            detail=f"Order with id {order_id} not found.",
         )
     return res
+
+
+@router.get(
+    "/meta/count",
+    response_model=dict[str, int],
+    summary="Return count of orders",
+    status_code=status.HTTP_200_OK,
+)
+async def count_orders(
+    order_status: OrderStatus | None = None,
+    user_id: UUID | None = None,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    filters = {}
+
+    if order_status:
+        filters["status"] = order_status
+
+    if user_id:
+        filters["user_id"] = user_id
+
+    return await OrderDAO.count_all(db_session, filter_by=filters)
 
 
 @router.post(
@@ -68,7 +94,58 @@ async def post_order(
     payload: OrderPostSchema,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    return await create_entity(payload=payload, db_session=db_session, dao=OrderDAO)
+    return await create_entity(
+        payload=payload,
+        db_session=db_session,
+        dao=OrderDAO,
+        refresh_fields=["user"],
+    )
+
+
+@router.post(
+    "/{order_id}/offers",
+    status_code=status.HTTP_201_CREATED,
+    response_model=OrderOfferSchema,
+)
+async def add_offer_to_order(
+    order_id: UUID,
+    order_offer: OrderOfferPostSchema,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    # получаем текущие данные из offers — для валидации
+    offer = await OfferDAO.find_by_id(db_session, order_offer.offer_id)
+    if not offer:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Offer not found"
+        )
+
+    product: Product = offer.product
+    if not product:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Product not found"
+        )
+
+    order_offer_obj = await OrderService.add_offer_to_order(
+        db_session, order_id, order_offer
+    )
+
+    return OrderOfferSchema(
+        id=order_offer_obj.id,
+        order_id=order_id,
+        address_id=offer.address_id,
+        offer_id=offer.id,
+        quantity=order_offer_obj.quantity,
+        brand=order_offer_obj.brand,
+        manufacturer_number=order_offer_obj.manufacturer_number,
+        price_rub=order_offer_obj.price_rub,
+        product_name=product.name,
+        image_url=product.image_url,
+        category_slug=product.sub_category.category_slug,
+        sub_category_slug=product.sub_category_slug,
+        category_name=product.sub_category.category_name,
+        sub_category_name=product.sub_category.name,
+        product_id=product.id,
+    )
 
 
 @router.patch(

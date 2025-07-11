@@ -9,6 +9,7 @@ from src.models.base import Base, uuid_pk
 from src.schemas.common.enums import WaybillType
 
 if TYPE_CHECKING:
+    from src.models.offer import Offer
     from src.models.user import User
     from src.models.waybill_offer import WaybillOffer
 
@@ -28,12 +29,9 @@ class Waybill(Base):
         "User", back_populates="waybills", lazy="joined"
     )
     waybill_offers: Mapped[list["WaybillOffer"]] = relationship(
-        "WaybillOffer", back_populates="waybill", lazy="joined"
+        "WaybillOffer", back_populates="waybill", lazy="selectin"
     )
 
     @property
-    def author(self) -> str:
-        """
-        Proxy `user.name` so Pydantic can see it.
-        """
-        return self.user.first_name
+    def offers(self) -> list["Offer"]:
+        return [wo.offer for wo in self.waybill_offers]

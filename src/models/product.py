@@ -33,23 +33,6 @@ class Product(Base):
     sub_category = relationship("SubCategory", back_populates="products", lazy="joined")
     offers = relationship("Offer", back_populates="product", lazy="select")
 
-    # Pydantic Proxies
-    @property
-    def sub_category_slug(self) -> str:
-        return self.sub_category.slug
-
-    @property
-    def sub_category_name(self) -> str:
-        return self.sub_category.name
-
-    @property
-    def category_slug(self) -> str:
-        return self.sub_category.category_slug
-
-    @property
-    def category_name(self) -> str:
-        return self.sub_category.category.name
-
     # Vector search
     # embedding: Mapped[Vector] = mapped_column(Vector(1536), nullable=True)
 

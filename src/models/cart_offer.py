@@ -25,8 +25,8 @@ class CartOffer(Base):
 
     # Relationships
     offer: Mapped["Offer"] = relationship(
-        "Offer", back_populates="cart_offers", lazy="joined"
+        "Offer", back_populates="cart_offers", lazy="selectin"
     )
     cart: Mapped["Cart"] = relationship(
-        "Cart", back_populates="cart_offers", lazy="joined"
+        "Cart", back_populates="cart_offers", lazy="selectin"
     )

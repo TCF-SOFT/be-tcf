@@ -13,6 +13,7 @@ from pydantic import (
 from slugify import slugify
 
 from src.config import settings
+from src.schemas.sub_category_schema import SubCategorySchema
 
 
 class _ProductBase(BaseModel):
@@ -36,10 +37,7 @@ class ProductSchema(_ProductBase):
     id: UUID
     bitrix_id: str | None = Field(None, examples=["278495"])
     slug: str | None = None
-    category_slug: str = Field(..., examples=["svechi-ford"])
-    category_name: str = Field(..., examples=["Свечи"])
-    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
-    sub_category_name: str = Field(..., examples=["Свечи зажигания"])
+    sub_category: SubCategorySchema
 
     is_deleted: bool = Field(..., examples=[False])
 

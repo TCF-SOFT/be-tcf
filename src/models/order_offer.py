@@ -31,7 +31,7 @@ class OrderOffer(Base):
 
     # Relationships
     order: Mapped["Order"] = relationship(
-        "Order", back_populates="order_offers", lazy="joined"
+        "Order", back_populates="order_offers", lazy="select"
     )
     offer: Mapped["Offer"] = relationship(
         "Offer", back_populates="order_offers", lazy="joined"
