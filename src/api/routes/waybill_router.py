@@ -15,6 +15,7 @@ from src.api.routes.fastapi_users_router import (
 from src.api.services.waybill_service import WaybillService
 from src.models import Product, Waybill
 from src.schemas.common.enums import WaybillType
+from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
 
@@ -170,19 +171,12 @@ async def add_offer_to_waybill(
     return WaybillOfferSchema(
         id=waybill_offer_obj.id,
         waybill_id=waybill_id,
-        address_id=offer.address_id,
         offer_id=offer.id,
+        offer=OfferSchema.model_validate(offer),
         quantity=waybill_offer_obj.quantity,
         brand=waybill_offer_obj.brand,
         manufacturer_number=waybill_offer_obj.manufacturer_number,
         price_rub=waybill_offer_obj.price_rub,
-        product_name=product.name,
-        image_url=product.image_url,
-        category_slug=product.sub_category.category_slug,
-        sub_category_slug=product.sub_category_slug,
-        category_name=product.sub_category.category_name,
-        sub_category_name=product.sub_category.name,
-        product_id=product.id,
     )
 
 

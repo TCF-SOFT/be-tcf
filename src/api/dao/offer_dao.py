@@ -16,7 +16,9 @@ class OfferDAO(BaseDAO):
     async def find_all_paginate(
         cls, db_session, filter_by: dict, order_by: str = None
     ) -> Page[OfferSchema]:
-        query = select(cls.model).filter_by(**filter_by)
+        # TODO: add order_by mapping for different fields
+        #  DB Name unification allows to use the same order_by `key:value` for different models
+        query = select(cls.model).filter_by(**filter_by).order_by(cls.model.id.desc())
         return await paginate(db_session, query)
 
     @classmethod
