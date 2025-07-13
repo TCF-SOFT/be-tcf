@@ -16,12 +16,18 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build and push Docker image
+    outputs:
+      TAG: ${{ steps.vars.outputs.TAG }}
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
           token: ${{ secrets.WORKFLOW_TOKEN }}
+
+    - name: Extract tag
+      id: vars
+      run: echo "TAG=${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -39,14 +45,14 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:latest
+        tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.TAG }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
     - name: Run Trivy vulnerability scan
       uses: aquasecurity/trivy-action@0.30.0
       with:
-        image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:latest
+        image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.TAG }}
         format: 'sarif'
         exit-code: 0  # let the pipeline continue even if issues are found
         severity: 'CRITICAL,HIGH'
@@ -81,4 +87,5 @@ jobs:
       run: |
         helm upgrade --install ${{ env.APP_NAME }} ./chart \
           --namespace dev \
-          --values chart/values.yaml
+          --values chart/values.yaml \
+          --set image.tag=${{ steps.vars.outputs.TAG }}
