@@ -1,0 +1,25 @@
+name: scan:repo:trivy
+on: [ push, pull_request ]
+
+permissions:
+  actions: read
+  security-events: write
+
+jobs:
+  ruff:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan repo for vulnerabilities
+        uses: aquasecurity/trivy-action@0.32.0
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
