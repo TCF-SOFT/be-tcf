@@ -6,7 +6,7 @@ permissions:
   security-events: write
 
 jobs:
-  ruff:
+  trivy:
     runs-on: ubuntu-latest
     steps:
       - name: Scan repo for vulnerabilities
