@@ -1,5 +1,9 @@
 name: deploy
 
+permissions:
+  contents: read
+  security-events: write
+
 on:
   push:
     tags:
