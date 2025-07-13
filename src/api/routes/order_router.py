@@ -11,6 +11,7 @@ from src.api.di.db_helper import db_helper
 from src.api.services.order_service import OrderService
 from src.models import Product
 from src.schemas.common.enums import OrderStatus
+from src.schemas.offer_schema import OfferSchema
 from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
 from src.schemas.order_schema import OrderPatchSchema, OrderPostSchema, OrderSchema
 
@@ -132,19 +133,12 @@ async def add_offer_to_order(
     return OrderOfferSchema(
         id=order_offer_obj.id,
         order_id=order_id,
-        address_id=offer.address_id,
         offer_id=offer.id,
+        offer=OfferSchema.model_validate(offer),
         quantity=order_offer_obj.quantity,
         brand=order_offer_obj.brand,
         manufacturer_number=order_offer_obj.manufacturer_number,
         price_rub=order_offer_obj.price_rub,
-        product_name=product.name,
-        image_url=product.image_url,
-        category_slug=product.sub_category.category_slug,
-        sub_category_slug=product.sub_category_slug,
-        category_name=product.sub_category.category_name,
-        sub_category_name=product.sub_category.name,
-        product_id=product.id,
     )
 
 

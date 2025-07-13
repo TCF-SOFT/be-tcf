@@ -2,6 +2,8 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.schemas.offer_schema import OfferSchema
+
 
 class _OrderOfferBaseSchema(BaseModel):
     offer_id: UUID
@@ -16,14 +18,7 @@ class _OrderOfferBaseSchema(BaseModel):
 class OrderOfferSchema(_OrderOfferBaseSchema):
     id: UUID
     order_id: UUID
-    product_name: str
-    address_id: str | None = Field(None, examples=["AA-TEST"])
-    image_url: str | None
-    category_slug: str = Field(..., examples=["svechi-ford"])
-    category_name: str = Field(..., examples=["Свечи"])
-    sub_category_slug: str = Field(..., examples=["svechi-zazhiganiia"])
-    sub_category_name: str = Field(..., examples=["Свечи зажигания"])
-    product_id: UUID
+    offer: OfferSchema
 
 
 class OrderOfferPostSchema(_OrderOfferBaseSchema):

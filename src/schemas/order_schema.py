@@ -3,10 +3,10 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from schemas.address_schema import AddressSchema
-from schemas.order_offer_schema import OrderOfferSchema
-from schemas.user_schema import UserRead
+from src.schemas.address_schema import AddressSchema
 from src.schemas.common.enums import OrderStatus
+from src.schemas.order_offer_schema import OrderOfferSchema
+from src.schemas.user_schema import UserRead
 
 
 class _OrderBase(BaseModel):

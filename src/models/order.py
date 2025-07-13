@@ -37,4 +37,4 @@ class Order(Base):
 
     @property
     def total_sum(self) -> float:
-        return sum([offer.price_rub for offer in self.order_offers])
+        return sum([offer.price_rub * offer.quantity for offer in self.order_offers])

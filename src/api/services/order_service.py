@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.order_offer_dao import OrderOfferDAO
 from src.models import Offer, OrderOffer
+from src.schemas.offer_schema import OfferSchema
 from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
 
 
@@ -54,13 +55,7 @@ class OrderService:
                         "brand": offer.brand,
                         "manufacturer_number": offer.manufacturer_number,
                         "price_rub": item.price_rub,
-                        "product_name": offer.product_name,
-                        "image_url": offer.image_url,
-                        "category_slug": offer.category_slug,
-                        "category_name": offer.category_name,
-                        "sub_category_slug": offer.sub_category_slug,
-                        "sub_category_name": offer.sub_category_name,
-                        "product_id": offer.product_id,
+                        "offer": OfferSchema.model_validate(offer),
                     }
                 )
             )

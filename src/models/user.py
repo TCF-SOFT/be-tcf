@@ -70,17 +70,19 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     shipping_company: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
+    # TODO: `select` is used due to AUTH strategy with DB
+    #  Change to JWT strategy allow to use `selectin` for 1:N relationships
     waybills: Mapped[list["Waybill"]] = relationship(
-        "Waybill", back_populates="user", lazy="selectin"
+        "Waybill", back_populates="user", lazy="select"
     )
     addresses: Mapped[list["Address"]] = relationship(
-        "Address", back_populates="user", lazy="selectin"
+        "Address", back_populates="user", lazy="select"
     )
     orders: Mapped[list["Order"]] = relationship(
-        "Order", back_populates="user", lazy="selectin"
+        "Order", back_populates="user", lazy="select"
     )
     carts: Mapped[list["Cart"]] = relationship(
-        "Cart", back_populates="user", lazy="selectin"
+        "Cart", back_populates="user", lazy="select"
     )
 
     @classmethod
