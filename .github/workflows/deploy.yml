@@ -84,8 +84,10 @@ jobs:
       run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
 
     - name: Deploy with Helm
+      env:
+        IMAGE_TAG: ${{ needs.build.outputs.TAG }}
       run: |
         helm upgrade --install ${{ env.APP_NAME }} ./chart \
           --namespace dev \
           --values chart/values.yaml \
-          --set image.tag=${{ steps.vars.outputs.TAG }}
+          --set image.tag="$IMAGE_TAG"
