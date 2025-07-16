@@ -101,7 +101,7 @@ class AuthConfig(BaseModel):
     RESET_PASSWORD_TOKEN_SECRET: str = env.str("RESET_PASSWORD_TOKEN_SECRET")
     VERIFICATION_TOKEN_SECRET: str = env.str("VERIFICATION_TOKEN_SECRET")
     CLERK_SECRET_KEY: str = env.str("CLERK_SECRET_KEY")
-    authorized_parties: list[str] = env.list("AUTHORIZED_PARTIES")
+    AUTHORIZED_PARTIES: list[str] = ['http://localhost:3000, https://tcf.eucalytics.uk']
 
     # AUTHENTIK_CLIENT_ID: str = env.str("AUTHENTIK_CLIENT_ID")
     # AUTHENTIK_CLIENT_SECRET: str = env.str("AUTHENTIK_CLIENT_SECRET")
