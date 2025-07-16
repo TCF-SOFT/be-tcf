@@ -12,7 +12,7 @@ from src.api.controllers.update_entity_controller import (
 )
 from src.api.dao.offer_dao import OfferDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.fastapi_users_router import require_employee
+from src.api.routes.clerk import require_clerk_session
 from src.schemas.offer_schema import OfferPatchSchema, OfferPostSchema, OfferSchema
 
 router = APIRouter(tags=["Offers"], prefix="/offers")
@@ -106,7 +106,7 @@ async def full_text_search_offers(
     response_model=OfferSchema,
     summary="Create new offer",
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def post_offer(
     payload: OfferPostSchema,
@@ -125,7 +125,7 @@ async def post_offer(
     response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def patch_offer(
     offer_id: UUID,
@@ -141,7 +141,7 @@ async def patch_offer(
     "/{offer_id}",
     summary="Delete offer by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def delete_offer(
     offer_id: UUID,

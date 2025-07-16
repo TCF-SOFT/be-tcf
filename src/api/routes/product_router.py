@@ -12,7 +12,7 @@ from src.api.controllers.update_entity_controller import (
 from src.api.dao.product_dao import ProductDAO
 from src.api.dao.sub_category_dao import SubCategoryDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.fastapi_users_router import require_employee
+from src.api.routes.clerk import require_clerk_session
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 from src.schemas.product_schema import (
@@ -129,7 +129,7 @@ async def full_text_search_products(
     response_model=ProductSchema,
     summary="Create new product",
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def post_product(
     payload: Annotated[ProductPostSchema, Depends(ProductPostSchema.as_form)],
@@ -153,7 +153,7 @@ async def post_product(
     response_model=ProductSchema,
     summary="Update product by id",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def patch_product(
     product_id: UUID,
@@ -177,7 +177,7 @@ async def patch_product(
     "/{product_id}",
     summary="Delete product by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def delete_product(
     product_id: UUID,

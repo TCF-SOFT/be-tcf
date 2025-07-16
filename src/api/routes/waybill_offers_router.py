@@ -5,12 +5,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.fastapi_users_router import require_employee
+from src.api.routes.clerk import require_clerk_session
 
 router = APIRouter(
     tags=["Waybill-Offers"],
     prefix="/waybill-offers",
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 
 

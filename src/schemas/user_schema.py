@@ -8,6 +8,7 @@ from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 
 class _BaseUser(BaseModel):
+    clerk_id: str | None
     first_name: str = Field(..., examples=["Vasilii"])
     last_name: str = Field(..., examples=["Pinov"])
     role: Role = Field("USER", examples=[Role.EMPLOYEE])

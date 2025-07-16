@@ -68,7 +68,7 @@ async def post_address(
     response_model=AddressSchema,
     summary="Update address by id",
     status_code=status.HTTP_200_OK,
-    # dependencies=[Depends(require_employee)],
+    # dependencies=[Depends(require_clerk_session)],
 )
 async def patch_address(
     address_id: UUID,
@@ -84,7 +84,7 @@ async def patch_address(
     "/{address_id}",
     summary="Delete address by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    # dependencies=[Depends(require_employee)],
+    # dependencies=[Depends(require_clerk_session)],
 )
 async def delete_address(
     address_id: UUID,

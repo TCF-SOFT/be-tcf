@@ -113,6 +113,7 @@ class BaseDAO:
             return res.scalar_one_or_none()
 
         except IntegrityError as e:
+            logger.error("IntegrityError: %s", e)
             name_value = values.get("name", "N/A")
             raise DuplicateNameError(name=name_value) from e
 

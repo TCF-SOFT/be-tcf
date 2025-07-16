@@ -13,7 +13,7 @@ from src.api.controllers.update_entity_controller import (
 from src.api.dao.category_dao import CategoryDAO
 from src.api.dao.sub_category_dao import SubCategoryDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.fastapi_users_router import require_employee
+from src.api.routes.clerk import require_clerk_session
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 from src.schemas.category_schema import CategorySchema
@@ -95,7 +95,7 @@ async def get_sub_category_by_slug(
     "",
     response_model=SubCategorySchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def post_sub_category(
     payload: Annotated[SubCategoryPostSchema, Depends(SubCategoryPostSchema.as_form)],
@@ -119,7 +119,7 @@ async def post_sub_category(
     response_model=SubCategorySchema,
     summary="Update a sub_category by id",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def patch_sub_category(
     sub_category_id: UUID,
@@ -143,7 +143,7 @@ async def patch_sub_category(
     "/{sub_category_id}",
     summary="Delete sub_category by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def delete_sub_category(
     sub_category_id: UUID,

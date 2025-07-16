@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends
 from fastapi.security import HTTPBearer
 
 from .address_router import router as address_router
-from .auth_router import router as auth_router
 from .category_router import router as category_router
 from .document_router import router as pricing_router
 from .health_check_router import router as health_check_router
@@ -21,7 +20,6 @@ http_bearer = HTTPBearer(auto_error=False)
 router = APIRouter(dependencies=[Depends(http_bearer)])
 
 # Include all routers
-router.include_router(auth_router)
 router.include_router(user_router)
 router.include_router(category_router)
 router.include_router(sub_category_router)
