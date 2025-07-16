@@ -1,7 +1,6 @@
 __all__ = (
     "Base",
     "User",
-    "AccessToken",
     "Category",
     "SubCategory",
     "Product",
@@ -16,7 +15,6 @@ __all__ = (
     "OrderOffer",
 )
 
-from .access_token import AccessToken
 from .address import Address
 from .base import Base
 from .cart import Cart

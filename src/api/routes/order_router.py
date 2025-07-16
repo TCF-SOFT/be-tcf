@@ -147,7 +147,7 @@ async def add_offer_to_order(
     response_model=OrderSchema,
     summary="Update order by id",
     status_code=status.HTTP_200_OK,
-    # dependencies=[Depends(require_employee)],
+    # dependencies=[Depends(require_clerk_session)],
 )
 async def patch_order(
     order_id: UUID,
@@ -163,7 +163,7 @@ async def patch_order(
     "/{order_id}",
     summary="Delete order by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    # dependencies=[Depends(require_employee)],
+    # dependencies=[Depends(require_clerk_session)],
 )
 async def delete_order(
     order_id: UUID,

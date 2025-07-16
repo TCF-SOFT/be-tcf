@@ -11,7 +11,7 @@ from src.api.controllers.update_entity_controller import (
 )
 from src.api.dao.category_dao import CategoryDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.fastapi_users_router import require_employee
+from src.api.routes.clerk import require_clerk_session
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 from src.schemas.category_schema import (
@@ -78,7 +78,7 @@ async def get_category_by_id(
     response_model=CategorySchema,
     summary="Create a new category",
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def post_category(
     payload: Annotated[CategoryPostSchema, Depends(CategoryPostSchema.as_form)],
@@ -101,7 +101,7 @@ async def post_category(
     response_model=CategorySchema,
     status_code=status.HTTP_200_OK,
     summary="Selective update category by id",
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def patch_category(
     category_id: UUID,
@@ -125,7 +125,7 @@ async def patch_category(
     "/{category_id}",
     summary="Delete a category by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_employee)],
+    dependencies=[Depends(require_clerk_session)],
 )
 async def delete_category(
     category_id: UUID,

@@ -6,22 +6,18 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
+from src.api.dao.user_dao import UserDAO
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.fastapi_users_router import (
-    current_active_user,
-    require_employee,
-)
+from src.api.routes.clerk import require_clerk_session
 from src.api.services.waybill_service import WaybillService
-from src.models import Product, Waybill
+from src.models import Product, User, Waybill
 from src.schemas.common.enums import WaybillType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
 
-router = APIRouter(
-    tags=["Waybills"], prefix="/waybills", dependencies=[Depends(require_employee)]
-)
+router = APIRouter(tags=["Waybills"], prefix="/waybills")
 
 
 @router.get(
@@ -33,15 +29,13 @@ async def get_waybills(
     db_session: AsyncSession = Depends(db_helper.session_getter),
     waybill_type: WaybillType | None = None,
     is_pending: bool | None = None,
-    user_id: UUID | None = None,
     search_term: str = "",
+    session=Depends(require_clerk_session),
 ):
     """
     Get waybills by type and user ID
     """
     filters = {}
-    if user_id:
-        filters["user_id"] = user_id
     if waybill_type:
         filters["waybill_type"] = waybill_type
     if is_pending is not None:
@@ -136,8 +130,15 @@ async def create_waybill(
 async def commit_waybill(
     waybill_id: UUID,
     db_session: AsyncSession = Depends(db_helper.session_getter),
-    user=Depends(current_active_user),
+    session=Depends(require_clerk_session),
 ):
+    user: User | None = await UserDAO.find_by_clerk_id(
+        db_session, session.payload["sub"]
+    )
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     return await WaybillService.commit(db_session, waybill_id, user.id)
 
 

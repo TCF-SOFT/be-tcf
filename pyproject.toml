@@ -43,6 +43,7 @@ dependencies = [
     "python-docx>=1.1.2",
     "pydantic-extra-types>=2.10.5",
     "phonenumbers>=9.0.8",
+    "clerk-backend-api>=3.0.5",
 ]
 
 

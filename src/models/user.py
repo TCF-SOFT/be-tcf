@@ -1,9 +1,5 @@
 from typing import TYPE_CHECKING
 
-from fastapi_users_db_sqlalchemy import (
-    SQLAlchemyBaseUserTableUUID,
-    SQLAlchemyUserDatabase,
-)
 from sqlalchemy import (
     Boolean,
     String,
@@ -17,19 +13,17 @@ from src.models.base import Base, str_uniq, uuid_pk
 from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 if TYPE_CHECKING:
-    # Do not import, just use type with `session: "AsyncSession"`
-    from sqlalchemy.ext.asyncio import AsyncSession
-
     from src.models.address import Address
     from src.models.cart import Cart
     from src.models.order import Order
     from src.models.waybill import Waybill
 
 
-class User(Base, SQLAlchemyBaseUserTableUUID):
+class User(Base):
     __tablename__ = "users"
 
     id: Mapped[uuid_pk]
+    clerk_id: Mapped[str] = mapped_column(String, nullable=True, unique=True)
     email: Mapped[str_uniq]
     hashed_password: Mapped[str] = mapped_column(String, nullable=False)
 
@@ -70,8 +64,6 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     shipping_company: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
-    # TODO: `select` is used due to AUTH strategy with DB
-    #  Change to JWT strategy allow to use `selectin` for 1:N relationships
     waybills: Mapped[list["Waybill"]] = relationship(
         "Waybill", back_populates="user", lazy="select"
     )
@@ -84,10 +76,3 @@ class User(Base, SQLAlchemyBaseUserTableUUID):
     carts: Mapped[list["Cart"]] = relationship(
         "Cart", back_populates="user", lazy="select"
     )
-
-    @classmethod
-    def get_db(cls, session: "AsyncSession"):
-        """
-        Database Adapter
-        """
-        return SQLAlchemyUserDatabase(session, cls)
