@@ -1,0 +1,49 @@
+namespace: dev
+app: be-tcf
+host: api-dev-tcf.eucalytics.uk
+
+datadog:
+  env: dev
+  service: be-tcf
+
+deployment:
+  name: be-tcf-deployment
+  replicas: 1
+
+image:
+  repository: ghcr.io/utikpuhlik/be-tcf
+  pullPolicy: Always
+  tag: latest
+
+service:
+  type: ClusterIP
+  name: be-tcf-svc
+  port: 8080
+
+resources:
+  requests:
+    memory: '384Mi'
+    cpu: '100m'
+  limits:
+    memory: '512Mi'
+    cpu: '200m'
+
+secrets:
+  api_utils: api-utils-secret
+  app_secrets: be-tcf-secret
+
+imagePullSecrets:
+  name: ghcr-secret
+
+ingress:
+  enabled: true
+  name: be-tcf-ingressroute
+  className: traefik
+  host: api-dev-tcf.eucalytics.uk
+  annotations: { }
+
+
+certificate:
+  name: be-tcf-ingressroute-certificate
+  secretName: be-tcf-tls-secret
+  clusterIssuer: cloudflare-clusterissuer

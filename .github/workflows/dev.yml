@@ -1,0 +1,186 @@
+name: dev-deploy
+
+permissions:
+  contents: read
+  security-events: write
+
+on: [ push, pull_request ]
+
+env:
+ APP_NAME: "be-tcf"
+ NAMESPACE: "dev"
+
+jobs:
+  ruff:
+    name: "Ruff linting and formatting"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3.4.0
+        with:
+          src: "./src"
+
+  trivy:
+    name: "Trivy scan"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Scan repo for vulnerabilities
+        uses: aquasecurity/trivy-action@0.32.0
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  tests:
+    name: "tests"
+    runs-on: ubuntu-latest
+    needs:
+      - trivy
+
+    services:
+      postgres:
+        image: postgres:17.5-bookworm
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U test_user"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+      redis:
+        image: bitnami/redis:8.0.2
+        env:
+          ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 6379:6379
+
+      mailhog:
+        image: mailhog/mailhog:v1.0.1
+        ports:
+          - 1025:1025
+          - 8025:8025
+
+      minio:
+        image: bitnami/minio:2025.5.24-debian-12-r7
+        env:
+          MINIO_ROOT_USER: test_access_key
+          MINIO_ROOT_PASSWORD: test_secret_key
+          MINIO_DEFAULT_BUCKETS: "assets-test"
+        ports:
+          - 9000:9000          # API
+          - 9001:9001          # (opt) web-console
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6.3.1
+
+      - name: "Set up Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: "pyproject.toml"
+
+      - name: Install dependencies
+        run: |
+          uv sync
+
+      - name: Run tests
+        run: |
+          uv run pytest
+          
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build and push Docker image
+    needs:
+      - tests
+    outputs:
+      COMMIT_SHA: ${{ steps.vars.outputs.COMMIT_SHA }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.WORKFLOW_TOKEN }}
+
+      - name: Extract commit hash
+        id: vars
+        run: echo "COMMIT_SHA=${GITHUB_SHA:0:8}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.GHCR_USERNAME }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.COMMIT_SHA }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Run Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.COMMIT_SHA }}
+          format: 'sarif'
+          exit-code: 0 # Do not fail the build on vulnerabilities
+          severity: 'CRITICAL,HIGH'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs:
+      - build
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Create kubeconfig directory
+        run: |
+          mkdir -p $HOME/.kube
+
+      - name: Set up Kubeconfig
+        run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
+
+      - name: Deploy with Helm
+        env:
+          IMAGE_TAG: ${{ needs.build.outputs.TAG }}
+        run: |
+          helm upgrade --install ${{ env.APP_NAME }} ./chart \
+            --namespace ${{ env.NAMESPACE }} \
+            --values chart/values-${{ env.NAMESPACE }}.yaml \
+            --set image.tag="$COMMIT_SHA" \
+            --set deployment.annotations."deployment\.kubernetes\.io/revision"="$(date +%s)" \
+            --force

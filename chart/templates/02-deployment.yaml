@@ -52,7 +52,7 @@ spec:
           - secretRef:
               name: {{ .Values.secrets.api_utils }}
           - secretRef:
-              name: {{ .Values.secrets.home_bar }}
+              name: {{ .Values.secrets.app_secrets }}
 
       imagePullSecrets:
       - name: {{ .Values.imagePullSecrets.name }}

@@ -1,18 +1,14 @@
-# Default values for chart.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-namespace: dev
+namespace: prod
 app: be-tcf
 host: api-tcf.eucalytics.uk
 
 datadog:
-  env: dev
+  env: prod
   service: be-tcf
 
 deployment:
   name: be-tcf-deployment
-  replicas: 1
+  replicas: 2
 
 image:
   repository: ghcr.io/utikpuhlik/be-tcf
@@ -33,9 +29,8 @@ resources:
     cpu: '200m'
 
 secrets:
-#  aws: aws-secret
   api_utils: api-utils-secret
-  home_bar: be-tcf-secret
+  app_secrets: be-tcf-secret
 
 imagePullSecrets:
   name: ghcr-secret
@@ -52,21 +47,3 @@ certificate:
   name: be-tcf-ingressroute-certificate
   secretName: be-tcf-tls-secret
   clusterIssuer: cloudflare-clusterissuer
-
-replicaCount: 1
-
-#livenessProbe:
-#  httpGet:
-#    path: /
-#    port: http
-#readinessProbe:
-#  httpGet:
-#    path: /
-#    port: http
-
-# autoscaling:
-#   enabled: false
-#   minReplicas: 1
-#   maxReplicas: 5
-#   targetCPUUtilizationPercentage: 50
-  # targetMemoryUtilizationPercentage: 80

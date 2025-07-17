@@ -56,7 +56,7 @@ async def lifespan(app: FastAPI):
             profile_lifecycle="trace",
             integrations=[FastApiIntegration()],
             release=await get_microservice_version(),
-            environment=settings.MODE,
+            environment=settings.ServerConfig.ENV,
         )
 
     # Resources initialization

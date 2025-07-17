@@ -13,7 +13,7 @@ spec:
       kind: Rule
       middlewares:
         - name: default-headers
-          namespace: dev
+          namespace: {{ .Values.namespace }}
       services:
         - name: {{ .Values.service.name }}
           port: {{ .Values.service.port }}

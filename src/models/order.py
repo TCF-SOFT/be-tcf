@@ -9,7 +9,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.models import Base
 from src.models.base import uuid_pk
-from src.schemas.common.enums import OrderStatus
 
 if TYPE_CHECKING:
     from src.models.address import Address
@@ -23,7 +22,7 @@ class Order(Base):
     id: Mapped[uuid_pk]
     user_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
     address_id: Mapped[UUID] = mapped_column(ForeignKey("addresses.id"), nullable=False)
-    status: Mapped[OrderStatus]
+    status: Mapped[str] = mapped_column(String(20), nullable=False)  # OrderStatus Enum
     note: Mapped[str] = mapped_column(String, nullable=True)
 
     # Relationships
