@@ -4,7 +4,10 @@ permissions:
   contents: read
   security-events: write
 
-on: [ push, pull_request ]
+on:
+  push:
+    tags-ignore: [ 'v*.*.*' ]
+  pull_request:
 
 env:
  APP_NAME: "be-tcf"
