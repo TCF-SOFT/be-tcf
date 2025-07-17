@@ -4,12 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.auth.clerk import require_clerk_session
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.user_dao import UserDAO
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.clerk import require_clerk_session
 from src.api.services.waybill_service import WaybillService
 from src.models import Product, User, Waybill
 from src.schemas.common.enums import WaybillType
@@ -17,7 +17,11 @@ from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
 
-router = APIRouter(tags=["Waybills"], prefix="/waybills")
+router = APIRouter(
+    tags=["Waybills"],
+    prefix="/waybills",
+    dependencies=[Depends(require_clerk_session)],
+)
 
 
 @router.get(
@@ -30,7 +34,6 @@ async def get_waybills(
     waybill_type: WaybillType | None = None,
     is_pending: bool | None = None,
     search_term: str = "",
-    session=Depends(require_clerk_session),
 ):
     """
     Get waybills by type and user ID

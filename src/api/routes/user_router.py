@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.auth.clerk import require_clerk_session
 from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.user_dao import UserDAO
 from src.api.di.db_helper import db_helper
@@ -10,7 +11,11 @@ from src.schemas.common.enums import Role
 from src.schemas.user_schema import UserRead, UserUpdate
 
 # Create the router
-router = APIRouter(tags=["Users"], prefix="/users")
+router = APIRouter(
+    tags=["Users"],
+    prefix="/users",
+    dependencies=[Depends(require_clerk_session)],
+)
 
 
 @router.get(

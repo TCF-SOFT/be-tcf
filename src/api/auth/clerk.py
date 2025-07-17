@@ -24,7 +24,7 @@ async def require_clerk_session(request: Request) -> RequestState:
     # это защищает от токенов, выписанных для других доменов.
     state = clerk.authenticate_request(
         hx_request,
-        AuthenticateRequestOptions(authorized_parties=settings.AUTH.authorized_parties),
+        AuthenticateRequestOptions(authorized_parties=settings.AUTH.AUTHORIZED_PARTIES),
     )
 
     if not state.is_signed_in:

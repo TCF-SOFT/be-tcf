@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from httpx import AsyncClient
-from src.utils.logging import logger
 
 
 class TestSubCategoryRoutes:

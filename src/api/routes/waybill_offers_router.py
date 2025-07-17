@@ -3,9 +3,9 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.auth.clerk import require_clerk_session
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.clerk import require_clerk_session
 
 router = APIRouter(
     tags=["Waybill-Offers"],

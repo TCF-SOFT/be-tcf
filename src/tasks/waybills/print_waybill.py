@@ -74,7 +74,7 @@ def create_document(
 
     widths1 = [Cm(2.0), Cm(14.0)]
     table1_data = [
-        ("ФИО:", waybill.author or "Не указано"),
+        ("ФИО:", waybill.user.first_name),
         ("Телефон:", "Не указан"),
         ("Город:", "Не указан"),
         ("Доставка:", "Самовывоз"),
@@ -120,8 +120,10 @@ def create_document(
     for i, offer in enumerate(offers):
         row = table2.rows[i + 1].cells
         row[0].text = str(i + 1)
-        row[1].paragraphs[0].add_run(offer.category_name).font.size = Pt(7)
-        row[2].paragraphs[0].add_run(offer.product_name).font.size = Pt(7.5)
+        row[1].paragraphs[0].add_run(
+            offer.offer.product.sub_category.category.name
+        ).font.size = Pt(7)
+        row[2].paragraphs[0].add_run(offer.offer.product.name).font.size = Pt(7.5)
         row[3].paragraphs[0].add_run(offer.brand).font.size = Pt(7.5)
         row[4].paragraphs[0].add_run(offer.manufacturer_number).font.size = Pt(7.5)
         row[5].paragraphs[0].add_run(f"{offer.price_rub:.0f} руб.").font.size = Pt(7.5)

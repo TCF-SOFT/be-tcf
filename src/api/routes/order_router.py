@@ -3,6 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.auth.clerk import require_clerk_session
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.offer_dao import OfferDAO
@@ -20,7 +21,11 @@ from src.schemas.order_schema import OrderPatchSchema, OrderPostSchema, OrderSch
 # 2. Add offers to the cart
 # 3. Create an order from the cart with order_offers for cart_offers
 # 4. Flush the cart and cart items
-router = APIRouter(tags=["Orders"], prefix="/orders")
+router = APIRouter(
+    tags=["Orders"],
+    prefix="/orders",
+    dependencies=[Depends(require_clerk_session)],
+)
 
 
 @router.get(

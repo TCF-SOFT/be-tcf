@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.auth.clerk import require_clerk_session
 from src.api.controllers.create_entity_controller import (
     create_entity,
 )
@@ -12,7 +13,6 @@ from src.api.controllers.update_entity_controller import (
 )
 from src.api.dao.offer_dao import OfferDAO
 from src.api.di.db_helper import db_helper
-from src.api.routes.clerk import require_clerk_session
 from src.schemas.offer_schema import OfferPatchSchema, OfferPostSchema, OfferSchema
 
 router = APIRouter(tags=["Offers"], prefix="/offers")
