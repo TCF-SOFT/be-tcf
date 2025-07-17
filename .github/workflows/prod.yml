@@ -7,13 +7,30 @@ permissions:
 on:
   push:
     tags:
-      - '*'
+      - 'v*.*.*'
 
 env:
  APP_NAME: "be-tcf"
  NAMESPACE: "prod"
 
 jobs:
+  extract-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.vars.outputs.tag }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set output
+        id: vars
+        run: echo "tag=${GITHUB_REF#refs/*/}" >> $GITHUB_OUTPUT
+      - name: Check output
+        env:
+          RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
+        run: |
+          echo $RELEASE_VERSION
+          echo ${{ steps.vars.outputs.tag }}
+
   ruff:
     name: "Ruff linting and formatting"
     runs-on: ubuntu-latest
@@ -105,20 +122,19 @@ jobs:
           uv run pytest
 
   build:
-    runs-on: ubuntu-latest
     name: Build and push Docker image
-    outputs:
-      TAG: ${{ steps.vars.outputs.TAG }}
+    runs-on: ubuntu-latest
+    needs:
+      - tests
+      - extract-tag
+    env:
+      IMAGE_TAG: ${{ needs.extract-tag.outputs.tag }}
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
           token: ${{ secrets.WORKFLOW_TOKEN }}
-
-    - name: Extract tag
-      id: vars
-      run: echo "TAG=${GITHUB_REF##*/}" >> "$GITHUB_OUTPUT"
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
@@ -136,14 +152,14 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.TAG }}
+        tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ env.IMAGE_TAG }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
     - name: Run Trivy vulnerability scan
       uses: aquasecurity/trivy-action@0.30.0
       with:
-        image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.TAG }}
+        image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ env.IMAGE_TAG }}
         format: 'sarif'
         exit-code: 1  # fail the job if issues are found
         severity: 'CRITICAL,HIGH'
@@ -155,10 +171,13 @@ jobs:
         sarif_file: 'trivy-results.sarif'
 
   deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
     needs:
       - build
-    runs-on: ubuntu-latest
-    name: Deploy to Kubernetes
+      - extract-tag
+    env:
+      IMAGE_TAG: ${{ needs.extract-tag.outputs.tag }}
 
     steps:
     - name: Checkout repository
@@ -175,8 +194,6 @@ jobs:
       run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
 
     - name: Deploy with Helm
-      env:
-        IMAGE_TAG: ${{ needs.build.outputs.TAG }}
       run: |
         helm upgrade --install ${{ env.APP_NAME }} ./chart \
           --namespace ${{ env.NAMESPACE }} \

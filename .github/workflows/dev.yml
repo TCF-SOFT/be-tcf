@@ -107,18 +107,12 @@ jobs:
     name: Build and push Docker image
     needs:
       - tests
-    outputs:
-      COMMIT_SHA: ${{ steps.vars.outputs.COMMIT_SHA }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.WORKFLOW_TOKEN }}
-
-      - name: Extract commit hash
-        id: vars
-        run: echo "COMMIT_SHA=${GITHUB_SHA:0:8}" >> "$GITHUB_OUTPUT"
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -136,14 +130,14 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.COMMIT_SHA }}
+          tags: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Run Trivy vulnerability scan
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ steps.vars.outputs.COMMIT_SHA }}
+          image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
           format: 'sarif'
           exit-code: 0 # Do not fail the build on vulnerabilities
           severity: 'CRITICAL,HIGH'
@@ -176,11 +170,11 @@ jobs:
 
       - name: Deploy with Helm
         env:
-          IMAGE_TAG: ${{ needs.build.outputs.TAG }}
+          IMAGE_TAG: ${{ github.sha }}
         run: |
           helm upgrade --install ${{ env.APP_NAME }} ./chart \
             --namespace ${{ env.NAMESPACE }} \
             --values chart/values-${{ env.NAMESPACE }}.yaml \
-            --set image.tag="$COMMIT_SHA" \
+            --set image.tag="$IMAGE_TAG" \
             --set deployment.annotations."deployment\.kubernetes\.io/revision"="$(date +%s)" \
             --force
