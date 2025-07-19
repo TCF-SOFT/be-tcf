@@ -36,6 +36,7 @@ class _BaseUser(BaseModel):
 
 class UserRead(schemas.BaseUser[uuid.UUID], _BaseUser):
     pass
+    # addresses: list[AddressSchema] = Field(default_factory=list)
 
 
 class UserCreate(schemas.BaseUserCreate, _BaseUser):

@@ -97,10 +97,8 @@ class AuthConfig(BaseModel):
     AUTHORIZED_PARTIES: list[str] = [
         "http://localhost:3000",
         "https://tcf.eucalytics.uk",
+        "https://tcf-dev.eucalytics.uk",
     ]
-
-    # AUTHENTIK_CLIENT_ID: str = env.str("AUTHENTIK_CLIENT_ID")
-    # AUTHENTIK_CLIENT_SECRET: str = env.str("AUTHENTIK_CLIENT_SECRET")
 
 
 class ServerConfig(BaseModel):

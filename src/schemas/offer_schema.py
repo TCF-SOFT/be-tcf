@@ -22,7 +22,6 @@ class _OfferBase(BaseModel):
     price_rub: float = Field(..., examples=[1000])
     super_wholesale_price_rub: float = Field(..., examples=[500])
 
-    quantity: int = Field(..., examples=[2])
     product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
@@ -31,6 +30,7 @@ class _OfferBase(BaseModel):
 class OfferSchema(_OfferBase):
     id: UUID
     offer_bitrix_id: str | None = Field(None, examples=["278495"])
+    quantity: int = Field(..., examples=[2])
     product: ProductSchema
     is_deleted: bool = Field(..., examples=[False])
 
