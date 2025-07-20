@@ -44,6 +44,7 @@ dependencies = [
     "pydantic-extra-types>=2.10.5",
     "phonenumbers>=9.0.8",
     "clerk-backend-api>=3.0.5",
+    "svix>=1.69.0",
 ]
 
 

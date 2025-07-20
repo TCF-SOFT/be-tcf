@@ -1,8 +1,6 @@
-import hashlib
-import hmac
-
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
+from svix import Webhook, exceptions
 
 from src.api.controllers.user_entity_controller import (
     create_user_entity,
@@ -10,22 +8,30 @@ from src.api.controllers.user_entity_controller import (
     update_user_entity,
 )
 from src.api.di.db_helper import db_helper
-from src.schemas.clerk_webhook_schema import ClerkWebhookSchema
 from src.config import settings
+from src.schemas.clerk_webhook_schema import ClerkWebhookSchema
 from src.utils.logging import logger
 
 
-def verify_clerk_signature(payload: bytes, signature: str, secret: str) -> bool:
+def verify_clerk_signature(
+    payload,
+    headers: dict[str, str],
+    secret: str,
+) -> bool:
     """
-    Hash-based Message Authentication Code (HMAC), is a cryptographic construction
-    that uses a secret key and a cryptographic hash function to verify
-    both the integrity and authenticity of a message
+    Hash-based Message Authentication Code (HMAC)
     """
-    expected_signature = hmac.new(
-        key=secret.encode(), msg=payload, digestmod=hashlib.sha256
-    ).hexdigest()
-
-    return hmac.compare_digest(expected_signature, signature)
+    wh = Webhook(secret)
+    try:
+        wh.verify(payload, headers)
+        return True
+    except (
+        exceptions.WebhookVerificationError,
+        exceptions.HTTPValidationError,
+        exceptions.HttpError,
+    ) as e:
+        logger.error("[Clerk | Webhook] Signature verification failed: %s", e)
+        return False
 
 
 router = APIRouter(prefix="/webhooks", tags=["Webhooks"])
@@ -40,14 +46,26 @@ async def clerk_webhook(
     request: Request,
     svix_signature: str = Header(
         None,
-        alias="Svix-Signature",
+        alias="svix-signature",
+    ),
+    svix_id: str = Header(
+        None,
+        alias="svix-id",
+    ),
+    svix_timestamp: str = Header(
+        None,
+        alias="svix-timestamp",
     ),
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     raw_body = await request.body()
-
+    headers = {
+        "svix-signature": svix_signature,
+        "svix-id": svix_id,
+        "svix-timestamp": svix_timestamp,
+    }
     if not verify_clerk_signature(
-        raw_body, svix_signature, settings.AUTH.CLERK_SIGNING_SECRET
+        raw_body, headers, settings.AUTH.CLERK_SIGNING_SECRET
     ):
         raise HTTPException(status_code=401, detail="Invalid Clerk signature")
 
