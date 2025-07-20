@@ -32,7 +32,7 @@ router = APIRouter(prefix="/webhooks", tags=["Webhooks"])
 
 
 @router.post(
-    "/clerk/webhook",
+    "/clerk",
     summary="Clerk Webhook Handler (user.created, user.deleted, user.updated)",
     status_code=200,
 )
