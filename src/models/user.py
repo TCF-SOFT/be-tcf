@@ -25,15 +25,11 @@ class User(Base):
     id: Mapped[uuid_pk]
     clerk_id: Mapped[str] = mapped_column(String, nullable=True, unique=True)
     email: Mapped[str_uniq]
-    hashed_password: Mapped[str] = mapped_column(String, nullable=False)
 
     first_name: Mapped[str] = mapped_column(String, nullable=False)
     last_name: Mapped[str] = mapped_column(String, nullable=False)
-    avatar_url: Mapped[str | None] = mapped_column(String, nullable=True)
 
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    is_superuser: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-    is_verified: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
 
     role: Mapped[Role] = mapped_column(
         SQLEnum(Role, native_enum=False),
@@ -42,7 +38,7 @@ class User(Base):
     )
 
     # --------------------------------------------------
-    #            Customer Only Fields
+    #      Customer Only Fields - Public Metadata
     # --------------------------------------------------
     customer_type: Mapped[CustomerType] = mapped_column(
         SQLEnum(CustomerType, native_enum=False),
@@ -51,7 +47,6 @@ class User(Base):
     )
 
     mailing: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-
     phone: Mapped[str | None] = mapped_column(String, nullable=True)
     city: Mapped[str | None] = mapped_column(String, nullable=True)
     notes: Mapped[str | None] = mapped_column(String, nullable=True)

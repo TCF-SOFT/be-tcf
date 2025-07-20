@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from src.schemas.address_schema import AddressSchema
 from src.schemas.common.enums import OrderStatus
 from src.schemas.order_offer_schema import OrderOfferSchema
-from src.schemas.user_schema import UserRead
+from src.schemas.user_schema import UserSchema
 
 
 class _OrderBase(BaseModel):
@@ -20,7 +20,7 @@ class _OrderBase(BaseModel):
 
 class OrderSchema(_OrderBase):
     id: UUID
-    user: UserRead
+    user: UserSchema
     address: AddressSchema
     order_offers: list[OrderOfferSchema]
     total_sum: float

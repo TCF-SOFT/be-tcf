@@ -8,7 +8,7 @@ from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.user_dao import UserDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.common.enums import Role
-from src.schemas.user_schema import UserRead, UserUpdate
+from src.schemas.user_schema import UserSchema, UserUpdate
 
 # Create the router
 router = APIRouter(
@@ -20,7 +20,7 @@ router = APIRouter(
 
 @router.get(
     "",
-    response_model=list[UserRead],
+    response_model=list[UserSchema],
     status_code=status.HTTP_200_OK,
     summary="Return all users or filter them",
 )
@@ -38,7 +38,7 @@ async def get_users(
 
 @router.get(
     "/{user_id}",
-    response_model=UserRead,
+    response_model=UserSchema,
     status_code=status.HTTP_200_OK,
     summary="Return a single user by id",
 )
@@ -51,7 +51,7 @@ async def get_user_by_id(
 
 @router.get(
     "/clerk/{clerk_id}",
-    response_model=UserRead,
+    response_model=UserSchema,
     status_code=status.HTTP_200_OK,
     summary="Return a single user by id",
 )
@@ -88,7 +88,7 @@ async def count_users(
 
 @router.patch(
     "/{user_id}",
-    response_model=UserRead,
+    response_model=UserSchema,
     status_code=status.HTTP_200_OK,
     summary="Selective update a user by id",
 )

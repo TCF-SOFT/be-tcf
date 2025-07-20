@@ -8,7 +8,7 @@ from pydantic import (
 )
 
 from schemas.common.enums import WaybillType
-from schemas.user_schema import UserRead
+from schemas.user_schema import UserSchema
 
 
 class _WaybillBaseSchema(BaseModel):
@@ -22,7 +22,7 @@ class _WaybillBaseSchema(BaseModel):
 
 class WaybillSchema(_WaybillBaseSchema):
     id: UUID
-    user: UserRead
+    user: UserSchema
 
     created_at: datetime
     updated_at: datetime
