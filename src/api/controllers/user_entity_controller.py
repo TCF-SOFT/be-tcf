@@ -3,11 +3,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.dao.user_dao import UserDAO
 from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 from src.schemas.user_schema import UserCreate
-from src.schemas.webhooks.clerk_webhook_schema import (
-    UserCreateWebhookSchema,
-    UserDeleteWebhookSchema,
-    UserUpdateWebhookSchema,
-)
+from src.schemas.webhooks.clerk_webhook_schema import UserWebhookSchema
+from src.schemas.webhooks.common import UserWebhookData
 from src.utils.logging import logger
 
 # ------------------------------ Disclaimer ------------------------------#
@@ -16,7 +13,7 @@ from src.utils.logging import logger
 
 
 async def create_user_entity(
-    payload: UserCreateWebhookSchema,
+    payload: UserWebhookSchema,
     db_session: AsyncSession,
 ) -> None:
     """
@@ -27,14 +24,14 @@ async def create_user_entity(
     3. Create a User instance with **kwargs
     """
 
-    user_data = payload.data
+    user_data: UserWebhookData = payload.data
 
     user_create = UserCreate(
-        clerk_id=user_data.id,
-        email=user_data.email_addresses[0].email_address,
+        clerk_id=user_data.clerk_id,
+        email=user_data.email,
         first_name=user_data.first_name,
         last_name=user_data.last_name,
-        is_active=~user_data.banned,
+        is_active=True,
         role=Role.USER,
         customer_type=CustomerType.USER_RETAIL,
         mailing=False,
@@ -45,17 +42,18 @@ async def create_user_entity(
         shipping_company=None,
     )
     logger.info(
-        "[Webhook | POST] Creating user %s", user_data.email_addresses[0].email_address
+        "[ClerkWebhook | POST] Creating user %s",
+        user_data.email_addresses[0].email_address,
     )
     await UserDAO.add(db_session, **user_create.model_dump())
     logger.info(
-        "[Webhook | POST] User %s is created",
+        "[ClerkWebhook | POST] User %s is created",
         user_data.email_addresses[0].email_address,
     )
 
 
 async def update_user_entity(
-    payload: UserUpdateWebhookSchema,
+    payload: UserWebhookSchema,
     db_session: AsyncSession,
 ) -> None:
     """
@@ -63,22 +61,30 @@ async def update_user_entity(
     """
     user_data = payload.data
     logger.info(
-        "[Webhook | PATCH] Updating user %s with id: %s",
-        user_data.id,
+        "[ClerkWebhook | PATCH] Updating user: %s",
+        user_data.clerk_id,
     )
     return await UserDAO.update(
-        db_session, {"clerk_id": user_data.id}, **user_data.model_dump()
+        db_session,
+        {"clerk_id": user_data.clerk_id},
+        **user_data.model_dump(
+            exclude={
+                "primary_email_address_id",
+                "primary_phone_number_id",
+                "email_addresses",
+                "phone_numbers",
+            }
+        ),
     )
 
 
 async def delete_user_entity(
-    payload: UserDeleteWebhookSchema,
+    payload: UserWebhookSchema,
     db_session: AsyncSession,
 ):
     user_data = payload.data
-    clerk_id = user_data.id
     logger.info(
-        "[Webhook | DELETE] Deleting user with id: %s",
-        clerk_id,
+        "[ClerkWebhook | DELETE] Deleting user: %s",
+        user_data.clerk_id,
     )
-    return await UserDAO.delete_by_clerk_id(db_session, clerk_id)
+    return await UserDAO.delete_by_clerk_id(db_session, user_data.clerk_id)

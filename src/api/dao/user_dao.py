@@ -28,7 +28,7 @@ class UserDAO(BaseDAO):
         """
         stmt = (
             sa_delete(cls.model)
-            .where(cls.model.id == clerk_id)
+            .where(cls.model.clerk_id == clerk_id)
             .returning(cls.model.clerk_id)  # ← return clerk_id of deleted row
         )
 

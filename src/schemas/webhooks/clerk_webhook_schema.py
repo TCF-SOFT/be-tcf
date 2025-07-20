@@ -40,7 +40,7 @@ class _WebhookSchema(BaseModel):
     """
 
     event_attributes: EventAttributes
-    instance_id: str
+    # instance_id: str
     object: str
     timestamp: float
     type: EventType
@@ -48,25 +48,11 @@ class _WebhookSchema(BaseModel):
     model_config = ConfigDict(validate_by_name=True)
 
 
-class UserCreateWebhookSchema(_WebhookSchema):
+class UserWebhookSchema(_WebhookSchema):
     """
     Schema for the user.created event in Clerk webhooks.
-    """
-
-    data: UserWebhookData
-
-
-class UserUpdateWebhookSchema(_WebhookSchema):
-    """
     Schema for the user.updated event in Clerk webhooks.
-    """
-
-    data: UserWebhookData
-
-
-class UserDeleteWebhookSchema(_WebhookSchema):
-    """
     Schema for the user.deleted event in Clerk webhooks.
     """
 
-    data: DeleteUserWebhookData
+    data: UserWebhookData | DeleteUserWebhookData

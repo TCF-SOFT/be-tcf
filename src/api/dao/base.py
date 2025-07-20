@@ -7,8 +7,8 @@ from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from common.exceptions.exceptions import DuplicateNameError
-from utils.logging import logger
+from src.common.exceptions.exceptions import DuplicateNameError
+from src.utils.logging import logger
 
 
 class BaseDAO:

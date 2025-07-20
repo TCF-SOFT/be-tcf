@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, computed_field
 
 from src.schemas.common.enums import Role
 
@@ -15,15 +15,15 @@ class EmailAddress(BaseModel):
     Represents the structure of an email address in Clerk webhook events.
     """
 
-    created_at: int
+    # created_at: int
     email_address: str
     id: str
-    linked_to: list[str]
-    matches_sso_connection: bool
+    # linked_to: list[str]
+    # matches_sso_connection: bool
     object: str
-    reserved: bool
-    updated_at: int
-    verification: Verification
+    # reserved: bool
+    # updated_at: int
+    # verification: Verification
 
 
 class PublicMetadata(BaseModel):
@@ -31,7 +31,7 @@ class PublicMetadata(BaseModel):
     Represents the public metadata structure for Clerk webhook events.
     """
 
-    role: Role
+    role: Role = Role.USER
 
 
 class UserWebhookData(BaseModel):
@@ -39,42 +39,38 @@ class UserWebhookData(BaseModel):
     Represents the data structure for a user creation event in Clerk webhook events.
     """
 
-    backup_code_enabled: bool
-    banned: bool
-    create_organization_enabled: bool
-    created_at: int
-    delete_self_enabled: bool
     email_addresses: list[EmailAddress]
-    enterprise_accounts: list[dict]
-    external_accounts: list[dict]
-    external_id: str | None
+
     first_name: str
-    has_image: bool
-    id: str
-    image_url: str
-    last_active_at: int
+    clerk_id: str = Field(..., alias="id")
+    # image_url: str | None
+    # last_active_at: int
     last_name: str
-    last_sign_in_at: int | None
-    legal_accepted_at: int | None
-    locked: bool
-    lockout_expires_in_seconds: int | None
-    mfa_disabled_at: int | None
-    mfa_enabled_at: int | None
-    object: str
-    passkeys: list[dict]
-    password_enabled: bool
     phone_numbers: list[dict]
     primary_email_address_id: str
     primary_phone_number_id: str | None
-    primary_web3_wallet_id: str | None
-    private_metadata: dict
-    profile_image_url: str
-    public_metadata: PublicMetadata
-    saml_accounts: list[dict]
-    totp_enabled: bool
-    two_factor_enabled: bool
-    unsafe_metadata: dict
-    updated_at: int
-    username: str | None
-    verification_attempts_remaining: int
-    web3_wallets: list[dict]
+
+    @computed_field
+    @property
+    def email(self) -> str:
+        """
+        Returns the primary email address of the user.
+        """
+        primary_email = None
+        for email in self.email_addresses:
+            if email.id == self.primary_email_address_id:
+                primary_email = email.email_address
+                break
+
+        return primary_email
+
+    @computed_field
+    def phone(self) -> str | None:
+        """
+        Returns the primary phone number of the user.
+        """
+        if len(self.phone_numbers) > 0 and self.primary_phone_number_id:
+            for phone in self.phone_numbers:
+                if phone.id == self.primary_phone_number_id:
+                    return phone.get("phone_number", None)
+        return None
