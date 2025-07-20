@@ -9,7 +9,11 @@ from src.api.controllers.user_entity_controller import (
 )
 from src.api.di.db_helper import db_helper
 from src.config import settings
-from src.schemas.webhooks.clerk_webhook_schema import UserCreateWebhookSchema
+from src.schemas.webhooks.clerk_webhook_schema import (
+    UserCreateWebhookSchema,
+    UserDeleteWebhookSchema,
+    UserUpdateWebhookSchema,
+)
 from src.utils.logging import logger
 
 
@@ -69,8 +73,8 @@ async def clerk_webhook(
     ):
         raise HTTPException(status_code=401, detail="Invalid Clerk signature")
 
-    payload: UserCreateWebhookSchema = await request.json()
-    logger.warning("[Clerk | Webhook] Event %s is caught", payload.type)
+    payload: UserCreateWebhookSchema | UserDeleteWebhookSchema | UserUpdateWebhookSchema = await request.json()
+    logger.warning("[Clerk | Webhook] Event %s is caught", payload)
 
     if payload.type == "user.created":
         await create_user_entity(payload, db_session)
