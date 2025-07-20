@@ -38,7 +38,7 @@ async def create_user_entity(
         phone=None,
         city=None,
         notes=None,
-        shipping_method=ShippingMethod.OTHER,
+        shipping_method=None,
         shipping_company=None,
     )
     logger.info(

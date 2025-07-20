@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.controllers.update_entity_controller import update_entity
 from src.api.auth.clerk import require_clerk_session
 from src.api.controllers.create_entity_controller import create_entity
 from src.api.dao.offer_dao import OfferDAO
@@ -114,14 +115,32 @@ async def get_waybill_offers(
     response_model=WaybillSchema,
 )
 async def create_waybill(
-    waybill: WaybillPostSchema,
+    payload: WaybillPostSchema,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await create_entity(
-        payload=waybill,
+        payload=payload,
         db_session=db_session,
         dao=WaybillDAO,
         refresh_fields=["user"],
+    )
+
+
+@router.patch(
+    "/{waybill_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=WaybillSchema,
+)
+async def patch_waybill(
+    waybill_id: UUID,
+    payload: WaybillPostSchema,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await update_entity(
+        entity_id=waybill_id,
+        payload=payload,
+        dao=WaybillDAO,
+        db_session=db_session,
     )
 
 
