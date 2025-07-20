@@ -1,14 +1,13 @@
-from enum import Enum
+from pydantic import BaseModel
 
-from pydantic import BaseModel, ConfigDict
-
-from schemas.common.enums import Role
+from src.schemas.common.enums import Role
 
 
-class EventType(str, Enum):
-    USER_CREATED = "user.created"
-    USER_UPDATED = "user.updated"
-    USER_DELETED = "user.deleted"
+class Verification(BaseModel):
+    attempts: int
+    expire_at: float
+    status: str
+    strategy: str
 
 
 class EmailAddress(BaseModel):
@@ -24,7 +23,7 @@ class EmailAddress(BaseModel):
     object: str
     reserved: bool
     updated_at: int
-    verification: dict
+    verification: Verification
 
 
 class PublicMetadata(BaseModel):
@@ -35,22 +34,9 @@ class PublicMetadata(BaseModel):
     role: Role
 
 
-class HttpRequest(BaseModel):
+class UserWebhookData(BaseModel):
     """
-    Represents the HTTP request structure for Clerk webhook events.
-    """
-
-    client_ip: str
-    user_agent: str
-
-
-class EventAttributes(BaseModel):
-    http_request: HttpRequest
-
-
-class WebhookData(BaseModel):
-    """
-    Represents the data structure for Clerk webhook events.
+    Represents the data structure for a user creation event in Clerk webhook events.
     """
 
     backup_code_enabled: bool
@@ -92,18 +78,3 @@ class WebhookData(BaseModel):
     username: str | None
     verification_attempts_remaining: int
     web3_wallets: list[dict]
-
-
-class ClerkWebhookSchema(BaseModel):
-    """
-    Represents the schema for Clerk webhook events.
-    """
-
-    data: WebhookData
-    event_attributes: EventAttributes
-    instance_id: str
-    object: str
-    timestamp: float
-    type: EventType
-
-    model_config = ConfigDict(validate_by_name=True)

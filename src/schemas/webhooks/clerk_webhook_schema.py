@@ -1,0 +1,72 @@
+from enum import Enum
+
+from pydantic import BaseModel, ConfigDict
+
+from src.schemas.webhooks.common import UserWebhookData
+
+
+class DeleteUserWebhookData(BaseModel):
+    """
+    Represents the data structure for a user deletion event in Clerk webhook events.
+    """
+
+    deleted: bool
+    id: str
+    object: str
+
+
+class EventType(str, Enum):
+    USER_CREATED = "user.created"
+    USER_UPDATED = "user.updated"
+    USER_DELETED = "user.deleted"
+
+
+class HttpRequest(BaseModel):
+    """
+    Represents the HTTP request structure for Clerk webhook events.
+    """
+
+    client_ip: str
+    user_agent: str
+
+
+class EventAttributes(BaseModel):
+    http_request: HttpRequest
+
+
+class _WebhookSchema(BaseModel):
+    """
+    Base schema for Clerk webhook events.
+    """
+
+    event_attributes: EventAttributes
+    instance_id: str
+    object: str
+    timestamp: float
+    type: EventType
+
+    model_config = ConfigDict(validate_by_name=True)
+
+
+class UserCreateWebhookSchema(_WebhookSchema):
+    """
+    Schema for the user.created event in Clerk webhooks.
+    """
+
+    data: UserWebhookData
+
+
+class UserUpdateWebhookSchema(_WebhookSchema):
+    """
+    Schema for the user.updated event in Clerk webhooks.
+    """
+
+    data: UserWebhookData
+
+
+class UserDeleteWebhookSchema(_WebhookSchema):
+    """
+    Schema for the user.deleted event in Clerk webhooks.
+    """
+
+    data: DeleteUserWebhookData

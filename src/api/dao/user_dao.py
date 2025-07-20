@@ -1,7 +1,7 @@
 from sqlalchemy import delete as sa_delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.dao.base import BaseDAO
+from src.api.dao.base import BaseDAO
 from src.models.user import User
 
 

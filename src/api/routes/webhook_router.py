@@ -9,7 +9,7 @@ from src.api.controllers.user_entity_controller import (
 )
 from src.api.di.db_helper import db_helper
 from src.config import settings
-from src.schemas.clerk_webhook_schema import ClerkWebhookSchema
+from src.schemas.webhooks.clerk_webhook_schema import UserCreateWebhookSchema
 from src.utils.logging import logger
 
 
@@ -69,7 +69,7 @@ async def clerk_webhook(
     ):
         raise HTTPException(status_code=401, detail="Invalid Clerk signature")
 
-    payload: ClerkWebhookSchema = await request.json()
+    payload: UserCreateWebhookSchema = await request.json()
     logger.warning("[Clerk | Webhook] Event %s is caught", payload.type)
 
     if payload.type == "user.created":

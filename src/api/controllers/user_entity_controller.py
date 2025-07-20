@@ -1,18 +1,22 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.common.enums import CustomerType, Role, ShippingMethod
 from src.api.dao.user_dao import UserDAO
-from src.schemas.clerk_webhook_schema import ClerkWebhookSchema
+from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 from src.schemas.user_schema import UserCreate
-from utils.logging import logger
+from src.schemas.webhooks.clerk_webhook_schema import (
+    UserCreateWebhookSchema,
+    UserDeleteWebhookSchema,
+    UserUpdateWebhookSchema,
+)
+from src.utils.logging import logger
 
 # ------------------------------ Disclaimer ------------------------------#
 # This is custom not generic create/update functions because of Clerk Webhook
-# These functions handles custom logic of user creation after Sign-up processs
+# These functions handles custom logic of user creation after Sign-up process
 
 
 async def create_user_entity(
-    payload: ClerkWebhookSchema,
+    payload: UserCreateWebhookSchema,
     db_session: AsyncSession,
 ) -> None:
     """
@@ -51,7 +55,7 @@ async def create_user_entity(
 
 
 async def update_user_entity(
-    payload: ClerkWebhookSchema,
+    payload: UserUpdateWebhookSchema,
     db_session: AsyncSession,
 ) -> None:
     """
@@ -60,15 +64,21 @@ async def update_user_entity(
     user_data = payload.data
     logger.info(
         "[Webhook | PATCH] Updating user %s with id: %s",
-        user_data.email_addresses[0].email_address,
         user_data.id,
+    )
+    return await UserDAO.update(
+        db_session, {"clerk_id": user_data.id}, **user_data.model_dump()
     )
 
 
 async def delete_user_entity(
-    payload: ClerkWebhookSchema,
+    payload: UserDeleteWebhookSchema,
     db_session: AsyncSession,
 ):
     user_data = payload.data
     clerk_id = user_data.id
+    logger.info(
+        "[Webhook | DELETE] Deleting user with id: %s",
+        clerk_id,
+    )
     return await UserDAO.delete_by_clerk_id(db_session, clerk_id)
