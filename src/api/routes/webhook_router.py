@@ -4,15 +4,15 @@ import hmac
 from fastapi import APIRouter, Depends, Header, HTTPException, Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.controllers.user_entity_controller import (
+from src.api.controllers.user_entity_controller import (
     create_user_entity,
     delete_user_entity,
     update_user_entity,
 )
-from api.di.db_helper import db_helper
-from schemas.clerk_webhook_schema import ClerkWebhookSchema
+from src.api.di.db_helper import db_helper
+from src.schemas.clerk_webhook_schema import ClerkWebhookSchema
 from src.config import settings
-from utils.logging import logger
+from src.utils.logging import logger
 
 
 def verify_clerk_signature(payload: bytes, signature: str, secret: str) -> bool:
@@ -38,16 +38,16 @@ router = APIRouter(prefix="/webhooks", tags=["Webhooks"])
 )
 async def clerk_webhook(
     request: Request,
-    clerk_signature: str = Header(
+    svix_signature: str = Header(
         None,
-        alias="Clerk-Signature",
+        alias="Svix-Signature",
     ),
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     raw_body = await request.body()
 
     if not verify_clerk_signature(
-        raw_body, clerk_signature, settings.AUTH.CLERK_SIGNING_SECRET
+        raw_body, svix_signature, settings.AUTH.CLERK_SIGNING_SECRET
     ):
         raise HTTPException(status_code=401, detail="Invalid Clerk signature")
 
