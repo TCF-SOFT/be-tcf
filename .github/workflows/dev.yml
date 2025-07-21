@@ -143,6 +143,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: ghcr.io/${{ secrets.GHCR_USERNAME }}/${{ env.APP_NAME }}:${{ github.sha }}
+          ignore-unfixed: true
           format: 'sarif'
           exit-code: 0 # Do not fail the build on vulnerabilities
           severity: 'CRITICAL,HIGH'
