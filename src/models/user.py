@@ -49,7 +49,7 @@ class User(Base):
     mailing: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     phone: Mapped[str | None] = mapped_column(String, nullable=True)
     city: Mapped[str | None] = mapped_column(String, nullable=True)
-    notes: Mapped[str | None] = mapped_column(String, nullable=True)
+    note: Mapped[str | None] = mapped_column(String, nullable=True)
 
     shipping_method: Mapped[ShippingMethod | None] = mapped_column(
         SQLEnum(ShippingMethod, native_enum=False),

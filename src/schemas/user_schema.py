@@ -27,7 +27,7 @@ class _BaseUser(BaseModel):
     mailing: bool = False
     phone: PhoneNumber | None = Field(None, examples=["+441234567890"])
     city: str | None = Field(None, examples=["Sevastopol"])
-    notes: str | None = None
+    note: str | None = None
     shipping_method: ShippingMethod | None = Field(
         None, examples=[ShippingMethod.CARGO]
     )
