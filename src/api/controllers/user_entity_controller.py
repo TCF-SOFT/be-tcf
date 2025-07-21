@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.user_dao import UserDAO
-from src.schemas.common.enums import CustomerType, Role, ShippingMethod
+from src.schemas.common.enums import CustomerType, Role
 from src.schemas.user_schema import UserCreate
 from src.schemas.webhooks.clerk_webhook_schema import UserWebhookSchema
 from src.schemas.webhooks.common import UserWebhookData
