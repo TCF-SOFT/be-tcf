@@ -37,7 +37,7 @@ async def create_user_entity(
         mailing=False,
         phone=None,
         city=None,
-        notes=None,
+        note=None,
         shipping_method=None,
         shipping_company=None,
     )
