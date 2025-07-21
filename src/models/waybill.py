@@ -23,6 +23,7 @@ class Waybill(Base):
     )
     is_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     counterparty_name: Mapped[str] = mapped_column(String, nullable=False)
+    note: Mapped[str] = mapped_column(String, nullable=True)
 
     # Relationships
     user: Mapped["User"] = relationship(

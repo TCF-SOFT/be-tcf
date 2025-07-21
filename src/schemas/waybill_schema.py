@@ -16,6 +16,7 @@ class _WaybillBaseSchema(BaseModel):
     waybill_type: WaybillType = Field(..., examples=[WaybillType.WAYBILL_OUT])
     is_pending: bool = Field(..., examples=[True])
     counterparty_name: str = Field(..., examples=["ООО Рога и Копыта"])
+    note: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
 
