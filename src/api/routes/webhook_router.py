@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from svix import Webhook, exceptions
 
@@ -41,6 +41,7 @@ router = APIRouter(prefix="/webhooks", tags=["Webhooks"])
     "/clerk",
     summary="Clerk Webhook Handler (user.created, user.deleted, user.updated)",
     status_code=200,
+    response_model=dict,
 )
 async def clerk_webhook(
     request: Request,
@@ -75,9 +76,18 @@ async def clerk_webhook(
 
     if payload.type == "user.created":
         await create_user_entity(payload, db_session)
+        return {"message": "User created successfully"}
 
     elif payload.type == "user.updated":
         await update_user_entity(payload, db_session)
+        return {"message": "User updated successfully"}
 
     elif payload.type == "user.deleted":
         await delete_user_entity(payload, db_session)
+        return {"message": "User deleted successfully"}
+
+    else:
+        logger.error("[ClerkWebhook] Unsupported event type: %s", payload.type)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Unsupported event type"
+        )

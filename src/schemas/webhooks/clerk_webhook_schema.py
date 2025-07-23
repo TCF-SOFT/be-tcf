@@ -1,6 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from src.schemas.webhooks.common import UserWebhookData
 
@@ -11,7 +11,7 @@ class DeleteUserWebhookData(BaseModel):
     """
 
     deleted: bool
-    id: str
+    clerk_id: str = Field(..., alias="id")
     object: str
 
 
