@@ -5,7 +5,6 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
 
 from src.api.dao.base import BaseDAO
-from src.common.microservices.open_ai_service import get_embedding
 from src.models import Product
 from src.schemas.product_schema import ProductSchema
 
@@ -72,36 +71,36 @@ class ProductDAO(BaseDAO):
         )
         return await paginate(db_session, query)
 
-    @classmethod
-    async def vector_search(
-        cls,
-        db_session,
-        search_term: str,
-    ) -> Page[ProductSchema]:
-        """
-        Perform a vector search on the product.
-        Show the most similar products to the search term.
-
-        library: https://github.com/pgvector/pgvector-python?tab=readme-ov-file#sqlalchemy
-        """
-        # TODO:
-        # - использование собственного векторизатора (размер векторов)
-        # - автоматическое обновление векторов при изменении товара
-        # - install extension pgvector в postgres при тестах
-
-        # 1. Получить embedding поискового запроса
-        query_vector: list[float] = await get_embedding(search_term)
-
-        # 2. order_by method - all results (vol. 1)
-        # query = (
-        #     select(cls.model).order_by(cls.model.embedding.l2_distance(query_vector))
-        #     .limit(100)
-        # )
-        # filter method - limited (vol. 2)
-        query = (
-            select(cls.model)
-            .filter(cls.model.embedding.l2_distance(query_vector) < 1.1)
-            .order_by(cls.model.embedding.l2_distance(query_vector))
-        )
-
-        return await paginate(db_session, query)
+    # @classmethod
+    # async def vector_search(
+    #     cls,
+    #     db_session,
+    #     search_term: str,
+    # ) -> Page[ProductSchema]:
+    #     """
+    #     Perform a vector search on the product.
+    #     Show the most similar products to the search term.
+    #
+    #     library: https://github.com/pgvector/pgvector-python?tab=readme-ov-file#sqlalchemy
+    #     """
+    #     # TODO:
+    #     #  - использование собственного векторизатора (размер векторов)
+    #     #  - автоматическое обновление векторов при изменении товара
+    #     #  - install extension pgvector в postgres при тестах
+    #
+    #     # 1. Получить embedding поискового запроса
+    #     query_vector: list[float] = await get_embedding(search_term)
+    #
+    #     # 2. order_by method - all results (vol. 1)
+    #     # query = (
+    #     #     select(cls.model).order_by(cls.model.embedding.l2_distance(query_vector))
+    #     #     .limit(100)
+    #     # )
+    #     # filter method - limited (vol. 2)
+    #     query = (
+    #         select(cls.model)
+    #         .filter(cls.model.embedding.l2_distance(query_vector) < 1.1)
+    #         .order_by(cls.model.embedding.l2_distance(query_vector))
+    #     )
+    #
+    #     return await paginate(db_session, query)
