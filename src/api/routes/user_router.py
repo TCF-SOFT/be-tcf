@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.clerk import require_clerk_session
@@ -66,6 +67,22 @@ async def get_user_by_clerk_id(
             detail=f"User with clerk_id {clerk_id} not found.",
         )
     return res
+
+
+@router.get(
+    "/search/wildcard",
+    response_model=Page[UserSchema],
+    status_code=status.HTTP_200_OK,
+    summary="Search users by wildcard",
+)
+async def search_users(
+    search_term: str,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    """
+    Search users by wildcard.
+    """
+    return await UserDAO.wildcard_search(db_session, search_term)
 
 
 @router.get(
