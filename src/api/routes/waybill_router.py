@@ -21,7 +21,7 @@ from src.schemas.waybill_schema import WaybillPostSchema, WaybillSchema
 router = APIRouter(
     tags=["Waybills"],
     prefix="/waybills",
-    dependencies=[Depends(require_clerk_session)],
+    # dependencies=[Depends(require_clerk_session)],
 )
 
 
@@ -122,7 +122,7 @@ async def create_waybill(
         payload=payload,
         db_session=db_session,
         dao=WaybillDAO,
-        refresh_fields=["user"],
+        refresh_fields=["author", "customer"],
     )
 
 

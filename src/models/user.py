@@ -59,8 +59,11 @@ class User(Base):
     shipping_company: Mapped[str | None] = mapped_column(String, nullable=True)
 
     # Relationships
-    waybills: Mapped[list["Waybill"]] = relationship(
-        "Waybill", back_populates="user", lazy="select"
+    created_waybills: Mapped[list["Waybill"]] = relationship(
+        "Waybill", foreign_keys="Waybill.author_id", back_populates="author"
+    )
+    received_waybills: Mapped[list["Waybill"]] = relationship(
+        "Waybill", foreign_keys="Waybill.customer_id", back_populates="customer"
     )
     addresses: Mapped[list["Address"]] = relationship(
         "Address", back_populates="user", lazy="select"

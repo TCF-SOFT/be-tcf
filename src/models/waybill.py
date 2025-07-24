@@ -16,7 +16,9 @@ if TYPE_CHECKING:
 
 class Waybill(Base):
     id: Mapped[uuid_pk]
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    author_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    customer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=True)
+
     waybill_type: Mapped[WaybillType] = mapped_column(
         SQLEnum(WaybillType, native_enum=False),
         nullable=False,
@@ -26,8 +28,17 @@ class Waybill(Base):
     note: Mapped[str] = mapped_column(String, nullable=True)
 
     # Relationships
-    user: Mapped["User"] = relationship(
-        "User", back_populates="waybills", lazy="joined"
+    author: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[author_id],
+        back_populates="created_waybills",
+        lazy="joined",
+    )
+    customer: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[customer_id],
+        back_populates="received_waybills",
+        lazy="joined",
     )
     waybill_offers: Mapped[list["WaybillOffer"]] = relationship(
         "WaybillOffer", back_populates="waybill", lazy="selectin"
