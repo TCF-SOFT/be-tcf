@@ -61,7 +61,7 @@ class BaseDAO:
     #            POST Methods
     # ---------------------------------------
     @classmethod
-    async def add(cls, db_session: AsyncSession, **values) -> model:
+    async def add(cls, db_session: AsyncSession, **values):
         """
         More: https://habr.com/ru/articles/828328/, 'Управление транзакциями'
         :param db_session:

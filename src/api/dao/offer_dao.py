@@ -27,12 +27,12 @@ class OfferDAO(BaseDAO):
         db_session,
         search_term: str,
     ) -> Page[OfferSchema]:
-        search_term = f"%{search_term.replace('.', '')}%"
+        search_term = f"%{search_term}%"
 
         query = select(cls.model).where(
             or_(
-                func.replace(cls.model.brand, ".", "").ilike(search_term),
-                func.replace(cls.model.manufacturer_number, ".", "").ilike(search_term),
+                cls.model.brand.ilike(search_term),
+                cls.model.manufacturer_number.ilike(search_term),
             )
         )
 
@@ -40,9 +40,11 @@ class OfferDAO(BaseDAO):
 
     @classmethod
     async def smart_offer_search(
-        cls, db_session: AsyncSession, search_term: str
+        cls,
+        db_session: AsyncSession,
+        search_term: str,
     ) -> Page[OfferSchema]:
-        search_term = f"%{search_term.lower()}%"
+        search_term = f"%{search_term}%"
         o = cls.model
         p = Product
 

@@ -17,14 +17,15 @@ if TYPE_CHECKING:
 class Waybill(Base):
     id: Mapped[uuid_pk]
     author_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-    customer_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=True)
+    customer_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("users.id"), nullable=False
+    )
 
     waybill_type: Mapped[WaybillType] = mapped_column(
         SQLEnum(WaybillType, native_enum=False),
         nullable=False,
     )
     is_pending: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
-    counterparty_name: Mapped[str] = mapped_column(String, nullable=False)
     note: Mapped[str] = mapped_column(String, nullable=True)
 
     # Relationships

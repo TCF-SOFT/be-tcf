@@ -1,7 +1,9 @@
 from fastapi_pagination import Page
-from sqlalchemy import delete as sa_delete, select, or_, func
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi_pagination.ext.sqlalchemy import paginate
+from sqlalchemy import delete as sa_delete
+from sqlalchemy import func, or_, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from schemas.user_schema import UserSchema
 from src.api.dao.base import BaseDAO
 from src.models.user import User

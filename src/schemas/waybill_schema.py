@@ -7,8 +7,9 @@ from pydantic import (
     Field,
 )
 
-from schemas.common.enums import WaybillType
-from schemas.user_schema import UserSchema
+from src.schemas.common.enums import WaybillType
+from src.schemas.user_schema import UserSchema
+from src.schemas.waybill_offer_schema import WaybillOfferPostSchema
 
 
 class _WaybillBaseSchema(BaseModel):
@@ -16,7 +17,6 @@ class _WaybillBaseSchema(BaseModel):
     customer_id: UUID | None = None
     waybill_type: WaybillType = Field(..., examples=[WaybillType.WAYBILL_OUT])
     is_pending: bool = Field(..., examples=[True])
-    counterparty_name: str = Field(..., examples=["ООО Рога и Копыта"])
     note: str | None = None
 
     model_config = ConfigDict(from_attributes=True)
@@ -39,3 +39,12 @@ class WaybillPostSchema(_WaybillBaseSchema):
 
 class WaybillPutSchema(_WaybillBaseSchema):
     pass
+
+
+class WaybillWithOffersPostSchema(_WaybillBaseSchema):
+    """Создание накладной сразу c позициями."""
+
+    waybill_offers: list[WaybillOfferPostSchema] = Field(
+        default_factory=list,
+        description="List of offers would be added to Waybill",
+    )

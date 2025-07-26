@@ -1,6 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.user_dao import UserDAO
+from src.models import User
 from src.schemas.common.enums import CustomerType, Role
 from src.schemas.user_schema import UserCreate
 from src.schemas.webhooks.clerk_webhook_schema import UserWebhookSchema
@@ -15,7 +16,7 @@ from src.utils.logging import logger
 async def create_user_entity(
     payload: UserWebhookSchema,
     db_session: AsyncSession,
-) -> None:
+) -> User:
     """
     Create a new user entity in the database
     Flow:
@@ -45,11 +46,12 @@ async def create_user_entity(
         "[ClerkWebhook | POST] Creating user %s",
         user_data.email_addresses[0].email_address,
     )
-    await UserDAO.add(db_session, **user_create.model_dump())
+    res = await UserDAO.add(db_session, **user_create.model_dump())
     logger.info(
         "[ClerkWebhook | POST] User %s is created",
         user_data.email_addresses[0].email_address,
     )
+    return res
 
 
 async def update_user_entity(

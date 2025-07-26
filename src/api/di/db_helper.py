@@ -61,7 +61,7 @@ class DatabaseHelper:
     async def dispose(self) -> None:
         await self.engine.dispose()
 
-    async def session_getter_auth(self) -> AsyncGenerator[AsyncSession, None]:
+    async def session_getter_manual(self) -> AsyncGenerator[AsyncSession, None]:
         async with self.AsyncSessionFactory() as session:
             yield session
 

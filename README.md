@@ -17,11 +17,6 @@
 `common/services` - common services: redis, S3, etc. Used in `deps` layer.
 `common/microservices` - common microservices: openai
 
-### Call API from Client with Auth (User search is implemented this way)
-1. Create server action
-2. Create a router and call the server action
-3. Call the router from the client with Tanstack Query for caching and data fetching
-
 ### API Endpoints
 Endpoints such as `/categories`, `/sub-categories`, `/products`, `/offers` are using the same flow:
 ```mermaid

@@ -2,11 +2,15 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.offer_schema import OfferSchema
+from src.api.dao.offer_dao import OfferDAO
+from src.api.dao.user_dao import UserDAO
+from src.schemas.common.enums import CustomerType
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.models import Offer, Waybill, WaybillOffer
+from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
+from src.schemas.waybill_schema import WaybillWithOffersPostSchema
 
 
 class WaybillService:
@@ -31,6 +35,31 @@ class WaybillService:
         waybill_id: UUID,
         waybill_offer: WaybillOfferPostSchema,
     ) -> WaybillOffer:
+        """
+        <Create from Cart>
+        Flow:
+        1. Fetch Offer, Waybill, User
+        2. Check for customer type
+        # TODO: how about IN/RETURN? Цена будет переписана
+        3. Assign new price to waybill_offer instance
+
+        """
+        offer: Offer = await OfferDAO.find_by_id(db_session, waybill_offer.offer_id)
+        waybill: Waybill = await WaybillDAO.find_by_id(db_session, waybill_id)
+
+        customer_type = CustomerType.USER_RETAIL
+        if waybill.customer_id:
+            customer = await UserDAO.find_by_id(db_session, waybill.customer.id)
+            customer_type = customer.customer_type
+
+        match customer_type:
+            case CustomerType.USER_SUPER_WHOLESALE:
+                price = offer.super_wholesale_price_rub
+            case CustomerType.USER_WHOLESALE:
+                price = round((offer.price_rub + offer.super_wholesale_price_rub) / 2)
+            case _:
+                price = offer.price_rub
+
         return await WaybillOfferDAO.add(
             db_session,
             waybill_id=waybill_id,
@@ -38,7 +67,7 @@ class WaybillService:
             quantity=waybill_offer.quantity,
             brand=waybill_offer.brand,
             manufacturer_number=waybill_offer.manufacturer_number,
-            price_rub=waybill_offer.price_rub,
+            price_rub=price,
         )
 
     @staticmethod
@@ -61,3 +90,21 @@ class WaybillService:
                 )
             )
         return result
+
+    @staticmethod
+    async def post_waybill_with_offers(
+        db_session: AsyncSession,
+        payload: WaybillWithOffersPostSchema,
+    ) -> Waybill:
+        """
+        Create a new waybill with offers.
+        """
+        async with db_session.begin():
+            waybill: Waybill = await WaybillDAO.add(
+                db_session, **payload.model_dump(exclude={"waybill_offers"})
+            )
+            for wo in payload.waybill_offers:
+                await WaybillService.add_offer_to_waybill(db_session, waybill.id, wo)
+
+        await db_session.refresh(waybill, ["author", "customer", "waybill_offers"])
+        return waybill

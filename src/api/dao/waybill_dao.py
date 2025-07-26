@@ -2,11 +2,11 @@ from uuid import UUID
 
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.base import BaseDAO
-from src.models import Offer, StockMovement, Waybill
+from src.models import Offer, StockMovement, User, Waybill
 from src.schemas.waybill_schema import WaybillSchema
 
 
@@ -15,14 +15,38 @@ class WaybillDAO(BaseDAO):
 
     @classmethod
     async def find_all_paginate(
-        cls, db_session, filter_by: dict, search_term: str
+        cls,
+        db_session,
+        filter_by: dict,
+        search_term: str,
     ) -> Page[WaybillSchema]:
+        search_term = f"%{search_term}%"
         query = (
             select(cls.model)
             .filter_by(**filter_by)
+            .where(
+                or_(
+                    Waybill.author.has(
+                        or_(
+                            User.email.ilike(search_term),
+                            User.first_name.ilike(search_term),
+                            User.last_name.ilike(search_term),
+                            User.phone.ilike(search_term),
+                        )
+                    ),
+                    Waybill.customer.has(
+                        or_(
+                            User.email.ilike(search_term),
+                            User.first_name.ilike(search_term),
+                            User.last_name.ilike(search_term),
+                            User.phone.ilike(search_term),
+                        )
+                    ),
+                )
+            )
             .order_by(cls.model.created_at.desc())
-            .where(cls.model.counterparty_name.ilike(f"%{search_term}%"))
         )
+
         return await paginate(db_session, query)
 
     @classmethod
