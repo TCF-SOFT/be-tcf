@@ -99,12 +99,13 @@ class WaybillService:
         """
         Create a new waybill with offers.
         """
-        async with db_session.begin():
-            waybill: Waybill = await WaybillDAO.add(
-                db_session, **payload.model_dump(exclude={"waybill_offers"})
-            )
-            for wo in payload.waybill_offers:
-                await WaybillService.add_offer_to_waybill(db_session, waybill.id, wo)
+        waybill: Waybill = await WaybillDAO.add(
+            db_session, **payload.model_dump(exclude={"waybill_offers"})
+        )
+        for wo in payload.waybill_offers:
+            await WaybillService.add_offer_to_waybill(db_session, waybill.id, wo)
+
+        await db_session.commit()
 
         await db_session.refresh(waybill, ["author", "customer", "waybill_offers"])
         return waybill
