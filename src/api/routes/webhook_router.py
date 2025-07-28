@@ -1,9 +1,8 @@
-from clerk_backend_api import Clerk
 from fastapi import APIRouter, Depends, Header, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from svix import Webhook, exceptions
 
-from api.auth.clerk import clerkClient
+from src.api.auth.clerk import clerkClient
 from src.api.controllers.user_entity_controller import (
     create_user_entity,
     delete_user_entity,
@@ -60,7 +59,6 @@ async def clerk_webhook(
         alias="svix-timestamp",
     ),
     db_session: AsyncSession = Depends(db_helper.session_getter),
-    clerk_client: Clerk = clerkClient,
 ):
     raw_body: bytes = await request.body()
     raw_json: dict = await request.json()
@@ -78,7 +76,7 @@ async def clerk_webhook(
     logger.warning("[ClerkWebhook] Event %s is caught", raw_json)
 
     if payload.type == "user.created":
-        await create_user_entity(payload, db_session, clerk_client)
+        await create_user_entity(payload, db_session, clerkClient)
         return {"message": "User created successfully"}
 
     elif payload.type == "user.updated":

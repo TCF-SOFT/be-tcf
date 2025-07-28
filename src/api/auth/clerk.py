@@ -10,7 +10,6 @@ clerkClient = Clerk(bearer_auth=settings.AUTH.CLERK_SECRET_KEY)
 
 async def require_clerk_session(
     request: Request,
-    clerk_client: Clerk = clerkClient,
 ) -> RequestState:
     """
     Проверяем JWT из Authorization: Bearer <token>.
@@ -25,7 +24,7 @@ async def require_clerk_session(
 
     # Можно дополнительно ограничить aud (authorized_parties) —
     # это защищает от токенов, выписанных для других доменов.
-    state = clerk_client.authenticate_request(
+    state = clerkClient.authenticate_request(
         hx_request,
         AuthenticateRequestOptions(authorized_parties=settings.AUTH.AUTHORIZED_PARTIES),
     )
