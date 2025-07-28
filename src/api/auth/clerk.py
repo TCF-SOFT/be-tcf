@@ -5,7 +5,7 @@ from fastapi import HTTPException, Request, status
 
 from src.config import settings
 
-clerk = Clerk(bearer_auth=settings.AUTH.CLERK_SECRET_KEY)
+clerkClient = Clerk(bearer_auth=settings.AUTH.CLERK_SECRET_KEY)
 
 
 async def require_clerk_session(request: Request) -> RequestState:

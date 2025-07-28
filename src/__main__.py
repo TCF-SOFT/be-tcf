@@ -16,7 +16,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from api.di.db_helper import db_helper
 from api.routes import router
-from src.api.controllers.api_microservice_version import get_microservice_version
+from config.config import ServerEnv
 from src.api.di.di import ResourceModule
 from src.api.middleware.logging_middleware import LoggingMiddleware
 from src.common.services.redis_service import RedisService
@@ -37,29 +37,6 @@ async def check_health(app: FastAPI):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if settings.RUN_PROD_WEB_SERVER:
-        logger.info("[!] Starting the application in production mode")
-        logger.info("[!] Starting sentry")
-        sentry_sdk.init(
-            dsn=settings.TELEMETRY.SENTRY_DSN,
-            # Add data like request headers and IP for users,
-            # see https://docs.sentry.io/platforms/python/data-management/data-collected/ for more info
-            send_default_pii=True,
-            # Set traces_sample_rate to 1.0 to capture 100%
-            # of transactions for tracing.
-            traces_sample_rate=1.0,
-            # Set profile_session_sample_rate to 1.0 to profile 100%
-            # of profile sessions.
-            profile_session_sample_rate=1.0,
-            # Set profile_lifecycle to "trace" to automatically
-            # run the profiler on when there is an active transaction
-            profile_lifecycle="trace",
-            integrations=[FastApiIntegration()],
-            release=await get_microservice_version(),
-            environment=settings.SERVER.ENV,
-        )
-
-    # Resources initialization
     logger.info("[!] Initializing resources...")
     app.state.resources = ResourceModule(redis_service=RedisService())
     app.state.redis_service = app.state.resources.get_redis_service()
@@ -101,6 +78,19 @@ if settings.TELEMETRY.DD_TRACE_ENABLED:
         aiohttp=True,
     )
 
+if settings.SERVER.ENV == ServerEnv.PROD:
+    logger.info("[!] Starting the application in production mode")
+    logger.info("[!] Starting sentry")
+    sentry_sdk.init(
+        dsn=settings.TELEMETRY.SENTRY_DSN,
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+        profile_session_sample_rate=1.0,
+        profile_lifecycle="trace",
+        integrations=[FastApiIntegration()],
+        environment=settings.SERVER.ENV,
+    )
+
 app = FastAPI(
     title=docs.title,
     description=docs.description,
@@ -126,7 +116,7 @@ app = FastAPI(
 add_pagination(app)
 
 # --------------------------------------------------
-#            FastAPI Middleware (FE)
+#        FastAPI Middleware (FE + Logging)
 # --------------------------------------------------
 app.add_middleware(
     CORSMiddleware,

@@ -1,15 +1,17 @@
 from uuid import UUID
 
+from clerk_backend_api import Clerk
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_clerk_session
+from src.api.auth.clerk import clerkClient, require_clerk_session
 from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.user_dao import UserDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.common.enums import Role
 from src.schemas.user_schema import UserSchema, UserUpdate
+from utils.logging import logger
 
 # Create the router
 router = APIRouter(
@@ -113,7 +115,18 @@ async def patch_user(
     user_id: UUID,
     payload: UserUpdate,
     db_session: AsyncSession = Depends(db_helper.session_getter),
+    clerk_client: Clerk = Depends(clerkClient),
 ):
-    return await update_entity(
+    internal_user = await update_entity(
         entity_id=user_id, payload=payload, dao=UserDAO, db_session=db_session
     )
+    await clerk_client.users.update_metadata_async(
+        user_id=payload.clerk_id,
+        public_metadata={
+            "_id": internal_user.id,
+            "_role": internal_user.role,
+            "_customer_type": internal_user.customer_type,
+        },
+    )
+    logger.info("[ClerkWebhook | PATCH] User metadata updated in Clerk")
+    return internal_user

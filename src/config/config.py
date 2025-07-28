@@ -6,15 +6,16 @@ from pydantic_settings import BaseSettings
 
 env = Env()
 
-# Decide which .env file to use based on the PYTHON_ENV environment variable
-env_file = ".env.test" if env.str("PYTHON_ENV", "dev") == "test" else ".env"
-env.read_env(env_file)
-
 
 class ServerEnv(str, Enum):
     TEST = "TEST"
     DEV = "DEV"
     PROD = "PROD"
+
+
+# Decide which .env file to use based on the ENV environment variable
+env_file = ".env.test" if env.str("ENV", ServerEnv.DEV) == ServerEnv.TEST else ".env"
+env.read_env(env_file)
 
 
 class DatabaseConfig(BaseModel):
@@ -114,6 +115,7 @@ class ServerConfig(BaseModel):
     # CORS settings
     ALLOW_ORIGINS: list[str] = [
         "https://tcf.eucalytics.uk",
+        "https://tcf-dev.eucalytics.uk",
         "http://localhost:3000",
     ]
     ALLOW_CREDENTIALS: bool = True
