@@ -64,7 +64,7 @@ asyncio_mode = "auto"
 # https://github.com/pytest-dev/pytest-asyncio/issues/924
 asyncio_default_fixture_loop_scope = "session"
 env = [
-    "ENV=test",
+    "ENV=TEST",
 ]
 
 [tool.ruff.format]
