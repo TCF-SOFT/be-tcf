@@ -13,7 +13,7 @@ class OrderStatus(str, Enum):
     IN_PROGRESS = "IN_PROGRESS"
     SHIPPING = "SHIPPING"
     COMPLETED = "COMPLETED"
-    CANCELLED = "CANCELLED"
+    CANCELED = "CANCELED"
 
 
 class CartStatus(str, Enum):
