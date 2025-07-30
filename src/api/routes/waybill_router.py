@@ -24,7 +24,7 @@ from src.schemas.waybill_schema import (
 router = APIRouter(
     tags=["Waybills"],
     prefix="/waybills",
-    # dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_clerk_session)],
 )
 
 

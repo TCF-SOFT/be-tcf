@@ -42,7 +42,8 @@ class WaybillDAO(BaseDAO):
                             User.phone.ilike(search_term),
                         )
                     ),
-                )
+                    Waybill.note.ilike(search_term)
+                    ),
             )
             .order_by(cls.model.created_at.desc())
         )
