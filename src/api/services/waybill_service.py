@@ -40,7 +40,6 @@ class WaybillService:
         Flow:
         1. Fetch Offer, Waybill, User
         2. Check for customer type
-        # TODO: how about IN/RETURN? Цена будет переписана
         3. Assign new price to waybill_offer instance
 
         """

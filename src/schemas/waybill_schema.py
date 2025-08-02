@@ -42,8 +42,6 @@ class WaybillPutSchema(_WaybillBaseSchema):
 
 
 class WaybillWithOffersPostSchema(_WaybillBaseSchema):
-    """Создание накладной сразу c позициями."""
-
     waybill_offers: list[WaybillOfferPostSchema] = Field(
         default_factory=list,
         description="List of offers would be added to Waybill",

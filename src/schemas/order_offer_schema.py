@@ -23,3 +23,7 @@ class OrderOfferSchema(_OrderOfferBaseSchema):
 
 class OrderOfferPostSchema(_OrderOfferBaseSchema):
     pass
+
+
+class OrderOfferPutSchema(_OrderOfferBaseSchema):
+    pass

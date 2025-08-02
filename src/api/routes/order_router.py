@@ -1,10 +1,9 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_clerk_session
-from src.api.controllers.create_entity_controller import create_entity
 from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.order_dao import OrderDAO
@@ -13,8 +12,15 @@ from src.api.services.order_service import OrderService
 from src.models import Product
 from src.schemas.common.enums import OrderStatus
 from src.schemas.offer_schema import OfferSchema
-from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
-from src.schemas.order_schema import OrderPatchSchema, OrderPostSchema, OrderSchema
+from src.schemas.order_offer_schema import (
+    OrderOfferPostSchema,
+    OrderOfferSchema,
+)
+from src.schemas.order_schema import (
+    OrderPatchSchema,
+    OrderSchema,
+    OrderWithOffersPostSchema,
+)
 
 # Flow:
 # 1. Create a cart
@@ -24,30 +30,30 @@ from src.schemas.order_schema import OrderPatchSchema, OrderPostSchema, OrderSch
 router = APIRouter(
     tags=["Orders"],
     prefix="/orders",
-    dependencies=[Depends(require_clerk_session)],
+    # dependencies=[Depends(require_clerk_session)],
 )
 
 
 @router.get(
     "",
-    response_model=list[OrderSchema],
+    response_model=Page[OrderSchema],
     summary="Return all orders",
     status_code=status.HTTP_200_OK,
 )
 async def get_orders(
+    db_session: AsyncSession = Depends(db_helper.session_getter),
     user_id: UUID | None = None,
     order_status: OrderStatus | None = None,
-    db_session: AsyncSession = Depends(db_helper.session_getter),
+    search_term: str = "",
 ):
-    """
-    Get all orders.
-    """
     filters = {}
     if user_id:
         filters["user_id"] = user_id
     if order_status:
         filters["status"] = order_status
-    return await OrderDAO.find_all(db_session, filter_by=filters)
+    return await OrderDAO.find_all_paginate(
+        db_session, filter_by=filters, search_term=search_term
+    )
 
 
 @router.get(
@@ -97,15 +103,10 @@ async def count_orders(
     status_code=status.HTTP_201_CREATED,
 )
 async def post_order(
-    payload: OrderPostSchema,
-    db_session: AsyncSession = Depends(db_helper.session_getter),
+    payload: OrderWithOffersPostSchema,
+    db_session: AsyncSession = Depends(db_helper.session_getter_manual),
 ):
-    return await create_entity(
-        payload=payload,
-        db_session=db_session,
-        dao=OrderDAO,
-        refresh_fields=["user"],
-    )
+    return await OrderService.post_order_with_offers(db_session, payload)
 
 
 @router.post(
