@@ -62,15 +62,18 @@ async def count_offers(
     # category_slug: str | None = None,
     # sub_category_slug: str | None = None,
     product_id: UUID | None = None,
-    # in_stock: bool | None = None,
+    in_stock: bool | None = None,
+    is_image: bool | None = None,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     filters = {}
 
     if product_id:
         filters["product_id"] = product_id
-    # if in_stock:
-    #     filters["in_stock"] = in_stock
+    if in_stock:
+        filters["in_stock"] = in_stock
+    if is_image is not None:
+        filters["is_image"] = is_image
 
     return await OfferDAO.count_all(db_session, filter_by=filters)
 

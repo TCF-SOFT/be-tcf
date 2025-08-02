@@ -1,10 +1,11 @@
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
-from sqlalchemy import func, or_, select
+from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
 from src.api.dao.base import BaseDAO
+from src.config import settings
 from src.models import Offer, Product
 from src.schemas.offer_schema import OfferSchema
 
@@ -102,3 +103,36 @@ class OfferDAO(BaseDAO):
             )
         )
         return await paginate(db_session, query)
+
+    @classmethod
+    async def count_all(cls, db_session, filter_by: dict) -> dict[str:int]:
+        """
+        Count all objects in the database
+        :param db_session:
+        :param filter_by:
+        :return:
+        """
+        query = select(func.count()).select_from(cls.model)
+
+        filters = []
+
+        if filter_by.get("product_id"):
+            filters.append(cls.model.product_id == filter_by["product_id"])
+
+        if filter_by.get("in_stock"):
+            filters.append(cls.model.quantity > 0)
+
+        if filter_by.get("is_image"):
+            query = query.join(Product, cls.model.product)
+            # filters.append(Product.image_url.isnot(None))
+            filters.append(Product.image_url != settings.IMAGE_PLACEHOLDER_URL)
+        elif filter_by.get("is_image") is False:
+            query = query.join(Product, cls.model.product)
+            filters.append(Product.image_url == settings.IMAGE_PLACEHOLDER_URL)
+            # filters.append(Product.image_url.is_(None))
+
+        query = query.where(and_(*filters))
+
+        result = await db_session.execute(query)
+        count = result.scalar_one()
+        return {"count": count}
