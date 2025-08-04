@@ -76,9 +76,11 @@ if settings.SERVER.ENV == ServerEnv.PROD:
             integrations=[FastApiIntegration()],
             environment=settings.SERVER.ENV,
         )
-        logger.info(f"[Telemetry] Sentry initialized successfully")
+        logger.info("[Telemetry] Sentry initialized successfully")
     else:
-        logger.warning("[Telemetry] Sentry initialization skipped, SENTRY_DSN is not set")
+        logger.warning(
+            "[Telemetry] Sentry initialization skipped, SENTRY_DSN is not set"
+        )
     # Datadog tracing (should be initialized before the app creation)
     if settings.TELEMETRY.DD_TRACE_ENABLED:
         patch_all(
@@ -92,7 +94,7 @@ if settings.SERVER.ENV == ServerEnv.PROD:
             openai=True,
             aiohttp=True,
         )
-        logger.info(f"[Telemetry] Datadog tracing initialized successfully")
+        logger.info("[Telemetry] Datadog tracing initialized successfully")
     else:
         logger.warning(
             "[Telemetry] Datadog tracing is disabled, DD_TRACE_ENABLED is not set to True"
