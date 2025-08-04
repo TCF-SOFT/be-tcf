@@ -59,6 +59,9 @@ class DatabaseHelper:
         )
 
     async def dispose(self) -> None:
+        """
+        Dispose of the database engine and close all connections.
+        """
         await self.engine.dispose()
 
     async def session_getter_manual(self) -> AsyncGenerator[AsyncSession, None]:

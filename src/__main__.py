@@ -61,35 +61,42 @@ async def lifespan(app: FastAPI):
     finally:
         logger.info("[!] Shutting down the application...")
         await app.state.redis_service.close()
-        await db_helper.dispose()  # Close the database connection pool
+        await db_helper.dispose()
 
-
-# Datadog tracing (should be initialized before the app creation)
-if settings.TELEMETRY.DD_TRACE_ENABLED:
-    patch_all(
-        fastapi=True,
-        loguru=True,
-        redis=True,
-        aiobotocore=True,
-        botocore=True,
-        httpx=True,
-        asyncpg=True,
-        openai=True,
-        aiohttp=True,
-    )
 
 if settings.SERVER.ENV == ServerEnv.PROD:
-    logger.info("[!] Starting the application in production mode")
-    logger.info("[!] Starting sentry")
-    sentry_sdk.init(
-        dsn=settings.TELEMETRY.SENTRY_DSN,
-        send_default_pii=True,
-        traces_sample_rate=1.0,
-        profile_session_sample_rate=1.0,
-        profile_lifecycle="trace",
-        integrations=[FastApiIntegration()],
-        environment=settings.SERVER.ENV,
-    )
+    logger.warning("[!] Starting the application in production mode")
+    if settings.TELEMETRY.SENTRY_DSN:
+        sentry_sdk.init(
+            dsn=settings.TELEMETRY.SENTRY_DSN,
+            send_default_pii=True,
+            traces_sample_rate=1.0,
+            profile_session_sample_rate=1.0,
+            profile_lifecycle="trace",
+            integrations=[FastApiIntegration()],
+            environment=settings.SERVER.ENV,
+        )
+        logger.info(f"[Telemetry] Sentry initialized successfully")
+    else:
+        logger.warning("[Telemetry] Sentry initialization skipped, SENTRY_DSN is not set")
+    # Datadog tracing (should be initialized before the app creation)
+    if settings.TELEMETRY.DD_TRACE_ENABLED:
+        patch_all(
+            fastapi=True,
+            loguru=True,
+            redis=True,
+            aiobotocore=True,
+            botocore=True,
+            httpx=True,
+            asyncpg=True,
+            openai=True,
+            aiohttp=True,
+        )
+        logger.info(f"[Telemetry] Datadog tracing initialized successfully")
+    else:
+        logger.warning(
+            "[Telemetry] Datadog tracing is disabled, DD_TRACE_ENABLED is not set to True"
+        )
 
 app = FastAPI(
     title=docs.title,
