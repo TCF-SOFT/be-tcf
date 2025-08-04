@@ -33,7 +33,7 @@ class OrderPostSchema(_OrderBaseSchema):
     pass
 
 
-class OrderPatchSchema(BaseModel):
+class OrderPatchSchema(_OrderBaseSchema):
     pass
 
 
