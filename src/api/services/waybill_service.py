@@ -88,7 +88,8 @@ class WaybillService:
                     }
                 )
             )
-        return result
+        res = sorted(result, key=lambda x: x.id)
+        return res
 
     @staticmethod
     async def post_waybill_with_offers(

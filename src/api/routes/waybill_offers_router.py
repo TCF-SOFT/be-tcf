@@ -4,14 +4,31 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.auth.clerk import require_clerk_session
+from api.controllers.update_entity_controller import update_entity
+from schemas.waybill_offer_schema import WaybillOfferSchema, WaybillOfferPatchSchema
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.db_helper import db_helper
 
 router = APIRouter(
     tags=["Waybill-Offers"],
     prefix="/waybill-offers",
-    dependencies=[Depends(require_clerk_session)],
+    # dependencies=[Depends(require_clerk_session)],
 )
+
+@router.patch(
+    "/{waybill_offer_id}",
+    status_code=status.HTTP_200_OK,
+    response_model=WaybillOfferSchema,
+)
+async def update_offer_in_waybill(
+    waybill_offer_id: UUID,
+    payload: WaybillOfferPatchSchema,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await update_entity(
+        entity_id=waybill_offer_id, payload=payload, dao=WaybillOfferDAO, db_session=db_session
+    )
+
 
 
 @router.delete("/{waybill_offer_id}", status_code=status.HTTP_204_NO_CONTENT)
