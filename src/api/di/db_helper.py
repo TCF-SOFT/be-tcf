@@ -75,7 +75,7 @@ class DatabaseHelper:
 
 db_helper = DatabaseHelper(
     url=settings.DB.PSQL_URL,
-    is_test=settings.MODE == "TEST",
+    is_test=settings.SERVER.ENV == "TEST",
     future=True,
     echo=settings.DB.echo,
     pool_pre_ping=True,

@@ -1,5 +1,7 @@
 from pydantic import BaseModel, ConfigDict
 
+from src.config import settings
+
 servers = [
     {"url": "http://127.0.0.1:8080", "description": "Local environment"},
     {
@@ -16,7 +18,7 @@ servers = [
     },
 ]
 
-title = "TCF API"
+title = settings.PROJECT_NAME
 description = """
 ## How to use this API
 lore ipsum dolor sit amet consectetur adipiscing elit

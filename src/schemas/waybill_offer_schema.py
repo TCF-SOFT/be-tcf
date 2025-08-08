@@ -24,5 +24,6 @@ class WaybillOfferSchema(_WaybillOfferBaseSchema):
 class WaybillOfferPostSchema(_WaybillOfferBaseSchema):
     pass
 
+
 class WaybillOfferPatchSchema(_WaybillOfferBaseSchema):
     pass

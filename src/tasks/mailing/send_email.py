@@ -31,12 +31,10 @@ async def send_email(
         message,
         sender=admin_email,
         recipients=[recipient],
-        hostname=settings.SMTP.SMTP_HOST
-        if settings.RUN_PROD_WEB_SERVER
-        else "localhost",
-        port=settings.SMTP.SMTP_PORT if settings.RUN_PROD_WEB_SERVER else 1025,
-        username=settings.SMTP.SMTP_USER if settings.RUN_PROD_WEB_SERVER else None,
-        password=settings.SMTP.SMTP_PASS if settings.RUN_PROD_WEB_SERVER else None,
-        start_tls=True if settings.RUN_PROD_WEB_SERVER else None,
+        hostname=settings.SMTP.SMTP_HOST,
+        port=settings.SMTP.SMTP_PORT,
+        username=settings.SMTP.SMTP_USER,
+        password=settings.SMTP.SMTP_PASS,
+        start_tls=True,
     )
-    logger.warning("Email was sent to %r", recipient)
+    logger.info("Email was sent to %r", recipient)

@@ -71,15 +71,15 @@ class JSONLogFormatter(logging.Formatter):
         duration = record.duration if hasattr(record, "duration") else record.msecs
 
         json_log_fields = BaseJsonLogSchema(
-            thread=record.process,
+            # thread=record.process,
             timestamp=now,
             level=LEVEL_TO_NAME[record.levelno],
             msg=message,
             func=record.funcName + ":" + str(record.lineno),
             source_log=record.name,
             duration=duration,
-            app_name=settings.PROJECT_NAME,
-            app_env=settings.MODE,
+            # app_name=settings.PROJECT_NAME,
+            # app_env=settings.E,
         )
 
         if hasattr(record, "props"):
@@ -115,7 +115,7 @@ class JSONLogFormatter(logging.Formatter):
         return json_log_object
 
 
-def handlers(env, to_file=settings.SAVE_LOGS_TO_FILE):
+def handlers(env, to_file=False):
     handler = ["json"] if env == 1 else ["intercept"]
 
     if to_file:

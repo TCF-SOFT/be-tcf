@@ -9,7 +9,7 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`{{ .Values.ingress.host }}`)
+    - match: Host(`{{ .Values.ingress.host }}`) && PathPrefix(`{{ .Values.ingress.pathPrefix }}`)
       kind: Rule
       middlewares:
         - name: default-headers
@@ -17,5 +17,4 @@ spec:
       services:
         - name: {{ .Values.service.name }}
           port: {{ .Values.service.port }}
-  tls:
-    secretName: {{ .Values.certificate.secretName }}
+  tls: {}

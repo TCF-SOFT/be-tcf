@@ -1,9 +1,8 @@
+import importlib.metadata
 import sys
 from contextlib import asynccontextmanager
 
-import sentry_sdk
 import uvicorn
-from ddtrace import patch_all
 from fastapi import FastAPI, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
@@ -11,11 +10,11 @@ from fastapi.responses import ORJSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
-from sentry_sdk.integrations.fastapi import FastApiIntegration
 from starlette.middleware.cors import CORSMiddleware
 
 from api.di.db_helper import db_helper
 from api.routes import router
+from common.services.telemetry import setup_telemetry
 from config.config import ServerEnv
 from src.api.di.di import ResourceModule
 from src.api.middleware.logging_middleware import LoggingMiddleware
@@ -28,7 +27,6 @@ from src.utils.logging import logger
 
 async def check_health(app: FastAPI):
     logger.info("[!] Performing health-check of services...")
-    # Check Redis health
     if not await app.state.redis.ping():
         logger.error("[X] Health-check failed: Unable to ping Redis")
         sys.exit(1)
@@ -59,53 +57,20 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
-        logger.info("[!] Shutting down the application...")
+        logger.warning("[!] Shutting down the application...")
         await app.state.redis_service.close()
         await db_helper.dispose()
 
 
 if settings.SERVER.ENV == ServerEnv.PROD:
-    logger.warning("[!] Starting the application in production mode")
-    if settings.TELEMETRY.SENTRY_DSN:
-        sentry_sdk.init(
-            dsn=settings.TELEMETRY.SENTRY_DSN,
-            send_default_pii=True,
-            traces_sample_rate=1.0,
-            profile_session_sample_rate=1.0,
-            profile_lifecycle="trace",
-            integrations=[FastApiIntegration()],
-            environment=settings.SERVER.ENV,
-        )
-        logger.info("[Telemetry] Sentry initialized successfully")
-    else:
-        logger.warning(
-            "[Telemetry] Sentry initialization skipped, SENTRY_DSN is not set"
-        )
-    # Datadog tracing (should be initialized before the app creation)
-    if settings.TELEMETRY.DD_TRACE_ENABLED:
-        patch_all(
-            fastapi=True,
-            loguru=True,
-            redis=True,
-            aiobotocore=True,
-            botocore=True,
-            httpx=True,
-            asyncpg=True,
-            openai=True,
-            aiohttp=True,
-        )
-        logger.info("[Telemetry] Datadog tracing initialized successfully")
-    else:
-        logger.warning(
-            "[Telemetry] Datadog tracing is disabled, DD_TRACE_ENABLED is not set to True"
-        )
+    setup_telemetry()
 
 app = FastAPI(
     title=docs.title,
     description=docs.description,
     summary=docs.summary,
     servers=docs.servers,
-    version="1.2.0",
+    version=importlib.metadata.version(settings.PROJECT_NAME),
     contact=docs.contact,
     openapi_url=settings.SERVER.OPENAPI_URL,
     docs_url=settings.SERVER.DOCS_URL,
@@ -161,5 +126,8 @@ app.include_router(router)
 
 if __name__ == "__main__":
     uvicorn.run(
-        app, host=settings.SERVER.HOST, port=settings.SERVER.PORT, log_config=None
+        app,
+        host=settings.SERVER.HOST,
+        port=settings.SERVER.PORT,
+        log_config=None,
     )

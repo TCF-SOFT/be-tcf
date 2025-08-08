@@ -151,9 +151,6 @@ class Settings(BaseSettings):
     """
 
     # Application settings
-    MODE: str = env.str("MODE", "DEV")
-    RUN_PROD_WEB_SERVER: int = env.int("RUN_PROD_WEB_SERVER", 0)
-
     DB: DatabaseConfig = DatabaseConfig()
     REDIS: RedisConfig = RedisConfig()
 
@@ -167,7 +164,6 @@ class Settings(BaseSettings):
     # Logging settings
     JSON_LOG_FORMAT: bool = env.bool("JSON_LOG_FORMAT", True)
     DEBUG: bool = env.bool("DEBUG", False)
-    SAVE_LOGS_TO_FILE: bool = env.bool("SAVE_LOGS_TO_FILE", False)
     PROJECT_NAME: str = env.str("PROJECT_NAME", "be-tcf")
 
     # OpenAI (Not used yet)
