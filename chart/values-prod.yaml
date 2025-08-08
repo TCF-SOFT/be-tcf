@@ -40,5 +40,5 @@ ingress:
   name: be-tcf-ingressroute
   className: traefik
   host: api.eucalytics.uk
-  pathPrefix: /be-tcf
+  pathPrefix: /tcf
   annotations: { }

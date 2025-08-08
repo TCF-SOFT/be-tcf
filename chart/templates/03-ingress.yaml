@@ -13,7 +13,9 @@ spec:
       kind: Rule
       middlewares:
         - name: default-headers
-          namespace: {{ .Values.namespace }}
+          namespace: default
+        - name: strip-prefix
+          namespace: default
       services:
         - name: {{ .Values.service.name }}
           port: {{ .Values.service.port }}
