@@ -6,6 +6,7 @@ from .category_router import router as category_router
 from .document_router import router as pricing_router
 from .health_check_router import router as health_check_router
 from .offer_router import router as offer_router
+from .order_offers_router import router as order_offers_router
 from .order_router import router as order_router
 from .product_router import router as product_router
 from .sub_category_router import router as sub_category_router
@@ -29,6 +30,7 @@ router.include_router(offer_router)
 router.include_router(waybill_router)
 router.include_router(waybill_offers_router)
 router.include_router(order_router)
+router.include_router(order_offers_router)
 router.include_router(address_router)
 router.include_router(webhook_router)
 router.include_router(pricing_router)

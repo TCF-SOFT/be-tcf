@@ -10,7 +10,7 @@ from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.order_dao import OrderDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.order_service import OrderService
-from src.models import Product
+from src.models import Order, Product
 from src.schemas.common.enums import OrderStatus
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.order_offer_schema import (
@@ -73,6 +73,26 @@ async def get_order(
             detail=f"Order with id {order_id} not found.",
         )
     return res
+
+
+@router.get(
+    "/{order}/offers",
+    status_code=status.HTTP_200_OK,
+    response_model=list[OrderOfferSchema],
+)
+async def get_order_offers(
+    order: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
+):
+    """
+    Get all offers in order
+    """
+    order: Order = await OrderDAO.find_by_id(db_session, order)
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Order not found"
+        )
+
+    return await OrderService.fetch_order_offers(order)
 
 
 @router.get(

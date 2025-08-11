@@ -25,5 +25,5 @@ class OrderOfferPostSchema(_OrderOfferBaseSchema):
     pass
 
 
-class OrderOfferPutSchema(_OrderOfferBaseSchema):
+class OrderOfferPatchSchema(_OrderOfferBaseSchema):
     pass

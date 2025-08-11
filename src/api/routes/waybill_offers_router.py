@@ -3,10 +3,10 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.controllers.update_entity_controller import update_entity
-from schemas.waybill_offer_schema import WaybillOfferPatchSchema, WaybillOfferSchema
+from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.db_helper import db_helper
+from src.schemas.waybill_offer_schema import WaybillOfferPatchSchema, WaybillOfferSchema
 
 router = APIRouter(
     tags=["Waybill-Offers"],
@@ -37,7 +37,6 @@ async def update_offer_in_waybill(
 async def delete_offer_from_waybill(
     waybill_offer_id: UUID,
     db_session: AsyncSession = Depends(db_helper.session_getter),
-    # user=Depends(get_current_user),
 ):
     deleted = await WaybillOfferDAO.delete_by_id(db_session, waybill_offer_id)
     if not deleted:
