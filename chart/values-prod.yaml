@@ -1,6 +1,5 @@
 namespace: prod
 app: be-tcf
-host: api.eucalytics.uk
 
 datadog:
   env: prod

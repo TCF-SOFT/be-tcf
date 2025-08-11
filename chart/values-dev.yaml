@@ -1,6 +1,5 @@
 namespace: dev
 app: be-tcf
-host: api-dev.eucalytics.uk
 
 datadog:
   env: dev
