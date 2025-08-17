@@ -1,5 +1,5 @@
-import uuid
 from typing import TYPE_CHECKING
+from uuid import UUID
 
 from sqlalchemy import Boolean, ForeignKey, String
 from sqlalchemy import Enum as SQLEnum
@@ -10,15 +10,16 @@ from src.schemas.common.enums import WaybillType
 
 if TYPE_CHECKING:
     from src.models.offer import Offer
-    from src.models.user import User
+    from src.models.user import Order, User
     from src.models.waybill_offer import WaybillOffer
 
 
 class Waybill(Base):
     id: Mapped[uuid_pk]
-    author_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
-    customer_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("users.id"), nullable=False
+    author_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    customer_id: Mapped[UUID] = mapped_column(ForeignKey("users.id"), nullable=False)
+    order_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("orders.id"), nullable=True, unique=True, index=True
     )
 
     waybill_type: Mapped[WaybillType] = mapped_column(
@@ -40,6 +41,13 @@ class Waybill(Base):
         foreign_keys=[customer_id],
         back_populates="received_waybills",
         lazy="joined",
+    )
+    order: Mapped["Order"] = relationship(
+        "Order",
+        foreign_keys=[order_id],
+        back_populates="waybill",
+        lazy="noload",
+        uselist=True,
     )
     waybill_offers: Mapped[list["WaybillOffer"]] = relationship(
         "WaybillOffer", back_populates="waybill", lazy="selectin"

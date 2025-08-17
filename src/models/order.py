@@ -14,6 +14,7 @@ if TYPE_CHECKING:
     from src.models.address import Address
     from src.models.order_offer import OrderOffer
     from src.models.user import User
+    from src.models.waybill import Waybill
 
 
 class Order(Base):
@@ -29,6 +30,12 @@ class Order(Base):
     user: Mapped["User"] = relationship("User", back_populates="orders", lazy="joined")
     address: Mapped["Address"] = relationship(
         "Address", back_populates="orders", lazy="joined"
+    )
+    waybill: Mapped["Waybill"] = relationship(
+        "Waybill",
+        back_populates="order",
+        uselist=False,
+        lazy="selectin",
     )
     order_offers: Mapped[list["OrderOffer"]] = relationship(
         "OrderOffer", back_populates="order", lazy="selectin"

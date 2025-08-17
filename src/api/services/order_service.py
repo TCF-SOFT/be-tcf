@@ -6,11 +6,13 @@ from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.order_dao import OrderDAO
 from src.api.dao.order_offer_dao import OrderOfferDAO
 from src.api.dao.user_dao import UserDAO
-from src.models import Offer, Order, OrderOffer
-from src.schemas.common.enums import CustomerType
+from src.api.dao.waybill_dao import WaybillDAO
+from src.models import Offer, Order, OrderOffer, Waybill, WaybillOffer
+from src.schemas.common.enums import CustomerType, WaybillType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
 from src.schemas.order_schema import OrderWithOffersPostSchema
+from src.schemas.waybill_schema import WaybillPostSchema
 
 
 class OrderService:
@@ -98,3 +100,42 @@ class OrderService:
         await db_session.commit()
         await db_session.refresh(order, ["user", "order_offers"])
         return order
+
+    @staticmethod
+    async def convert_order_to_waybill(
+        db_session: AsyncSession,
+        order_id: UUID,
+        author_id: UUID,
+    ) -> Waybill:
+        """
+        Convert an order to a waybill.
+        """
+        order: Order = await OrderDAO.find_by_id(db_session, order_id)
+        if not order:
+            raise ValueError("Order not found")
+
+        waybill_object = WaybillPostSchema(
+            author_id=author_id,
+            customer_id=order.user.id,
+            waybill_type=WaybillType.WAYBILL_OUT,
+            is_pending=True,
+            note=order.note,
+        )
+        waybill: Waybill = await WaybillDAO.add(
+            db_session, **waybill_object.model_dump()
+        )
+
+        for order_offer in order.order_offers:
+            waybill_offer = WaybillOffer(
+                waybill_id=waybill.id,
+                offer_id=order_offer.offer_id,
+                quantity=order_offer.quantity,
+                brand=order_offer.brand,
+                manufacturer_number=order_offer.manufacturer_number,
+                price_rub=order_offer.price_rub,
+            )
+            waybill.waybill_offers.append(waybill_offer)
+
+        await db_session.commit()
+        await db_session.refresh(waybill, ["user", "waybill_offers"])
+        return waybill

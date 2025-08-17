@@ -6,11 +6,11 @@ from unittest import mock
 import pytest
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
+from src.api.auth.clerk import clerkClient
 from src.common.services.s3_service import S3Service
 from src.config import settings
 from src.models import Category, Offer, Product, SubCategory
 from src.models.base import Base
-from src.utils.logging import logger
 
 
 @pytest.fixture(scope="function")
@@ -18,7 +18,7 @@ async def patch_db(monkeypatch):
     from src.api.di.db_helper import DatabaseHelper
 
     test_helper = DatabaseHelper(settings.DB.PSQL_URL, is_test=True)
-    logger.warning(settings.DB.PSQL_URL)
+    # logger.warning(settings.DB.PSQL_URL)
     monkeypatch.setattr("src.api.di.db_helper.db_helper", test_helper)
     yield
     await test_helper.dispose()
@@ -65,6 +65,17 @@ async def setup_test_db(patch_db):
         await session.commit()
 
 
+async def _issue_session_token(
+    user_id: str = settings.AUTH.TEST_EMPLOYEE_CLERK_ID,
+) -> str:
+    """
+    Helper function to issue a session token for a user.
+    """
+    session = await clerkClient.sessions.create_async(request={"user_id": user_id})
+    token_res = await clerkClient.sessions.create_token_async(session_id=session.id)
+    return token_res.jwt
+
+
 # -------------------------------
 # 🧪 Client for HTTP testing
 # -------------------------------
@@ -78,7 +89,7 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(
         transport=ASGITransport(app=app),
         base_url="http://testserver",
-        headers={"Content-Type": "application/json"},
+        headers={"Content-Type": "application/json", "Origin": "http://testserver"},
     ) as test_client:
         # app.state.resources = ResourceModule(redis_service=RedisService())
         # app.state.redis_service = app.state.resources.get_redis_service()
@@ -93,35 +104,15 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
         yield test_client
 
 
-# TODO: restrict registration under the Employee role
 @pytest.fixture
-async def employee_token(client: AsyncClient) -> str:
-    await client.post(
-        "/auth/register",
-        json={
-            "email": "employee@test.com",
-            "password": "test",
-            "first_name": "Nikola",
-            "last_name": "Makiavelli",
-            "role": "EMPLOYEE",
-            "is_active": True,  # после регистрации
-            "is_superuser": False,  # только админ
-            "is_verified": False,  # после подтверждения
-        },
-    )
-
-    res = await client.post(
-        "/auth/login",
-        data={
-            "grant_type": "password",
-            "username": "employee@test.com",
-            "password": "test",
-        },
-        headers={"Content-Type": "application/x-www-form-urlencoded"},
-    )
-    logger.warning(res.text)
-    assert res.status_code == 200, "Login failed"
-    return res.json()["access_token"]
+async def employee_token() -> str:
+    """
+    Future-idea:
+    1. Create a user with    clerkClient.users.create()
+    2. Delete it after test  clerkClient.users.delete_async()
+    Blocked-by: creation would trigger Clerk Webhook and create a user in the target database
+    """
+    return await _issue_session_token()
 
 
 @pytest.fixture

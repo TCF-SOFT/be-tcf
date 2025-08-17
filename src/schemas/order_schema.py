@@ -7,6 +7,7 @@ from src.schemas.address_schema import AddressSchema
 from src.schemas.common.enums import OrderStatus
 from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
 from src.schemas.user_schema import UserSchema
+from src.schemas.waybill_schema import WaybillSchema
 
 
 class _OrderBaseSchema(BaseModel):
@@ -22,6 +23,7 @@ class OrderSchema(_OrderBaseSchema):
     id: UUID
     user: UserSchema
     address: AddressSchema
+    waybill: WaybillSchema | None = None
     order_offers: list[OrderOfferSchema]
     total_sum: float
 

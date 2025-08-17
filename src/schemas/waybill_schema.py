@@ -24,8 +24,9 @@ class _WaybillBaseSchema(BaseModel):
 
 class WaybillSchema(_WaybillBaseSchema):
     id: UUID
+    order_id: UUID | None = None
     author: UserSchema
-    customer: UserSchema | None = None
+    customer: UserSchema
 
     created_at: datetime
     updated_at: datetime

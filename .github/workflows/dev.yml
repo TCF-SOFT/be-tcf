@@ -48,6 +48,9 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - trivy
+    env:
+      TEST_EMPLOYEE_CLERK_ID: ${{ secrets.TEST_EMPLOYEE_CLERK_ID }}
+      CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
 
     services:
       postgres:

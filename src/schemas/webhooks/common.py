@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, computed_field
 
-from src.schemas.common.enums import Role
+from src.schemas.common.enums import CustomerType, Role
 
 
 class Verification(BaseModel):
@@ -31,7 +31,9 @@ class PublicMetadata(BaseModel):
     Represents the public metadata structure for Clerk webhook events.
     """
 
-    role: Role = Role.USER
+    _id: str
+    _role: Role
+    _customer_type: CustomerType
 
 
 class UserWebhookData(BaseModel):
@@ -49,6 +51,7 @@ class UserWebhookData(BaseModel):
     phone_numbers: list[dict]
     primary_email_address_id: str
     primary_phone_number_id: str | None
+    public_metadata: PublicMetadata | dict
 
     @computed_field
     @property

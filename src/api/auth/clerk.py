@@ -1,9 +1,11 @@
 import httpx
 from clerk_backend_api import Clerk
 from clerk_backend_api.security.types import AuthenticateRequestOptions, RequestState
-from fastapi import HTTPException, Request, status
+from fastapi import Depends, HTTPException, Request, status
 
-from src.config import settings
+from src.config import ServerEnv, settings
+from src.schemas.common.enums import Role
+from src.schemas.webhooks.common import PublicMetadata
 
 clerkClient = Clerk(bearer_auth=settings.AUTH.CLERK_SECRET_KEY)
 
@@ -19,21 +21,53 @@ async def require_clerk_session(
     hx_request = httpx.Request(
         method=request.method,
         url=str(request.url),
-        headers=request.headers,  # <-- содержат Authorization
+        headers=request.headers,
     )
 
-    # Можно дополнительно ограничить aud (authorized_parties) —
+    # Restriction for (authorized_parties) —
     # это защищает от токенов, выписанных для других доменов.
-    state = clerkClient.authenticate_request(
-        hx_request,
-        AuthenticateRequestOptions(authorized_parties=settings.AUTH.AUTHORIZED_PARTIES),
-    )
-
+    if settings.SERVER.ENV == ServerEnv.TEST:
+        state = clerkClient.authenticate_request(
+            hx_request, AuthenticateRequestOptions()
+        )
+    else:
+        state = clerkClient.authenticate_request(
+            hx_request,
+            AuthenticateRequestOptions(
+                authorized_parties=settings.AUTH.AUTHORIZED_PARTIES
+            ),
+        )
     if not state.is_signed_in:
-        # state.reason содержит причину (expired, invalid_signature…)
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail=f"Unauthenticated: {state.reason}",
         )
 
     return state
+
+
+def require_role(
+    *allowed: Role,
+):
+    """
+    Dependency factory for RBAC
+    """
+    allowed_values = {r.value for r in allowed}
+
+    async def _dep(state: RequestState = Depends(require_clerk_session)) -> str:
+        if settings.SERVER.ENV == ServerEnv.TEST:
+            return settings.AUTH.TEST_EMPLOYEE_CLERK_ID
+        else:
+            clerk_id: str = state.payload.get("clerk_id")
+            user = await clerkClient.users.get_async(user_id=clerk_id)
+            public_md: PublicMetadata | dict = user.public_metadata
+            user_role = public_md.get("_role")
+
+            if not user_role or user_role not in allowed_values:
+                raise HTTPException(
+                    status_code=status.HTTP_403_FORBIDDEN,
+                    detail=f"Access denied: role {user_role} is not allowed.",
+                )
+            return clerk_id
+
+    return _dep

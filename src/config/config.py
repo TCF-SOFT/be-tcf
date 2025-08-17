@@ -100,7 +100,9 @@ class AuthConfig(BaseModel):
         "http://localhost:3000",
         "https://tcf.eucalytics.uk",
         "https://tcf-dev.eucalytics.uk",
+        "http://testserver",
     ]
+    TEST_EMPLOYEE_CLERK_ID: str = env.str("TEST_EMPLOYEE_CLERK_ID")
 
 
 class ServerConfig(BaseModel):

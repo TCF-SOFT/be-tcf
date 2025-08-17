@@ -20,8 +20,8 @@ class OrderOffer(Base):
     __tablename__ = "order_offers"
 
     id: Mapped[uuid_pk]
-    order_id: Mapped[str] = mapped_column(ForeignKey("orders.id"), nullable=False)
-    offer_id: Mapped[str] = mapped_column(ForeignKey("offers.id"), nullable=False)
+    order_id: Mapped[uuid_pk] = mapped_column(ForeignKey("orders.id"), nullable=False)
+    offer_id: Mapped[uuid_pk] = mapped_column(ForeignKey("offers.id"), nullable=False)
     quantity: Mapped[int] = mapped_column(Integer, nullable=False)
 
     # Snapshot fields
