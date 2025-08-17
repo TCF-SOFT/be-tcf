@@ -104,18 +104,15 @@ class OrderService:
     @staticmethod
     async def convert_order_to_waybill(
         db_session: AsyncSession,
-        order_id: UUID,
+        order: Order,
         author_id: UUID,
     ) -> Waybill:
         """
         Convert an order to a waybill.
         """
-        order: Order = await OrderDAO.find_by_id(db_session, order_id)
-        if not order:
-            raise ValueError("Order not found")
-
         waybill_object = WaybillPostSchema(
             author_id=author_id,
+            order_id=order.id,
             customer_id=order.user.id,
             waybill_type=WaybillType.WAYBILL_OUT,
             is_pending=True,
@@ -137,5 +134,6 @@ class OrderService:
             waybill.waybill_offers.append(waybill_offer)
 
         await db_session.commit()
-        await db_session.refresh(waybill, ["user", "waybill_offers"])
+        await db_session.refresh(waybill, ["author", "waybill_offers"])
+        await db_session.refresh(order, ["waybill"])
         return waybill

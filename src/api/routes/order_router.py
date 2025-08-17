@@ -22,6 +22,7 @@ from src.schemas.order_schema import (
     OrderSchema,
     OrderWithOffersPostSchema,
 )
+from src.schemas.waybill_schema import WaybillSchema
 
 # Flow:
 # 1. Create a cart
@@ -168,6 +169,36 @@ async def add_offer_to_order(
         manufacturer_number=order_offer_obj.manufacturer_number,
         price_rub=order_offer_obj.price_rub,
     )
+
+
+@router.post(
+    "/{order_id}/convert",
+    response_model=WaybillSchema,
+    summary="Convert order to waybill",
+    status_code=status.HTTP_201_CREATED,
+    # dependencies=[Depends(require_clerk_session)],
+)
+async def convert_order_to_waybill(
+    order_id: UUID,
+    author_id: UUID,
+    db_session: AsyncSession = Depends(db_helper.session_getter_manual),
+):
+    """
+    Convert an order to a waybill.
+    This will create a waybill from the order and flush the order.
+    """
+    order = await OrderDAO.find_by_id(db_session, order_id)
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Order not found"
+        )
+    if order.waybill:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Order is already converted to a waybill",
+        )
+
+    return await OrderService.convert_order_to_waybill(db_session, order, author_id)
 
 
 @router.patch(

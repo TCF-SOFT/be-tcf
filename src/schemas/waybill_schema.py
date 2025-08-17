@@ -14,7 +14,8 @@ from src.schemas.waybill_offer_schema import WaybillOfferPostSchema
 
 class _WaybillBaseSchema(BaseModel):
     author_id: UUID
-    customer_id: UUID | None = None
+    customer_id: UUID
+    order_id: UUID | None = None
     waybill_type: WaybillType = Field(..., examples=[WaybillType.WAYBILL_OUT])
     is_pending: bool = Field(..., examples=[True])
     note: str | None = None
@@ -24,7 +25,6 @@ class _WaybillBaseSchema(BaseModel):
 
 class WaybillSchema(_WaybillBaseSchema):
     id: UUID
-    order_id: UUID | None = None
     author: UserSchema
     customer: UserSchema
 
