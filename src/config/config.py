@@ -102,7 +102,7 @@ class AuthConfig(BaseModel):
         "https://tcf-dev.eucalytics.uk",
         "http://testserver",
     ]
-    TEST_EMPLOYEE_CLERK_ID: str = env.str("TEST_EMPLOYEE_CLERK_ID")
+    TEST_EMPLOYEE_CLERK_ID: str = env.str("TEST_EMPLOYEE_CLERK_ID", "")
 
 
 class ServerConfig(BaseModel):
