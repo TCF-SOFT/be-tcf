@@ -17,6 +17,7 @@ class _BaseUser(BaseModel):
     last_name: str = Field(..., examples=["Pinov"])
     is_active: bool = True
     role: Role = Field("USER", examples=[Role.USER])
+    balance_rub: int
 
     # --------------------------------------------------
     #      Customer Only Fields - Public Metadata

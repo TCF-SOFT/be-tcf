@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     Boolean,
-    String,
+    String, Integer,
 )
 from sqlalchemy import (
     Enum as SQLEnum,
@@ -36,6 +36,7 @@ class User(Base):
         nullable=False,
         default=Role.USER,
     )
+    balance_rub: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
 
     # --------------------------------------------------
     #      Customer Only Fields - Public Metadata

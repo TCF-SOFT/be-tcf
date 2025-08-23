@@ -24,8 +24,6 @@ class _ProductBase(BaseModel):
             "6962492, 1048310, 97AG2K021BA, 1133750, 1048308, 6180371, 94AB2K021AB, 6704271, 1130753"
         ],
     )
-    description: str | None = Field(None, examples=["Колодки тормозные передние"])
-
     sub_category_id: UUID = Field(
         ..., examples=["34805edd-26da-456b-8360-aee69bce5092"]
     )
