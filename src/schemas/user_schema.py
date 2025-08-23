@@ -16,14 +16,14 @@ class _BaseUser(BaseModel):
     first_name: str = Field(..., examples=["Vasilii"])
     last_name: str = Field(..., examples=["Pinov"])
     is_active: bool = True
-    role: Role = Field("USER", examples=[Role.USER])
+    role: Role = Field(Role.USER, examples=[Role.USER])
     balance_rub: int
 
     # --------------------------------------------------
     #      Customer Only Fields - Public Metadata
     # --------------------------------------------------
     customer_type: CustomerType = Field(
-        default="USER_RETAIL", examples=[CustomerType.USER_RETAIL]
+        default=CustomerType.USER_RETAIL, examples=[CustomerType.USER_RETAIL]
     )
     mailing: bool = False
     phone: PhoneNumber | None = Field(None, examples=["+441234567890"])

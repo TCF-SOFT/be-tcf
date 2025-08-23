@@ -2,7 +2,8 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy import (
     Boolean,
-    String, Integer,
+    Integer,
+    String,
 )
 from sqlalchemy import (
     Enum as SQLEnum,
