@@ -1,7 +1,7 @@
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import delete as sa_delete
-from sqlalchemy import func, or_, select
+from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from schemas.user_schema import UserSchema
@@ -11,6 +11,30 @@ from src.models.user import User
 
 class UserDAO(BaseDAO):
     model = User
+
+    @classmethod
+    async def find_all_paginate(
+        cls,
+        db_session,
+        filter_by: dict,
+        search_term: str,
+    ) -> Page[UserSchema]:
+        search_term = f"%{search_term}%"
+        query = (
+            select(cls.model)
+            .filter_by(**filter_by)
+            .where(
+                or_(
+                    cls.model.first_name.ilike(search_term),
+                    cls.model.last_name.ilike(search_term),
+                    cls.model.phone.ilike(search_term),
+                    cls.model.email.ilike(search_term),
+                )
+            )
+            .order_by(cls.model.created_at.desc())
+        )
+
+        return await paginate(db_session, query)
 
     @classmethod
     async def find_by_clerk_id(
@@ -41,22 +65,3 @@ class UserDAO(BaseDAO):
 
         deleted_id = result.scalar_one_or_none()
         return deleted_id is not None
-
-    @classmethod
-    async def wildcard_search(
-        cls,
-        db_session,
-        search_term: str,
-    ) -> Page[UserSchema]:
-        search_term = f"%{search_term.replace('.', '')}%"
-
-        query = select(cls.model).where(
-            or_(
-                func.replace(cls.model.first_name, ".", "").ilike(search_term),
-                func.replace(cls.model.last_name, ".", "").ilike(search_term),
-                func.replace(cls.model.phone, ".", "").ilike(search_term),
-                func.replace(cls.model.email, ".", "").ilike(search_term),
-            )
-        )
-
-        return await paginate(db_session, query)

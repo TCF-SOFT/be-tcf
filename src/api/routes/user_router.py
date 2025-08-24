@@ -1,9 +1,11 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.params import Query
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas.common.enums import CustomerType
 from src.api.auth.clerk import clerkClient, require_clerk_session
 from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.user_dao import UserDAO
@@ -22,12 +24,14 @@ router = APIRouter(
 
 @router.get(
     "",
-    response_model=list[UserSchema],
+    response_model=Page[UserSchema],
     status_code=status.HTTP_200_OK,
-    summary="Return all users or filter them",
+    summary="Return all users with optional filters",
 )
 async def get_users(
     db_session: AsyncSession = Depends(db_helper.session_getter),
+    customer_type: CustomerType = None,
+    search_term: str = Query("", description="name, phone or email"),
     role: Role | None = None,
 ):
     filters = {}
@@ -35,7 +39,10 @@ async def get_users(
     if role:
         filters["role"] = role
 
-    return await UserDAO.find_all(db_session, filters)
+    if customer_type:
+        filters["customer_type"] = customer_type
+
+    return await UserDAO.find_all_paginate(db_session, filters, search_term=search_term)
 
 
 @router.get(
@@ -68,22 +75,6 @@ async def get_user_by_clerk_id(
             detail=f"User with clerk_id {clerk_id} not found.",
         )
     return res
-
-
-@router.get(
-    "/search/wildcard",
-    response_model=Page[UserSchema],
-    status_code=status.HTTP_200_OK,
-    summary="Search users by wildcard",
-)
-async def search_users(
-    search_term: str,
-    db_session: AsyncSession = Depends(db_helper.session_getter),
-):
-    """
-    Search users by wildcard.
-    """
-    return await UserDAO.wildcard_search(db_session, search_term)
 
 
 @router.get(

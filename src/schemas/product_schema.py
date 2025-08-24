@@ -58,13 +58,11 @@ class ProductPostSchema(_ProductBase):
         cls,
         name: Annotated[str, Form(...)],
         cross_number: Annotated[str | None, Form(...)],
-        description: Annotated[str | None, Form(...)],
         sub_category_id: Annotated[UUID, Form(...)],
     ) -> "ProductPostSchema":
         return cls(
             name=name,
             cross_number=cross_number,
-            description=description,
             sub_category_id=sub_category_id,
         )
 
@@ -80,12 +78,17 @@ class ProductPutSchema(_ProductBase):
         cls,
         name: Annotated[str, Form(...)],
         cross_number: Annotated[str | None, Form(...)],
-        description: Annotated[str | None, Form(...)],
         sub_category_id: Annotated[UUID, Form(...)],
     ) -> "ProductPutSchema":
         return cls(
             name=name,
             cross_number=cross_number,
-            description=description,
             sub_category_id=sub_category_id,
         )
+
+
+class ProductAnalyticalSchema(BaseModel):
+    name: str
+    image_url: HttpUrl
+    sold: int
+    revenue: float

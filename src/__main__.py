@@ -10,7 +10,6 @@ from fastapi.responses import ORJSONResponse
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
-from starlette.middleware.cors import CORSMiddleware
 
 from api.di.db_helper import db_helper
 from api.routes import router
@@ -92,13 +91,13 @@ add_pagination(app)
 # --------------------------------------------------
 #        FastAPI Middleware (FE + Logging)
 # --------------------------------------------------
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.SERVER.ALLOW_ORIGINS,
-    allow_credentials=settings.SERVER.ALLOW_CREDENTIALS,
-    allow_methods=settings.SERVER.ALLOW_METHODS,
-    allow_headers=settings.SERVER.ALLOW_HEADERS,
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=settings.SERVER.ALLOW_ORIGINS,
+#     allow_credentials=settings.SERVER.ALLOW_CREDENTIALS,
+#     allow_methods=settings.SERVER.ALLOW_METHODS,
+#     allow_headers=settings.SERVER.ALLOW_HEADERS,
+# )
 
 app.middleware("http")(LoggingMiddleware())
 

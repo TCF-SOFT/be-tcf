@@ -40,7 +40,7 @@ async def get_waybills(
     search_term: str = "",
 ):
     """
-    Get waybills by type and user ID
+    Get waybills with optional filters
     """
     filters = {}
     if waybill_type:
