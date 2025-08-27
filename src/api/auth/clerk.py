@@ -62,12 +62,13 @@ def require_role(
             user = await clerkClient.users.get_async(user_id=clerk_id)
             public_md: PublicMetadata | dict = user.public_metadata
             user_role = public_md.get("_role")
+            user_id = public_md.get("_id")
 
             if not user_role or user_role not in allowed_values:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"Access denied: role {user_role} is not allowed.",
                 )
-            return clerk_id
+            return user_id
 
     return _dep

@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_clerk_session
+from src.api.auth.clerk import require_clerk_session, require_role
 from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.user_dao import UserDAO
@@ -12,13 +12,12 @@ from src.api.dao.waybill_dao import WaybillDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.waybill_service import WaybillService
 from src.models import Product, User, Waybill
-from src.schemas.common.enums import WaybillType
+from src.schemas.common.enums import WaybillType, Role
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import (
-    WaybillPostSchema,
     WaybillSchema,
-    WaybillWithOffersPostSchema,
+    WaybillWithOffersPostSchema, WaybillWithOffersInternalPostSchema, WaybillPatchSchema,
 )
 
 router = APIRouter(
@@ -119,9 +118,19 @@ async def get_waybill_offers(
 )
 async def create_waybill(
     payload: WaybillWithOffersPostSchema,
+    author_id: UUID = Depends(require_role(Role.EMPLOYEE)),
     db_session: AsyncSession = Depends(db_helper.session_getter_manual),
 ):
-    return await WaybillService.post_waybill_with_offers(db_session, payload)
+    internal = WaybillWithOffersInternalPostSchema(
+        author_id=author_id,
+        **payload.model_dump()
+    )
+
+    # If customer_id is not provided, set it to author_id
+    if internal.customer_id is None:
+        internal.customer_id = internal.author_id
+
+    return await WaybillService.post_waybill_with_offers(db_session, internal)
 
 
 @router.patch(
@@ -131,7 +140,7 @@ async def create_waybill(
 )
 async def patch_waybill(
     waybill_id: UUID,
-    payload: WaybillPostSchema,
+    payload: WaybillPatchSchema,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     return await update_entity(

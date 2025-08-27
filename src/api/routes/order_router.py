@@ -4,14 +4,14 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_clerk_session
+from src.api.auth.clerk import require_clerk_session, require_role
 from src.api.controllers.update_entity_controller import update_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.order_dao import OrderDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.order_service import OrderService
 from src.models import Order, Product
-from src.schemas.common.enums import OrderStatus
+from src.schemas.common.enums import OrderStatus, Role
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.order_offer_schema import (
     OrderOfferPostSchema,
@@ -20,7 +20,7 @@ from src.schemas.order_offer_schema import (
 from src.schemas.order_schema import (
     OrderPatchSchema,
     OrderSchema,
-    OrderWithOffersPostSchema,
+    OrderWithOffersPostSchema, OrderWithOffersInternalPostSchema,
 )
 from src.schemas.waybill_schema import WaybillSchema
 
@@ -127,9 +127,14 @@ async def count_orders(
 )
 async def post_order(
     payload: OrderWithOffersPostSchema,
+    user_id: UUID = Depends(require_role(Role.USER, Role.EMPLOYEE)),
     db_session: AsyncSession = Depends(db_helper.session_getter_manual),
 ):
-    return await OrderService.post_order_with_offers(db_session, payload)
+    internal = OrderWithOffersInternalPostSchema(
+        user_id=user_id,
+        **payload.model_dump(),
+    )
+    return await OrderService.post_order_with_offers(db_session, internal)
 
 
 @router.post(
@@ -176,11 +181,10 @@ async def add_offer_to_order(
     response_model=WaybillSchema,
     summary="Convert order to waybill",
     status_code=status.HTTP_201_CREATED,
-    # dependencies=[Depends(require_clerk_session)],
 )
 async def convert_order_to_waybill(
     order_id: UUID,
-    author_id: UUID,
+    author_id: UUID = Depends(require_role(Role.EMPLOYEE)),
     db_session: AsyncSession = Depends(db_helper.session_getter_manual),
 ):
     """

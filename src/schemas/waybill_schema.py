@@ -13,8 +13,7 @@ from src.schemas.waybill_offer_schema import WaybillOfferPostSchema
 
 
 class _WaybillBaseSchema(BaseModel):
-    author_id: UUID
-    customer_id: UUID
+    customer_id: UUID | None = None
     order_id: UUID | None = None
     waybill_type: WaybillType = Field(..., examples=[WaybillType.WAYBILL_OUT])
     is_pending: bool = Field(..., examples=[True])
@@ -35,10 +34,10 @@ class WaybillSchema(_WaybillBaseSchema):
 
 
 class WaybillPostSchema(_WaybillBaseSchema):
-    pass
+    author_id: UUID
 
 
-class WaybillPutSchema(_WaybillBaseSchema):
+class WaybillPatchSchema(_WaybillBaseSchema):
     pass
 
 
@@ -47,3 +46,11 @@ class WaybillWithOffersPostSchema(_WaybillBaseSchema):
         default_factory=list,
         description="List of offers would be added to Waybill",
     )
+
+class WaybillWithOffersInternalPostSchema(_WaybillBaseSchema):
+    author_id: UUID
+    waybill_offers: list[WaybillOfferPostSchema] = Field(
+        default_factory=list,
+        description="List of offers would be added to Waybill",
+    )
+

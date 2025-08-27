@@ -10,7 +10,7 @@ from src.models import Offer, Waybill, WaybillOffer
 from src.schemas.common.enums import CustomerType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
-from src.schemas.waybill_schema import WaybillWithOffersPostSchema
+from src.schemas.waybill_schema import WaybillWithOffersPostSchema, WaybillWithOffersInternalPostSchema
 
 
 class WaybillService:
@@ -94,7 +94,7 @@ class WaybillService:
     @staticmethod
     async def post_waybill_with_offers(
         db_session: AsyncSession,
-        payload: WaybillWithOffersPostSchema,
+        payload: WaybillWithOffersInternalPostSchema,
     ) -> Waybill:
         """
         Create a new waybill with offers.

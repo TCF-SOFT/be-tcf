@@ -91,6 +91,7 @@ class SMTPConfig(BaseModel):
     SMTP_PORT: int = env.int("SMTP_PORT")
     SMTP_USER: str = env.str("SMTP_USER")
     SMTP_PASS: str = env.str("SMTP_PASS")
+    RESEND_API_KEY: str = env.str("RESEND_API_KEY", "")
 
 
 class AuthConfig(BaseModel):
