@@ -12,12 +12,14 @@ from src.api.dao.waybill_dao import WaybillDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.waybill_service import WaybillService
 from src.models import Product, User, Waybill
-from src.schemas.common.enums import WaybillType, Role
+from src.schemas.common.enums import Role, WaybillType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import (
+    WaybillPatchSchema,
     WaybillSchema,
-    WaybillWithOffersPostSchema, WaybillWithOffersInternalPostSchema, WaybillPatchSchema,
+    WaybillWithOffersInternalPostSchema,
+    WaybillWithOffersPostSchema,
 )
 
 router = APIRouter(
@@ -122,8 +124,7 @@ async def create_waybill(
     db_session: AsyncSession = Depends(db_helper.session_getter_manual),
 ):
     internal = WaybillWithOffersInternalPostSchema(
-        author_id=author_id,
-        **payload.model_dump()
+        author_id=author_id, **payload.model_dump()
     )
 
     # If customer_id is not provided, set it to author_id

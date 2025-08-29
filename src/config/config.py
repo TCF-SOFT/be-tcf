@@ -169,6 +169,8 @@ class Settings(BaseSettings):
     DEBUG: bool = env.bool("DEBUG", False)
     PROJECT_NAME: str = env.str("PROJECT_NAME", "be-tcf")
 
+    DOCX3R_URL: str = env.str("DOCX3R_URL", "https://api.eucalytics.uk/docx3r")
+
     # OpenAI (Not used yet)
     OPENAI_API_KEY: str = env.str("OPENAI_API_KEY", "")
     IMAGE_PLACEHOLDER_URL: str = (

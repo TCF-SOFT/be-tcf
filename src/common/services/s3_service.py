@@ -107,12 +107,17 @@ class S3Service:
         return f"{self._endpoint}/{self._bucket}/{key}"
 
     @staticmethod
-    def generate_key(file_name: str, remote_path: str = "tmp/") -> str:
+    def generate_key(
+        file_name: str, remote_path: str = "tmp/", use_file_name: bool = False
+    ) -> str:
         """
         Generate a unique key for the file to be uploaded to S3.
         # 1. safe suffix extraction
-        # 2. build key: <remote_path>/<uuid>.<ext>
+        # 2. build key: <remote_path>/<uuid>.<ext> or <remote_path>/<file_name>
         """
+        if use_file_name:
+            return f"{remote_path.rstrip('/')}/{file_name}".lstrip("/")
+
         suffix = Path(file_name).suffix.lower()
         key = f"{remote_path.rstrip('/')}/{uuid.uuid4().hex}{suffix}".lstrip("/")
         return key

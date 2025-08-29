@@ -20,7 +20,8 @@ from src.schemas.order_offer_schema import (
 from src.schemas.order_schema import (
     OrderPatchSchema,
     OrderSchema,
-    OrderWithOffersPostSchema, OrderWithOffersInternalPostSchema,
+    OrderWithOffersInternalPostSchema,
+    OrderWithOffersPostSchema,
 )
 from src.schemas.waybill_schema import WaybillSchema
 

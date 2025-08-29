@@ -10,7 +10,9 @@ from src.models import Offer, Waybill, WaybillOffer
 from src.schemas.common.enums import CustomerType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
-from src.schemas.waybill_schema import WaybillWithOffersPostSchema, WaybillWithOffersInternalPostSchema
+from src.schemas.waybill_schema import (
+    WaybillWithOffersInternalPostSchema,
+)
 
 
 class WaybillService:

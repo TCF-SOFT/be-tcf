@@ -47,10 +47,10 @@ class WaybillWithOffersPostSchema(_WaybillBaseSchema):
         description="List of offers would be added to Waybill",
     )
 
+
 class WaybillWithOffersInternalPostSchema(_WaybillBaseSchema):
     author_id: UUID
     waybill_offers: list[WaybillOfferPostSchema] = Field(
         default_factory=list,
         description="List of offers would be added to Waybill",
     )
-

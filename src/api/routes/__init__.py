@@ -4,7 +4,9 @@ from fastapi.security import HTTPBearer
 from .address_router import router as address_router
 from .analytical_router import router as analytical_router
 from .category_router import router as category_router
+from .documents_router import router as documents_router
 from .health_check_router import router as health_check_router
+from .mail_router import router as mail_router
 from .offer_router import router as offer_router
 from .order_offers_router import router as order_offers_router
 from .order_router import router as order_router
@@ -36,3 +38,5 @@ router.include_router(address_router)
 router.include_router(webhook_router)
 router.include_router(health_check_router)
 router.include_router(version_router)
+router.include_router(mail_router)
+router.include_router(documents_router)

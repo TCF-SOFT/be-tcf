@@ -11,7 +11,9 @@ from src.models import Offer, Order, OrderOffer, Waybill, WaybillOffer
 from src.schemas.common.enums import CustomerType, WaybillType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
-from src.schemas.order_schema import OrderWithOffersPostSchema, OrderWithOffersInternalPostSchema
+from src.schemas.order_schema import (
+    OrderWithOffersInternalPostSchema,
+)
 from src.schemas.waybill_schema import WaybillPostSchema
 
 

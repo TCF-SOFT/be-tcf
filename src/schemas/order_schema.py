@@ -44,12 +44,14 @@ class OrderWithOffersPostSchema(_OrderBaseSchema):
         description="List of offers to be added to the Order",
     )
 
+
 class OrderWithOffersInternalPostSchema(_OrderBaseSchema):
     """
     Internal schema with injected user_id
     Injection happens in the route layer from JWT
     Used to remove user_id from the public schema on Frontend
     """
+
     user_id: UUID = Field(..., examples=["13a6f665-da25-4868-92c3-4e6a39dd3c6f"])
     order_offers: list[OrderOfferPostSchema] = Field(
         default_factory=list,
