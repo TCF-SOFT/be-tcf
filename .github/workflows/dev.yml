@@ -51,6 +51,8 @@ jobs:
     env:
       TEST_EMPLOYEE_CLERK_ID: ${{ secrets.TEST_EMPLOYEE_CLERK_ID }}
       CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+      API_KEY: ${{ secrets.API_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
 
     services:
       postgres:

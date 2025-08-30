@@ -4,6 +4,7 @@ from typing import BinaryIO
 from fastapi import APIRouter, Depends, status
 from pydantic import HttpUrl
 
+from src.api.auth import validate_api_key
 from src.api.controllers.price_controller import fetch_price_list
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
@@ -16,6 +17,7 @@ router = APIRouter(tags=["Documents"], prefix="/documents")
     "/price",
     summary="Upload PriceList to S3 and return a presigned URL",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(validate_api_key)],
 )
 async def upload_price_and_get_link(
     s3: S3Service = Depends(get_s3_service),

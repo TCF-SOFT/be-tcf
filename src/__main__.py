@@ -91,14 +91,6 @@ add_pagination(app)
 # --------------------------------------------------
 #        FastAPI Middleware (FE + Logging)
 # --------------------------------------------------
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=settings.SERVER.ALLOW_ORIGINS,
-#     allow_credentials=settings.SERVER.ALLOW_CREDENTIALS,
-#     allow_methods=settings.SERVER.ALLOW_METHODS,
-#     allow_headers=settings.SERVER.ALLOW_HEADERS,
-# )
-
 app.middleware("http")(LoggingMiddleware())
 
 

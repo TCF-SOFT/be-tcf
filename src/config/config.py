@@ -91,7 +91,7 @@ class SMTPConfig(BaseModel):
     SMTP_PORT: int = env.int("SMTP_PORT")
     SMTP_USER: str = env.str("SMTP_USER")
     SMTP_PASS: str = env.str("SMTP_PASS")
-    RESEND_API_KEY: str = env.str("RESEND_API_KEY", "")
+    RESEND_API_KEY: str = env.str("RESEND_API_KEY")
 
 
 class AuthConfig(BaseModel):
@@ -105,6 +105,9 @@ class AuthConfig(BaseModel):
     ]
     TEST_EMPLOYEE_CLERK_ID: str = env.str("TEST_EMPLOYEE_CLERK_ID", "")
 
+    # API key to secure certain endpoints
+    API_KEY: str = env.str("API_KEY")
+
 
 class ServerConfig(BaseModel):
     """
@@ -114,22 +117,6 @@ class ServerConfig(BaseModel):
     HOST: str = "0.0.0.0"
     PORT: int = 8080
     ENV: ServerEnv = env.str("ENV", "DEV").upper()
-
-    # CORS settings
-    ALLOW_ORIGINS: list[str] = [
-        "https://tcf.eucalytics.uk",
-        "https://tcf-dev.eucalytics.uk",
-        "http://localhost:3000",
-    ]
-    ALLOW_CREDENTIALS: bool = True
-    ALLOW_METHODS: list[str] = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    ALLOW_HEADERS: list[str] = [
-        "Content-Type",
-        "Set-Cookie",
-        "Authorization",
-        "Access-Control-Allow-Headers",
-        "Access-Control-Allow-Origin",
-    ]
 
     @computed_field
     def DOCS_URL(self) -> str | None:
