@@ -6,9 +6,6 @@ from config import settings
 router = APIRouter(tags=["Mailing"], prefix="/mail")
 resend.api_key = settings.SMTP.RESEND_API_KEY
 
-f: bytes = open("price_opt.xlsx", "rb").read()
-attachment: resend.Attachment = {"content": list(f), "filename": "price_opt.xlsx"}
-
 
 @router.post(
     "",
@@ -20,7 +17,6 @@ def send_mail() -> dict:
         "to": ["utikpuhlik@gmail.com"],
         "subject": "ТЦ Форд - рассылка",
         "html": "<strong>it works!</strong> <a href=https://eucalytics.uk>Перейти на сайт</a>",
-        "attachments": [attachment],
     }
     email: resend.Email = resend.Emails.send(params)
     return email
