@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import StrEnum
 
 from environs import Env
 from pydantic import BaseModel, PostgresDsn, computed_field
@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings
 env = Env()
 
 
-class ServerEnv(str, Enum):
+class ServerEnv(StrEnum):
     TEST = "TEST"
     DEV = "DEV"
     PROD = "PROD"

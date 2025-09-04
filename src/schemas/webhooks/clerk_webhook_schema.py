@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -15,7 +15,7 @@ class DeleteUserWebhookData(BaseModel):
     object: str
 
 
-class EventType(str, Enum):
+class EventType(StrEnum):
     USER_CREATED = "user.created"
     USER_UPDATED = "user.updated"
     USER_DELETED = "user.deleted"
