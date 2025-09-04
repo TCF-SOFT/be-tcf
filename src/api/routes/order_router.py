@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_clerk_session, require_role
-from src.api.controllers.update_entity_controller import update_entity
+from src.api.auth.clerk import require_role
+from src.api.core.update_entity import update_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.order_dao import OrderDAO
 from src.api.di.db_helper import db_helper
@@ -34,7 +34,6 @@ from src.schemas.waybill_schema import WaybillSchema
 router = APIRouter(
     tags=["Orders"],
     prefix="/orders",
-    dependencies=[Depends(require_clerk_session)],
 )
 
 
@@ -43,6 +42,7 @@ router = APIRouter(
     response_model=Page[OrderSchema],
     summary="Return all orders",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_role(Role.USER))],
 )
 async def get_orders(
     db_session: AsyncSession = Depends(db_helper.session_getter),
@@ -65,6 +65,7 @@ async def get_orders(
     response_model=OrderSchema,
     summary="Return offer by id",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_role(Role.USER))],
 )
 async def get_order(
     order_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
@@ -82,6 +83,7 @@ async def get_order(
     "/{order}/offers",
     status_code=status.HTTP_200_OK,
     response_model=list[OrderOfferSchema],
+    dependencies=[Depends(require_role(Role.USER))],
 )
 async def get_order_offers(
     order: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
@@ -103,6 +105,7 @@ async def get_order_offers(
     response_model=dict[str, int],
     summary="Return count of orders",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def count_orders(
     order_status: OrderStatus | None = None,
@@ -125,10 +128,11 @@ async def count_orders(
     response_model=OrderSchema,
     summary="Create a new order",
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_role(Role.USER))],
 )
 async def post_order(
     payload: OrderWithOffersPostSchema,
-    user_id: UUID = Depends(require_role(Role.USER, Role.EMPLOYEE)),
+    user_id: UUID = Depends(require_role(Role.USER)),
     db_session: AsyncSession = Depends(db_helper.session_getter_manual),
 ):
     internal = OrderWithOffersInternalPostSchema(
@@ -142,6 +146,7 @@ async def post_order(
     "/{order_id}/offers",
     status_code=status.HTTP_201_CREATED,
     response_model=OrderOfferSchema,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def add_offer_to_order(
     order_id: UUID,
@@ -182,6 +187,7 @@ async def add_offer_to_order(
     response_model=WaybillSchema,
     summary="Convert order to waybill",
     status_code=status.HTTP_201_CREATED,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def convert_order_to_waybill(
     order_id: UUID,
@@ -211,7 +217,7 @@ async def convert_order_to_waybill(
     response_model=OrderSchema,
     summary="Update order by id",
     status_code=status.HTTP_200_OK,
-    # dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_order(
     order_id: UUID,
@@ -227,7 +233,7 @@ async def patch_order(
     "/{order_id}",
     summary="Delete order by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    # dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.ADMIN))],
 )
 async def delete_order(
     order_id: UUID,

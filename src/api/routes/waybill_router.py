@@ -4,8 +4,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_clerk_session, require_role
-from src.api.controllers.update_entity_controller import update_entity
+from src.api.auth.clerk import require_role
+from src.api.core.update_entity import update_entity
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.user_dao import UserDAO
 from src.api.dao.waybill_dao import WaybillDAO
@@ -25,7 +25,6 @@ from src.schemas.waybill_schema import (
 router = APIRouter(
     tags=["Waybills"],
     prefix="/waybills",
-    dependencies=[Depends(require_clerk_session)],
 )
 
 
@@ -33,6 +32,7 @@ router = APIRouter(
     "",
     status_code=status.HTTP_200_OK,
     response_model=Page[WaybillSchema],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def get_waybills(
     db_session: AsyncSession = Depends(db_helper.session_getter),
@@ -57,6 +57,7 @@ async def get_waybills(
     "/{waybill_id}",
     status_code=status.HTTP_200_OK,
     response_model=WaybillSchema,
+    dependencies=[Depends(require_role(Role.USER))],
 )
 async def get_waybill(
     waybill_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
@@ -77,6 +78,7 @@ async def get_waybill(
     response_model=dict[str, int],
     summary="Return count of waybills",
     status_code=status.HTTP_200_OK,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def count_waybills(
     waybill_type: WaybillType | None = None,
@@ -97,6 +99,7 @@ async def count_waybills(
     "/{waybill_id}/offers",
     status_code=status.HTTP_200_OK,
     response_model=list[WaybillOfferSchema],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def get_waybill_offers(
     waybill_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)
@@ -117,6 +120,7 @@ async def get_waybill_offers(
     "",
     status_code=status.HTTP_201_CREATED,
     response_model=WaybillSchema,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def create_waybill(
     payload: WaybillWithOffersPostSchema,
@@ -138,6 +142,7 @@ async def create_waybill(
     "/{waybill_id}",
     status_code=status.HTTP_200_OK,
     response_model=WaybillSchema,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_waybill(
     waybill_id: UUID,
@@ -160,7 +165,7 @@ async def patch_waybill(
 async def commit_waybill(
     waybill_id: UUID,
     db_session: AsyncSession = Depends(db_helper.session_getter),
-    session=Depends(require_clerk_session),
+    session=Depends(require_role(Role.EMPLOYEE)),
 ):
     user: User | None = await UserDAO.find_by_clerk_id(
         db_session, session.payload["sub"]
@@ -176,6 +181,7 @@ async def commit_waybill(
     "/{waybill_id}/offers",
     status_code=status.HTTP_201_CREATED,
     response_model=WaybillOfferSchema,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def add_offer_to_waybill(
     waybill_id: UUID,
@@ -214,6 +220,7 @@ async def add_offer_to_waybill(
 @router.delete(
     "/{waybill_id}",
     status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def delete_waybill(
     waybill_id: UUID, db_session: AsyncSession = Depends(db_helper.session_getter)

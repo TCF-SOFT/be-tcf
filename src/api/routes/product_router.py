@@ -5,9 +5,10 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.auth.clerk import require_clerk_session
-from src.api.controllers.create_entity_controller import create_entity_with_image
-from src.api.controllers.update_entity_controller import (
+from api.auth.clerk import require_role
+from schemas.common.enums import Role
+from src.api.core.create_entity import create_entity_with_image
+from src.api.core.update_entity import (
     update_entity_with_optional_image,
 )
 from src.api.dao.product_dao import ProductDAO
@@ -129,7 +130,7 @@ async def full_text_search_products(
     response_model=ProductSchema,
     summary="Create new product",
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def post_product(
     payload: Annotated[ProductPostSchema, Depends(ProductPostSchema.as_form)],
@@ -153,7 +154,7 @@ async def post_product(
     response_model=ProductSchema,
     summary="Update product by id",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_product(
     product_id: UUID,
@@ -177,7 +178,7 @@ async def patch_product(
     "/{product_id}",
     summary="Delete product by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.ADMIN))],
 )
 async def delete_product(
     product_id: UUID,

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, status
 from pydantic import HttpUrl
 
 from src.api.auth import validate_api_key
-from src.api.controllers.price_controller import fetch_price_list
+from src.api.core.price_service import fetch_price_list
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 

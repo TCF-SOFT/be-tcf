@@ -5,12 +5,11 @@ from fastapi.params import Query
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.common.enums import CustomerType
-from src.api.auth.clerk import clerkClient, require_clerk_session
-from src.api.controllers.update_entity_controller import update_entity
+from src.api.auth.clerk import clerkClient, require_role
+from src.api.core.update_entity import update_entity
 from src.api.dao.user_dao import UserDAO
 from src.api.di.db_helper import db_helper
-from src.schemas.common.enums import Role
+from src.schemas.common.enums import CustomerType, Role
 from src.schemas.user_schema import UserSchema, UserUpdate
 from src.utils.logging import logger
 
@@ -18,7 +17,6 @@ from src.utils.logging import logger
 router = APIRouter(
     tags=["Users"],
     prefix="/users",
-    dependencies=[Depends(require_clerk_session)],
 )
 
 
@@ -27,6 +25,7 @@ router = APIRouter(
     response_model=Page[UserSchema],
     status_code=status.HTTP_200_OK,
     summary="Return all users with optional filters",
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def get_users(
     db_session: AsyncSession = Depends(db_helper.session_getter),
@@ -50,6 +49,7 @@ async def get_users(
     response_model=UserSchema,
     status_code=status.HTTP_200_OK,
     summary="Return a single user by id",
+    dependencies=[Depends(require_role(Role.USER))],
 )
 async def get_user_by_id(
     user_id: UUID,
@@ -63,6 +63,7 @@ async def get_user_by_id(
     response_model=UserSchema,
     status_code=status.HTTP_200_OK,
     summary="Return a single user by id",
+    dependencies=[Depends(require_role(Role.USER))],
 )
 async def get_user_by_clerk_id(
     clerk_id: str,
@@ -82,6 +83,7 @@ async def get_user_by_clerk_id(
     response_model=dict[str, int],
     status_code=status.HTTP_200_OK,
     summary="Return count of users",
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def count_users(
     db_session: AsyncSession = Depends(db_helper.session_getter),
@@ -100,6 +102,7 @@ async def count_users(
     response_model=UserSchema,
     status_code=status.HTTP_200_OK,
     summary="Selective update a user by id",
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_user(
     user_id: UUID,

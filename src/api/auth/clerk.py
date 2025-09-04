@@ -4,7 +4,7 @@ from clerk_backend_api.security.types import AuthenticateRequestOptions, Request
 from fastapi import Depends, HTTPException, Request, status
 
 from src.config import ServerEnv, settings
-from src.schemas.common.enums import Role
+from src.schemas.common.enums import ROLE_HIERARCHY, Role
 from src.schemas.webhooks.common import PublicMetadata
 
 clerkClient = Clerk(bearer_auth=settings.AUTH.CLERK_SECRET_KEY)
@@ -51,8 +51,9 @@ def require_role(
 ):
     """
     Dependency factory for RBAC
+    ADMIN > EMPLOYEE > USER
     """
-    allowed_values = {r.value for r in allowed}
+    min_required = max(ROLE_HIERARCHY[r] for r in allowed)
 
     async def _dep(state: RequestState = Depends(require_clerk_session)) -> str:
         if settings.SERVER.ENV == ServerEnv.TEST:
@@ -64,7 +65,7 @@ def require_role(
             user_role = public_md.get("_role")
             user_id = public_md.get("_id")
 
-            if not user_role or user_role not in allowed_values:
+            if not user_role or ROLE_HIERARCHY.get(Role(user_role), 0) < min_required:
                 raise HTTPException(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"Access denied: role {user_role} is not allowed.",

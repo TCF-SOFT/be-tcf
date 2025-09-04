@@ -6,9 +6,10 @@ from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from api.auth.clerk import require_clerk_session
-from src.api.controllers.create_entity_controller import create_entity_with_image
-from src.api.controllers.update_entity_controller import (
+from api.auth.clerk import require_role
+from schemas.common.enums import Role
+from src.api.core.create_entity import create_entity_with_image
+from src.api.core.update_entity import (
     update_entity_with_optional_image,
 )
 from src.api.dao.category_dao import CategoryDAO
@@ -95,7 +96,7 @@ async def get_sub_category_by_slug(
     "",
     response_model=SubCategorySchema,
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def post_sub_category(
     payload: Annotated[SubCategoryPostSchema, Depends(SubCategoryPostSchema.as_form)],
@@ -119,7 +120,7 @@ async def post_sub_category(
     response_model=SubCategorySchema,
     summary="Update a sub_category by id",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_sub_category(
     sub_category_id: UUID,
@@ -143,7 +144,7 @@ async def patch_sub_category(
     "/{sub_category_id}",
     summary="Delete sub_category by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.ADMIN))],
 )
 async def delete_sub_category(
     sub_category_id: UUID,

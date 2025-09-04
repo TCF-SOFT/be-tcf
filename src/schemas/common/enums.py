@@ -40,6 +40,13 @@ class Role(str, Enum):
     USER = "USER"
 
 
+ROLE_HIERARCHY = {
+    Role.USER: 1,
+    Role.EMPLOYEE: 2,
+    Role.ADMIN: 3,
+}
+
+
 class PriceListExt(str, Enum):
     EXCEL = "xlsx"
     CSV = "csv"

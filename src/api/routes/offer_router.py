@@ -4,11 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.auth.clerk import require_clerk_session
-from src.api.controllers.create_entity_controller import (
+from api.auth.clerk import require_role
+from schemas.common.enums import Role
+from src.api.core.create_entity import (
     create_entity,
 )
-from src.api.controllers.update_entity_controller import (
+from src.api.core.update_entity import (
     update_entity,
 )
 from src.api.dao.offer_dao import OfferDAO
@@ -109,7 +110,7 @@ async def full_text_search_offers(
     response_model=OfferSchema,
     summary="Create new offer",
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def post_offer(
     payload: OfferPostSchema,
@@ -128,7 +129,7 @@ async def post_offer(
     response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_offer(
     offer_id: UUID,
@@ -144,7 +145,7 @@ async def patch_offer(
     "/{offer_id}",
     summary="Delete offer by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.ADMIN))],
 )
 async def delete_offer(
     offer_id: UUID,

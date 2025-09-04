@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from svix import Webhook, exceptions
 
 from src.api.auth.clerk import clerkClient
-from src.api.controllers.user_entity_controller import (
+from src.api.core.user_entity import (
     create_user_entity,
     delete_user_entity,
     update_user_entity,

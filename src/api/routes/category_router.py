@@ -7,8 +7,8 @@ from starlette import status
 
 from schemas.common.enums import Role
 from src.api.auth.clerk import require_role
-from src.api.controllers.create_entity_controller import create_entity_with_image
-from src.api.controllers.update_entity_controller import (
+from src.api.core.create_entity import create_entity_with_image
+from src.api.core.update_entity import (
     update_entity_with_optional_image,
 )
 from src.api.dao.category_dao import CategoryDAO
@@ -79,7 +79,7 @@ async def get_category_by_id(
     response_model=CategorySchema,
     summary="Create a new category",
     status_code=status.HTTP_201_CREATED,
-    dependencies=[Depends(require_role(Role.ADMIN, Role.EMPLOYEE))],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def post_category(
     payload: Annotated[CategoryPostSchema, Depends(CategoryPostSchema.as_form)],
@@ -102,7 +102,7 @@ async def post_category(
     response_model=CategorySchema,
     status_code=status.HTTP_200_OK,
     summary="Selective update category by id",
-    dependencies=[Depends(require_role(Role.ADMIN, Role.EMPLOYEE))],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_category(
     category_id: UUID,
@@ -126,7 +126,7 @@ async def patch_category(
     "/{category_id}",
     summary="Delete a category by id",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Depends(require_role(Role.ADMIN, Role.EMPLOYEE))],
+    dependencies=[Depends(require_role(Role.ADMIN))],
 )
 async def delete_category(
     category_id: UUID,

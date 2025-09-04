@@ -3,8 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.controllers.create_entity_controller import create_entity
-from api.controllers.update_entity_controller import update_entity
+from api.core.create_entity import create_entity
+from api.core.update_entity import update_entity
 from src.api.dao.address_dao import AddressDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.address_schema import (

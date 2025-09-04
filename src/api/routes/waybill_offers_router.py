@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.controllers.update_entity_controller import update_entity
+from src.api.core.update_entity import update_entity
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.waybill_offer_schema import WaybillOfferPatchSchema, WaybillOfferSchema
