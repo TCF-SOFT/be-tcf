@@ -1,14 +1,14 @@
-from enum import Enum
+from enum import StrEnum
 from typing import Literal
 
 
-class ShippingMethod(str, Enum):
+class ShippingMethod(StrEnum):
     SELF_PICKUP = "SELF_PICKUP"
     CARGO = "CARGO"
     OTHER = "OTHER"
 
 
-class OrderStatus(str, Enum):
+class OrderStatus(StrEnum):
     NEW = "NEW"
     IN_PROGRESS = "IN_PROGRESS"
     SHIPPING = "SHIPPING"
@@ -16,25 +16,25 @@ class OrderStatus(str, Enum):
     CANCELED = "CANCELED"
 
 
-class CartStatus(str, Enum):
+class CartStatus(StrEnum):
     DRAFT = "DRAFT"
     ORDERED = "ORDERED"
     ABANDONED = "ABANDONED"
 
 
-class CustomerType(str, Enum):
+class CustomerType(StrEnum):
     USER_RETAIL = "USER_RETAIL"
     USER_WHOLESALE = "USER_WHOLESALE"
     USER_SUPER_WHOLESALE = "USER_SUPER_WHOLESALE"
 
 
-class WaybillType(str, Enum):
+class WaybillType(StrEnum):
     WAYBILL_IN = "WAYBILL_IN"
     WAYBILL_OUT = "WAYBILL_OUT"
     WAYBILL_RETURN = "WAYBILL_RETURN"
 
 
-class Role(str, Enum):
+class Role(StrEnum):
     ADMIN = "ADMIN"
     EMPLOYEE = "EMPLOYEE"
     USER = "USER"
@@ -47,12 +47,12 @@ ROLE_HIERARCHY = {
 }
 
 
-class PriceListExt(str, Enum):
+class PriceListExt(StrEnum):
     EXCEL = "xlsx"
     CSV = "csv"
 
 
-class PriceListType(str, Enum):
+class PriceListType(StrEnum):
     RETIAL = "retail"
     WHOLESALE = "wholesale"
 
