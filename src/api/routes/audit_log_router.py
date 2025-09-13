@@ -1,0 +1,20 @@
+from fastapi import APIRouter, status
+from fastapi.params import Depends
+from fastapi_pagination import Page
+
+from api.di.db_helper import db_helper
+from schemas.audit_log_schema import AuditLogSchema
+from src.api.dao.audit_log_dao import AuditLogDAO
+
+router = APIRouter(tags=["Audit Log"], prefix="/audit-log")
+
+
+@router.get(
+    "",
+    response_model=Page[AuditLogSchema],
+    summary="Return all audit logs with pagination",
+    status_code=status.HTTP_200_OK,
+)
+async def get_audit_logs(db_session=Depends(db_helper.session_getter)):
+    filters = {}
+    return await AuditLogDAO.find_all_paginate(db_session, filters)

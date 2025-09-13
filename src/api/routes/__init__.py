@@ -3,6 +3,7 @@ from fastapi.security import HTTPBearer
 
 from .address_router import router as address_router
 from .analytical_router import router as analytical_router
+from .audit_log_router import router as audit_log_router
 from .category_router import router as category_router
 from .documents_router import router as documents_router
 from .health_check_router import router as health_check_router
@@ -40,3 +41,4 @@ router.include_router(health_check_router)
 router.include_router(version_router)
 router.include_router(mail_router)
 router.include_router(documents_router)
+router.include_router(audit_log_router)
