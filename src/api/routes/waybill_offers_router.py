@@ -3,6 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.auth.clerk import require_role
+from schemas.common.enums import Role
 from src.api.core.update_entity import update_entity
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.api.di.db_helper import db_helper
@@ -11,7 +13,7 @@ from src.schemas.waybill_offer_schema import WaybillOfferPatchSchema, WaybillOff
 router = APIRouter(
     tags=["Waybill-Offers"],
     prefix="/waybill-offers",
-    # dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 
 

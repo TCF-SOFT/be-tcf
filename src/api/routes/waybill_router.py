@@ -7,11 +7,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.auth.clerk import require_role
 from src.api.core.update_entity import update_entity
 from src.api.dao.offer_dao import OfferDAO
-from src.api.dao.user_dao import UserDAO
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.waybill_service import WaybillService
-from src.models import Product, User, Waybill
+from src.models import Product, Waybill
 from src.schemas.common.enums import Role, WaybillType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
@@ -165,16 +164,9 @@ async def patch_waybill(
 async def commit_waybill(
     waybill_id: UUID,
     db_session: AsyncSession = Depends(db_helper.session_getter),
-    session=Depends(require_role(Role.EMPLOYEE)),
+    user_id=Depends(require_role(Role.EMPLOYEE)),
 ):
-    user: User | None = await UserDAO.find_by_clerk_id(
-        db_session, session.payload["sub"]
-    )
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
-        )
-    return await WaybillService.commit(db_session, waybill_id, user.id)
+    return await WaybillService.commit(db_session, waybill_id, user_id)
 
 
 @router.post(

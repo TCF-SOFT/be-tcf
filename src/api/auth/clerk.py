@@ -2,7 +2,10 @@ import httpx
 from clerk_backend_api import Clerk
 from clerk_backend_api.security.types import AuthenticateRequestOptions, RequestState
 from fastapi import Depends, HTTPException, Request, status
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.core.audit_log import save_log_entry
+from api.di.db_helper import db_helper
 from src.config import ServerEnv, settings
 from src.schemas.common.enums import ROLE_HIERARCHY, Role
 from src.schemas.webhooks.common import PublicMetadata
@@ -55,7 +58,11 @@ def require_role(
     """
     min_required = max(ROLE_HIERARCHY[r] for r in allowed)
 
-    async def _dep(state: RequestState = Depends(require_clerk_session)) -> str:
+    async def _dep(
+        request: Request,
+        db_session: AsyncSession = Depends(db_helper.session_getter),
+        state: RequestState = Depends(require_clerk_session),
+    ) -> str:
         if settings.SERVER.ENV == ServerEnv.TEST:
             return settings.AUTH.TEST_EMPLOYEE_CLERK_ID
         else:
@@ -70,6 +77,9 @@ def require_role(
                     status_code=status.HTTP_403_FORBIDDEN,
                     detail=f"Access denied: role {user_role} is not allowed.",
                 )
+
+            await save_log_entry(db_session, user_id, request)
+
             return user_id
 
     return _dep

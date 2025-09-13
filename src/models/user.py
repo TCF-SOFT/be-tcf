@@ -14,10 +14,7 @@ from src.models.base import Base, str_uniq, uuid_pk
 from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 if TYPE_CHECKING:
-    from src.models.address import Address
-    from src.models.cart import Cart
-    from src.models.order import Order
-    from src.models.waybill import Waybill
+    from src.models import Address, AuditLog, Cart, Order, Waybill
 
 
 class User(Base):
@@ -75,4 +72,7 @@ class User(Base):
     )
     carts: Mapped[list["Cart"]] = relationship(
         "Cart", back_populates="user", lazy="select"
+    )
+    audit_log: Mapped[list["AuditLog"]] = relationship(
+        "AuditLog", back_populates="user", lazy="noload"
     )

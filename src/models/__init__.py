@@ -13,9 +13,11 @@ __all__ = (
     "Cart",
     "CartOffer",
     "OrderOffer",
+    "AuditLog",
 )
 
 from .address import Address
+from .audit_log import AuditLog
 from .base import Base
 from .cart import Cart
 from .cart_offer import CartOffer

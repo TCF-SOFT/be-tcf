@@ -3,6 +3,8 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.auth.clerk import require_role
+from schemas.common.enums import Role
 from src.api.core.update_entity import update_entity
 from src.api.dao.order_offer_dao import OrderOfferDAO
 from src.api.di.db_helper import db_helper
@@ -11,7 +13,7 @@ from src.schemas.order_offer_schema import OrderOfferPatchSchema, OrderOfferSche
 router = APIRouter(
     tags=["Order-Offers"],
     prefix="/order-offers",
-    # dependencies=[Depends(require_clerk_session)],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 
 

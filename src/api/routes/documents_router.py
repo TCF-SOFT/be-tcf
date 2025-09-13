@@ -12,7 +12,6 @@ from src.common.services.s3_service import S3Service
 router = APIRouter(tags=["Documents"], prefix="/documents")
 
 
-# TODO: Secure this endpoint with API key
 @router.post(
     "/price",
     summary="Upload PriceList to S3 and return a presigned URL",
