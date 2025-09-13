@@ -8,8 +8,7 @@ from sqlalchemy import (
 from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from src.models import Base
-from src.models.base import uuid_pk
+from src.models.base import uuid_pk, Base
 
 if TYPE_CHECKING:
     from src.models import User
