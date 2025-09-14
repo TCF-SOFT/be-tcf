@@ -1,7 +1,12 @@
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.models import Offer, Product, Waybill, WaybillOffer
+from schemas.analytical_schema import (
+    CategoryFacet,
+    ProductFacetsSchema,
+    SubCategoryFacet,
+)
+from src.models import Category, Offer, Product, SubCategory, Waybill, WaybillOffer
 from src.schemas.common.enums import WaybillType
 
 
@@ -43,3 +48,32 @@ class AnalyticalService:
         rows = result.all()
 
         return rows
+
+    @staticmethod
+    async def calculate_product_facets(session: AsyncSession) -> ProductFacetsSchema:
+        # Category facets
+        q1 = (
+            select(Category.slug, func.count(Product.id).label("product_count"))
+            .join(SubCategory, SubCategory.category_id == Category.id)
+            .join(Product, Product.sub_category_id == SubCategory.id)
+            .group_by(Category.slug)
+        )
+        res1 = await session.execute(q1)
+        categories = [
+            CategoryFacet(category_slug=slug, product_count=cnt)
+            for slug, cnt in res1.all()
+        ]
+
+        # SubCategory facets
+        q2 = (
+            select(SubCategory.slug, func.count(Product.id).label("product_count"))
+            .join(Product, Product.sub_category_id == SubCategory.id)
+            .group_by(SubCategory.slug)
+        )
+        res2 = await session.execute(q2)
+        sub_categories = [
+            SubCategoryFacet(sub_category_slug=slug, product_count=cnt)
+            for slug, cnt in res2.all()
+        ]
+
+        return ProductFacetsSchema(categories=categories, sub_categories=sub_categories)
