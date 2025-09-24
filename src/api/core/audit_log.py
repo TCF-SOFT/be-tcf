@@ -4,7 +4,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.audit_log_dao import AuditLogDAO
-from src.schemas.audit_log_schema import AuditLogSchema, Method
+from src.schemas.audit_log_schema import Method, AuditLogPostSchema
 from src.utils.logging import logger
 
 
@@ -24,7 +24,7 @@ async def save_log_entry(
             logger.warning("Failed to create audit log: %s", e)
             payload = None
 
-        entry_log = AuditLogSchema(
+        entry_log = AuditLogPostSchema(
             user_id=user_id,
             method=request.method,
             endpoint=str(request.url),

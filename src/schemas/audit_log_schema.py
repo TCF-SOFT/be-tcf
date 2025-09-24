@@ -14,17 +14,21 @@ class Method(StrEnum):
     DELETE = "DELETE"
     PATCH = "PATCH"
 
-
-class AuditLogSchema(BaseModel):
-    id: UUID
+class _AuditLogBaseSchema(BaseModel):
     user_id: UUID
     method: Method | str
     endpoint: HttpUrl | str
     payload: dict | None = None
 
-    user: UserSchema
+    model_config = ConfigDict(from_attributes=True)
 
+class AuditLogSchema(_AuditLogBaseSchema):
+    id: UUID
+    user: UserSchema
     created_at: datetime
     updated_at: datetime
 
-    model_config = ConfigDict(from_attributes=True)
+
+
+class AuditLogPostSchema(_AuditLogBaseSchema):
+    pass
