@@ -78,7 +78,7 @@ class OfferDAO(BaseDAO):
         o = cls.model
         p = Product
 
-        similarity_threshold = 0.11
+        similarity_threshold = 0.8
 
         query = (
             select(o)
