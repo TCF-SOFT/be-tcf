@@ -76,7 +76,7 @@ async def get_product_by_id(
     status_code=status.HTTP_200_OK,
 )
 async def get_product_by_slug(
-    slug: UUID,
+    slug: str,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     res = await ProductDAO.find_by_slug(db_session, slug)

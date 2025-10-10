@@ -85,7 +85,7 @@ jobs:
           --health-retries=5
 
       redis:
-        image: bitnami/redis:8.0.2
+        image: redis:8.2-bookworm
         env:
           ALLOW_EMPTY_PASSWORD: yes
         ports:

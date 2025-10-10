@@ -7,7 +7,7 @@ services:
       - "8025:8025"
 
   redis:
-    image: bitnami/redis:8.0.2
+    image: redis:8.2-bookworm
     container_name: 'redis'
     ports:
       - "6379:6379"
