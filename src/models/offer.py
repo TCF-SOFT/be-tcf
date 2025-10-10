@@ -1,5 +1,5 @@
-import uuid
 from typing import TYPE_CHECKING
+from uuid import UUID
 
 from sqlalchemy import (
     Boolean,
@@ -22,16 +22,15 @@ if TYPE_CHECKING:
 
 class Offer(Base):
     id: Mapped[uuid_pk]
-    # TODO: rename to SKU (pydantic + zod)
-    address_id: Mapped[str] = mapped_column(String, nullable=True)
-    product_id: Mapped[uuid.UUID] = mapped_column(
-        ForeignKey("products.id"), nullable=False
-    )
+    # TODO: rename to SKU (pydantic + zod + db + docx3r)
+    sku: Mapped[str] = mapped_column(String, nullable=True)
+    product_id: Mapped[UUID] = mapped_column(ForeignKey("products.id"), nullable=False)
     offer_bitrix_id: Mapped[str] = mapped_column(String, nullable=True)
 
     brand: Mapped[str] = mapped_column(String, nullable=False)
-    manufacturer_number: Mapped[str] = mapped_column(String, nullable=True)
-    internal_description: Mapped[str] = mapped_column(Text, nullable=True)
+    manufacturer_number: Mapped[str] = mapped_column(String, nullable=False)
+    internal_description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    image_url: Mapped[str] = mapped_column(String, nullable=True)
 
     price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
     super_wholesale_price_rub: Mapped[float] = mapped_column(

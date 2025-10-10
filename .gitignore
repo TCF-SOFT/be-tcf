@@ -4,7 +4,12 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-1
+
+upload/
+category_img/
+products_img/
+sub_category_img/
+
 # AWS User-specific
 .idea/**/aws.xml
 tmp/

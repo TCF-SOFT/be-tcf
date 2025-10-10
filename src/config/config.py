@@ -29,7 +29,9 @@ class DatabaseConfig(BaseModel):
     PSQL_DB: str = env.str("PSQL_DB")
     PSQL_PORT: int = 5432
 
-    PSQL_URL: PostgresDsn = f"postgresql+asyncpg://{PSQL_USER}:{PSQL_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"
+    PSQL_URL: PostgresDsn | str = (
+        f"postgresql+asyncpg://{PSQL_USER}:{PSQL_PASS}@{PSQL_HOST}:{PSQL_PORT}/{PSQL_DB}"
+    )
 
     echo: bool = False
     echo_pool: bool = False

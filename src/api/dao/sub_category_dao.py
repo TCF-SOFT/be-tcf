@@ -10,7 +10,7 @@ class SubCategoryDAO(BaseDAO):
     @classmethod
     async def find_by_slug(cls, db_session, slug: str) -> SubCategory | None:
         """
-        Find a category by its slug.
+        Find a SubCategory by its slug.
         """
         query = select(cls.model).filter_by(slug=slug)
         result = await db_session.execute(query)

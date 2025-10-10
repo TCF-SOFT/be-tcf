@@ -17,8 +17,8 @@ from src.api.di.db_helper import db_helper
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 from src.schemas.product_schema import (
+    ProductPatchSchema,
     ProductPostSchema,
-    ProductPutSchema,
     ProductSchema,
 )
 from src.schemas.sub_category_schema import SubCategorySchema
@@ -158,7 +158,7 @@ async def post_product(
 )
 async def patch_product(
     product_id: UUID,
-    payload: Annotated[ProductPutSchema, Depends(ProductPutSchema.as_form)],
+    payload: Annotated[ProductPatchSchema, Depends(ProductPatchSchema.as_form)],
     image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(db_helper.session_getter),
     s3: S3Service = Depends(get_s3_service),

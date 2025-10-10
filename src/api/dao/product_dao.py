@@ -31,6 +31,16 @@ class ProductDAO(BaseDAO):
         return ProductSchema.model_validate(res)
 
     @classmethod
+    async def find_by_slug(cls, db_session, slug: str) -> ProductSchema | None:
+        """
+        Find a Product by its slug.
+        """
+        query = select(cls.model).filter_by(slug=slug)
+        result = await db_session.execute(query)
+        res = result.scalar_one_or_none()
+        return res
+
+    @classmethod
     async def wildcard_search(
         cls,
         db_session,
@@ -42,7 +52,6 @@ class ProductDAO(BaseDAO):
             or_(
                 func.replace(cls.model.name, ".", "").ilike(search_term),
                 func.replace(cls.model.cross_number, ".", "").ilike(search_term),
-                func.replace(cls.model.address_id, ".", "").ilike(search_term),
             )
         )
 
@@ -56,7 +65,7 @@ class ProductDAO(BaseDAO):
     ) -> Page[ProductSchema]:
         """
         Perform a full-text search on the product.
-        Use lexeme to search for the term in the name, description, manufacturer_number, address_id and brand.
+        Use lexeme to search for the term in the name, description, manufacturer_number, sku and brand.
 
         article: https://habr.com/ru/companies/beeline_cloud/articles/742214/
 

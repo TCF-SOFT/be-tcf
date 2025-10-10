@@ -1,16 +1,19 @@
+from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from api.auth.clerk import require_role
-from schemas.common.enums import Role
-from src.api.core.create_entity import (
-    create_entity,
+from api.core.create_entity import (
+    create_entity_with_optional_image,
 )
+from common.deps.s3_service import get_s3_service
+from common.services.s3_service import S3Service
+from schemas.common.enums import Role
 from src.api.core.update_entity import (
-    update_entity,
+    update_entity_with_optional_image,
 )
 from src.api.dao.offer_dao import OfferDAO
 from src.api.di.db_helper import db_helper
@@ -113,12 +116,17 @@ async def full_text_search_offers(
     dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def post_offer(
-    payload: OfferPostSchema,
+    payload: Annotated[OfferPostSchema, Depends(OfferPostSchema.as_form)],
+    image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(db_helper.session_getter),
+    s3: S3Service = Depends(get_s3_service),
 ):
-    return await create_entity(
+    return await create_entity_with_optional_image(
         payload=payload,
+        image_blob=image_blob,
+        upload_path="images/tmp",
         db_session=db_session,
+        s3=s3,
         dao=OfferDAO,
         refresh_fields=["product"],
     )
@@ -133,11 +141,19 @@ async def post_offer(
 )
 async def patch_offer(
     offer_id: UUID,
-    payload: OfferPatchSchema,
+    payload: Annotated[OfferPatchSchema, Depends(OfferPatchSchema.as_form)],
+    image_blob: UploadFile | None = File(None),
     db_session: AsyncSession = Depends(db_helper.session_getter),
+    s3: S3Service = Depends(get_s3_service),
 ):
-    return await update_entity(
-        entity_id=offer_id, payload=payload, dao=OfferDAO, db_session=db_session
+    return await update_entity_with_optional_image(
+        entity_id=offer_id,
+        payload=payload,
+        dao=OfferDAO,
+        upload_path="images/tmp",
+        db_session=db_session,
+        s3=s3,
+        image_blob=image_blob,
     )
 
 

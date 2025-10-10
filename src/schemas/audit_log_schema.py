@@ -14,6 +14,7 @@ class Method(StrEnum):
     DELETE = "DELETE"
     PATCH = "PATCH"
 
+
 class _AuditLogBaseSchema(BaseModel):
     user_id: UUID
     method: Method | str
@@ -22,12 +23,12 @@ class _AuditLogBaseSchema(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+
 class AuditLogSchema(_AuditLogBaseSchema):
     id: UUID
     user: UserSchema
     created_at: datetime
     updated_at: datetime
-
 
 
 class AuditLogPostSchema(_AuditLogBaseSchema):

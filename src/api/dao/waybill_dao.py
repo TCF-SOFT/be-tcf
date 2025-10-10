@@ -5,8 +5,9 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas.common.enums import WaybillType
 from src.api.dao.base import BaseDAO
-from src.models import Offer, StockMovement, User, Waybill
+from src.models import Offer, User, Waybill
 from src.schemas.waybill_schema import WaybillSchema
 
 
@@ -67,21 +68,12 @@ class WaybillDAO(BaseDAO):
         for w_offer in offers:
             # Обновляем количество в оффере
             offer: Offer = w_offer.offer
-            if waybill.waybill_type in ["WAYBILL_IN", "WAYBILL_RETURN"]:
+            if waybill.waybill_type in [
+                WaybillType.WAYBILL_IN,
+                WaybillType.WAYBILL_RETURN,
+            ]:
                 offer.quantity += w_offer.quantity
             else:
                 offer.quantity -= w_offer.quantity
-
-            # Создаем движение
-            movement = StockMovement(
-                offer_id=offer.id,
-                waybill_id=waybill.id,
-                waybill_type=waybill.waybill_type,
-                quantity=w_offer.quantity,
-                user_id=user_id,
-                comment=f"Waybill commit: {waybill.id}",
-                reverted=False,
-            )
-            db_session.add(movement)
 
         return waybill

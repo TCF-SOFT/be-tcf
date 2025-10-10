@@ -42,6 +42,7 @@ async def create_user_entity(
         note=None,
         shipping_method=None,
         shipping_company=None,
+        balance_rub=0,
     )
     logger.info(
         "[ClerkWebhook | POST] Creating user %s",

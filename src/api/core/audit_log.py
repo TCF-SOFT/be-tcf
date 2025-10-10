@@ -4,7 +4,7 @@ from fastapi import Request
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.audit_log_dao import AuditLogDAO
-from src.schemas.audit_log_schema import Method, AuditLogPostSchema
+from src.schemas.audit_log_schema import AuditLogPostSchema, Method
 from src.utils.logging import logger
 
 

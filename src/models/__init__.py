@@ -7,7 +7,6 @@ __all__ = (
     "Offer",
     "Waybill",
     "WaybillOffer",
-    "StockMovement",
     "Address",
     "Order",
     "Cart",
@@ -26,7 +25,6 @@ from .offer import Offer
 from .order import Order
 from .order_offer import OrderOffer
 from .product import Product
-from .stock_movement import StockMovement
 from .sub_category import SubCategory
 from .user import User
 from .waybill import Waybill

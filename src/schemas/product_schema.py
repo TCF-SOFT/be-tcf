@@ -67,7 +67,7 @@ class ProductPostSchema(_ProductBase):
         )
 
 
-class ProductPutSchema(_ProductBase):
+class ProductPatchSchema(_ProductBase):
     @computed_field
     @property
     def slug(self) -> str:
@@ -79,7 +79,7 @@ class ProductPutSchema(_ProductBase):
         name: Annotated[str, Form(...)],
         cross_number: Annotated[str | None, Form(...)],
         sub_category_id: Annotated[UUID, Form(...)],
-    ) -> "ProductPutSchema":
+    ) -> "ProductPatchSchema":
         return cls(
             name=name,
             cross_number=cross_number,
