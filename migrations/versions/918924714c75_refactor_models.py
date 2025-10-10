@@ -1,7 +1,7 @@
 """refactor models
 
 Revision ID: 918924714c75
-Revises: 
+Revises:
 Create Date: 2025-10-10 18:03:33.905467
 
 """
