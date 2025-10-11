@@ -6,9 +6,9 @@
 .idea/**/shelf
 
 upload/
-category_img/
-products_img/
-sub_category_img/
+categories/
+products/
+sub_categories/
 
 # AWS User-specific
 .idea/**/aws.xml

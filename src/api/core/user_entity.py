@@ -86,6 +86,7 @@ async def update_user_entity(
                 "primary_phone_number_id",
                 "email_addresses",
                 "phone_numbers",
+                "public_metadata"
             }
         ),
     )
