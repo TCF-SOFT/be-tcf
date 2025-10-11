@@ -12,8 +12,8 @@ on:
     branches: [ main ]
 
 env:
- APP_NAME: "be-tcf"
- NAMESPACE: "dev"
+  APP_NAME: "be-tcf"
+  NAMESPACE: "dev"
 
 jobs:
   ruff:
@@ -83,7 +83,7 @@ jobs:
           - 8025:8025
 
       minio:
-        image: minio/minio:latest-cicd
+        image: ghcr.io/utikpuhlik/minio:latest
         env:
           MINIO_ROOT_USER: test_access_key
           MINIO_ROOT_PASSWORD: test_secret_key
