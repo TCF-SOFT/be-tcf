@@ -14,7 +14,7 @@ from src.models.base import Base, str_uniq, uuid_pk
 from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 if TYPE_CHECKING:
-    from src.models import Address, AuditLog, Cart, Order, Waybill
+    from src.models import Address, AuditLog, Cart, Order, UserBalanceHistory, Waybill
 
 
 class User(Base):
@@ -34,7 +34,7 @@ class User(Base):
         nullable=False,
         default=Role.USER,
     )
-    balance_rub: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    balance_rub: Mapped[int | float] = mapped_column(Integer, nullable=False, default=0)
 
     # --------------------------------------------------
     #      Customer Only Fields - Public Metadata
@@ -75,4 +75,7 @@ class User(Base):
     )
     audit_log: Mapped[list["AuditLog"]] = relationship(
         "AuditLog", back_populates="user", lazy="noload"
+    )
+    user_balance_history: Mapped[list["UserBalanceHistory"]] = relationship(
+        "UserBalanceHistory", back_populates="user", lazy="noload"
     )

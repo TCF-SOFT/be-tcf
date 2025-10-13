@@ -9,9 +9,7 @@ from src.models.base import Base, uuid_pk
 from src.schemas.common.enums import WaybillType
 
 if TYPE_CHECKING:
-    from src.models.offer import Offer
-    from src.models.user import Order, User
-    from src.models.waybill_offer import WaybillOffer
+    from src.models import Offer, Order, User, UserBalanceHistory, WaybillOffer
 
 
 class Waybill(Base):
@@ -51,6 +49,9 @@ class Waybill(Base):
     )
     waybill_offers: Mapped[list["WaybillOffer"]] = relationship(
         "WaybillOffer", back_populates="waybill", lazy="selectin"
+    )
+    user_balance_history: Mapped[list["UserBalanceHistory"]] = relationship(
+        "UserBalanceHistory", back_populates="waybill", lazy="noload"
     )
 
     @property

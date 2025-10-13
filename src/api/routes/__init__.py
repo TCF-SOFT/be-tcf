@@ -13,6 +13,7 @@ from .order_offers_router import router as order_offers_router
 from .order_router import router as order_router
 from .product_router import router as product_router
 from .sub_category_router import router as sub_category_router
+from .user_balance_history_router import router as user_balance_history_router
 from .user_router import router as user_router
 from .version_router import router as version_router
 from .waybill_offers_router import router as waybill_offers_router
@@ -26,6 +27,7 @@ router = APIRouter(dependencies=[Depends(http_bearer)])
 
 # Include all routers
 router.include_router(user_router)
+router.include_router(user_balance_history_router)
 router.include_router(category_router)
 router.include_router(sub_category_router)
 router.include_router(product_router)

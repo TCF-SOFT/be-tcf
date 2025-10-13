@@ -13,6 +13,7 @@ __all__ = (
     "CartOffer",
     "OrderOffer",
     "AuditLog",
+    "UserBalanceHistory",
 )
 
 from .address import Address
@@ -27,5 +28,6 @@ from .order_offer import OrderOffer
 from .product import Product
 from .sub_category import SubCategory
 from .user import User
+from .user_balance_history import UserBalanceHistory
 from .waybill import Waybill
 from .waybill_offer import WaybillOffer

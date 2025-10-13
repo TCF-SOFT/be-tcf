@@ -2,12 +2,14 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from api.services.user_balance_service import UserBalanceService
+from schemas.common.enums import WaybillType
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.user_dao import UserDAO
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
 from src.models import Offer, Waybill, WaybillOffer
-from src.schemas.common.enums import CustomerType
+from src.schemas.common.enums import CustomerType, UserBalanceReason
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import (
@@ -24,12 +26,32 @@ class WaybillService:
     4. Commit waybill. POST /waybill/{id}/commit
     5. Waybill.is_pending → False
     6. Refresh Offer.quantity
-    7. Create StockMovement for each WaybillOffer
+    7. If customer_id is set, then change User.balance_rub
+    8. Create UserBalanceHistory record
+    9. Waybill is immutable after commit
     """
 
     @staticmethod
-    async def commit(db: AsyncSession, waybill_id: UUID, user_id: UUID) -> Waybill:
-        return await WaybillDAO.commit_waybill(db, waybill_id, user_id)
+    async def commit(
+        db_session: AsyncSession, waybill_id: UUID, user_id: UUID
+    ) -> Waybill:
+        waybill = await WaybillDAO.commit_waybill(db_session, waybill_id, user_id)
+        if waybill.customer_id:
+            total = sum(
+                item.price_rub * item.quantity for item in waybill.waybill_offers
+            )
+            # TODO: revise logic of balance change for WAYBILL_IN/WAYBILL_OUT/RETURN
+            await UserBalanceService.change_balance(
+                db_session=db_session,
+                user_id=waybill.customer_id,
+                delta=-total
+                if waybill.waybill_type == WaybillType.WAYBILL_OUT
+                else total,
+                reason=UserBalanceReason.WAYBILL_PAYMENT,
+                waybill_id=waybill.id,
+            )
+
+        return waybill
 
     @staticmethod
     async def add_offer_to_waybill(

@@ -45,7 +45,7 @@ class BaseDAO:
         return res
 
     @classmethod
-    async def count_all(cls, db_session, filter_by: dict) -> dict[str:int]:
+    async def count_all(cls, db_session, filter_by: dict) -> dict[str, int]:
         """
         Count all objects in the database
         :param db_session:
