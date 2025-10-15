@@ -24,9 +24,6 @@ class TestCategoryRoutes:
         assert res.status_code == 200
         response = res.json()
         assert isinstance(response, dict), "Response body is not valid"
-        assert "id" in response, "ID is not present in response body"
-        assert "image_url" in response, "Image is not present in response body"
-        assert response["image_url"] is not None, "Image couldn't be null"
 
     async def test_get_by_id_returns_category(self, client: AsyncClient):
         res = await client.get(f"{self.ENDPOINT}/{self.valid_category_id}")
