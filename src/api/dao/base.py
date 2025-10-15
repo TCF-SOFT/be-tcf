@@ -1,6 +1,8 @@
-from typing import Any
+from typing import Any, Generic, Type, TypeVar
 from uuid import UUID
 
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import delete as sa_delete
 from sqlalchemy import func, select
 from sqlalchemy import update as sqlalchemy_update
@@ -10,18 +12,23 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.common.exceptions.exceptions import DuplicateNameError
 from src.utils.logging import logger
 
+T = TypeVar("T")
+S = TypeVar("S")
 
-class BaseDAO:
+
+class BaseDAO(Generic[T, S]):
     """
     Создается базовый класс для всех сервисов, который содержит общие методы для всех сервисов.
     В сервисах используем нужную модель, чтобы не дублировать код.
     Унаследованные классы используем в роутерах.
-    """
-
-    model = None
 
     # self.model (in instance method)
     # cls.model (in classmethod)
+    """
+
+    model: Type[T] | None = None
+    schema: Type[S]
+
     @classmethod
     async def find_all(
         cls, db_session: AsyncSession, filter_by: dict, order_by: str = None
@@ -32,16 +39,39 @@ class BaseDAO:
         return res
 
     @classmethod
-    async def find_one_or_none(cls, db_session, filter_by: dict) -> list or None:
+    async def find_all_paginate(
+        cls, db_session, filter_by: dict = None, order_by: str = None
+    ) -> Page[S]:
+        query = (
+            select(cls.model)
+            .filter_by(**filter_by if filter_by else {})
+            .order_by(cls.model.id.desc())
+        )
+        # TODO: add order_by mapping for different fields
+        #  DB Name unification allows to use the same order_by `key:value` for different models
+        return await paginate(db_session, query)
+
+    @classmethod
+    async def find_one_or_none(cls, db_session, filter_by: dict) -> list:
         query = select(cls.model).filter_by(**filter_by)
         result = await db_session.execute(query)
         return result.unique().scalar_one_or_none()
 
     @classmethod
-    async def find_by_id(cls, db_session, _id: UUID) -> Any:
+    async def find_by_id(cls, db_session, _id: UUID) -> T:
         query = select(cls.model).filter_by(id=_id)
         result = await db_session.execute(query)
         res = result.unique().scalar_one_or_none()
+        return res
+
+    @classmethod
+    async def find_by_slug(cls, db_session, slug: str) -> T:
+        """
+        Find a Product by its slug.
+        """
+        query = select(cls.model).filter_by(slug=slug)
+        result = await db_session.execute(query)
+        res = result.scalar_one_or_none()
         return res
 
     @classmethod

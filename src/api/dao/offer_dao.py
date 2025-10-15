@@ -12,15 +12,7 @@ from src.schemas.offer_schema import OfferSchema
 
 class OfferDAO(BaseDAO):
     model = Offer
-
-    @classmethod
-    async def find_all_paginate(
-        cls, db_session, filter_by: dict, order_by: str = None
-    ) -> Page[OfferSchema]:
-        # TODO: add order_by mapping for different fields
-        #  DB Name unification allows to use the same order_by `key:value` for different models
-        query = select(cls.model).filter_by(**filter_by).order_by(cls.model.id.desc())
-        return await paginate(db_session, query)
+    schema = OfferSchema
 
     @classmethod
     async def wildcard_search(

@@ -3,6 +3,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi_cache.decorator import cache
+from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -30,15 +31,15 @@ router = APIRouter(tags=["Sub-Categories"], prefix="/sub-categories")
 
 @router.get(
     "",
-    response_model=list[SubCategorySchema] | None,
-    summary="",
+    response_model=Page[SubCategorySchema],
+    summary="Return all sub-categories with pagination or filter them",
     status_code=status.HTTP_200_OK,
 )
 @cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_sub_categories(
     db_session: AsyncSession = Depends(db_helper.session_getter),
     category_id: UUID | None = None,
-    category_slug: str = None,
+    category_slug: str | None = None,
 ):
     filters = {}
     if category_slug:
@@ -55,7 +56,7 @@ async def get_sub_categories(
     if category_id:
         filters["category_id"] = category_id
 
-    return await SubCategoryDAO.find_all(db_session, filter_by=filters)
+    return await SubCategoryDAO.find_all_paginate(db_session, filter_by=filters)
 
 
 @router.get(

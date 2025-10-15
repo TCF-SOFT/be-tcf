@@ -14,8 +14,9 @@ class OrderDAO(BaseDAO):
     async def find_all_paginate(
         cls,
         db_session,
-        filter_by: dict,
         search_term: str,
+        filter_by: dict | None = None,
+        order_by: str = None,
     ) -> Page[OrderSchema]:
         search_term = f"%{search_term}%"
         query = (

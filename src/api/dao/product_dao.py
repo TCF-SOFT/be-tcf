@@ -11,13 +11,7 @@ from src.schemas.product_schema import ProductSchema
 
 class ProductDAO(BaseDAO):
     model = Product
-
-    @classmethod
-    async def find_all_paginate(
-        cls, db_session, filter_by: dict
-    ) -> Page[ProductSchema]:
-        query = select(cls.model).filter_by(**filter_by)
-        return await paginate(db_session, query)
+    schema = ProductSchema
 
     @classmethod
     async def find_by_id(cls, db_session, _id: UUID) -> ProductSchema:
@@ -29,16 +23,6 @@ class ProductDAO(BaseDAO):
         result = await db_session.execute(query)
         res = result.scalar_one_or_none()
         return ProductSchema.model_validate(res)
-
-    @classmethod
-    async def find_by_slug(cls, db_session, slug: str) -> ProductSchema | None:
-        """
-        Find a Product by its slug.
-        """
-        query = select(cls.model).filter_by(slug=slug)
-        result = await db_session.execute(query)
-        res = result.scalar_one_or_none()
-        return res
 
     @classmethod
     async def wildcard_search(

@@ -21,7 +21,6 @@ from src.schemas.product_schema import (
     ProductPostSchema,
     ProductSchema,
 )
-from src.schemas.sub_category_schema import SubCategorySchema
 
 router = APIRouter(tags=["Products"], prefix="/products")
 
@@ -41,9 +40,7 @@ async def get_products(
 ):
     filters: dict[str, bool | UUID | str] = {"is_deleted": is_deleted}
     if sub_category_slug:
-        sub_category: SubCategorySchema = await SubCategoryDAO.find_by_slug(
-            db_session, sub_category_slug
-        )
+        sub_category = await SubCategoryDAO.find_by_slug(db_session, sub_category_slug)
         if sub_category:
             filters["sub_category_id"] = sub_category.id
 

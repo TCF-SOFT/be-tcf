@@ -2,6 +2,7 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -26,8 +27,8 @@ router = APIRouter(tags=["Categories"], prefix="/categories")
 
 @router.get(
     "",
-    response_model=list[CategorySchema],
-    summary="Get all categories",
+    response_model=Page[CategorySchema],
+    summary="Return all categories with pagination",
     status_code=status.HTTP_200_OK,
 )
 # @cache(expire=60 * 10, coder=ORJsonCoder)
@@ -35,7 +36,7 @@ async def get_categories(
     db_session: AsyncSession = Depends(db_helper.session_getter),
     order_by: str = None,
 ):
-    return await CategoryDAO.find_all(db_session, filter_by={}, order_by=order_by)
+    return await CategoryDAO.find_all_paginate(db_session)
 
 
 @router.get(
