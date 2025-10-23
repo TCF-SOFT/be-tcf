@@ -48,6 +48,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "asgi-lifespan>=2.1.0",
     "coverage>=7.6.9",
     "jupyter>=1.1.1",
     "notebook>=7.4.5",
@@ -83,7 +84,7 @@ src = ["src"]
 line-length = 88
 indent-width = 4
 show-fixes = true
-target-version = "py312"
+target-version = "py313"
 exclude = [
     ".git",
     ".git-rewrite",

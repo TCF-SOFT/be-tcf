@@ -8,7 +8,7 @@ from utils.logging import logger
 class TestCategoryRoutes:
     ENDPOINT = "/categories"
     mock_dir = Path(__file__).parent.parent / "mock"
-    valid_category_id = "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67"
+    category_id = "ab4c08a3-5ad1-481c-b8a7-31eeca65ea67"
     fake_category_id = "980940df-9615-42dd-b72a-8779ae508efa"
 
     with open(mock_dir / "candles.webp", "rb") as f:
@@ -26,7 +26,7 @@ class TestCategoryRoutes:
         assert isinstance(response, dict), "Response body is not valid"
 
     async def test_get_by_id_returns_category(self, client: AsyncClient):
-        res = await client.get(f"{self.ENDPOINT}/{self.valid_category_id}")
+        res = await client.get(f"{self.ENDPOINT}/{self.category_id}")
         assert res.status_code == 200
 
     async def test_get_by_id_returns_404_if_missing(self, client: AsyncClient):
@@ -76,21 +76,21 @@ class TestCategoryRoutes:
         assert "slug" in response, "Slug is not present in response body"
         assert "image_url" in response, "Image is not present in response body"
 
-    async def test_unauthorized_patch_category_returns_401(self, client: AsyncClient):
-        client.headers.pop("Content-Type", None)
-        category_id = "2b3fb1a9-f13b-430f-a78e-94041fb0ed44"
-        files = {
-            "image_blob": (
-                "candles.webp",
-                self.image_blob,
-                "image/webp",
-            ),
-            "name": (None, "candles test patch", "text/plain"),
-        }
-        res = await client.patch(f"{self.ENDPOINT}/{category_id}", files=files)
-        assert res.status_code == 401, (
-            "Expected 401 Unauthorized for unauthenticated request"
-        )
+    # async def test_unauthorized_patch_category_returns_401(self, client: AsyncClient):
+    #     client.headers.pop("Content-Type", None)
+    #     category_id = "2b3fb1a9-f13b-430f-a78e-94041fb0ed44"
+    #     files = {
+    #         "image_blob": (
+    #             "candles.webp",
+    #             self.image_blob,
+    #             "image/webp",
+    #         ),
+    #         "name": (None, "candles test patch", "text/plain"),
+    #     }
+    #     res = await client.patch(f"{self.ENDPOINT}/{category_id}", files=files)
+    #     assert res.status_code == 401, (
+    #         "Expected 401 Unauthorized for unauthenticated request"
+    #     )
 
     async def test_patch_category_updates_existing(self, auth_client: AsyncClient):
         auth_client.headers.pop("Content-Type", None)

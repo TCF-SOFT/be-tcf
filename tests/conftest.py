@@ -4,6 +4,7 @@ from typing import AsyncGenerator
 from unittest import mock
 
 import pytest
+from asgi_lifespan import LifespanManager
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
 from src.api.auth.clerk import clerkClient
@@ -82,15 +83,18 @@ async def _issue_session_token(
 mock.patch("fastapi_cache.decorator.cache", lambda *args, **kwargs: lambda f: f).start()
 
 
-@pytest.fixture(scope="function")
+@pytest.fixture(scope="session")
 async def client() -> AsyncGenerator[AsyncClient, None]:
     from src.__main__ import app
 
-    async with AsyncClient(
-        transport=ASGITransport(app=app),
-        base_url="http://testserver",
-        headers={"Content-Type": "application/json", "Origin": "http://testserver"},
-    ) as test_client:
+    async with (
+        AsyncClient(
+            transport=ASGITransport(app=app),
+            base_url="http://testserver",
+            headers={"Content-Type": "application/json", "Origin": "http://testserver"},
+        ) as test_client,
+        LifespanManager(app),
+    ):
         # app.state.resources = ResourceModule(redis_service=RedisService())
         # app.state.redis_service = app.state.resources.get_redis_service()
         # app.state.redis = app.state.redis_service.get_redis()

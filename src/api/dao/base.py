@@ -2,7 +2,7 @@ from typing import Any, Generic, Type, TypeVar
 from uuid import UUID
 
 from fastapi_pagination import Page
-from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination.ext.sqlalchemy import apaginate
 from sqlalchemy import delete as sa_delete
 from sqlalchemy import func, select
 from sqlalchemy import update as sqlalchemy_update
@@ -49,7 +49,7 @@ class BaseDAO(Generic[T, S]):
         )
         # TODO: add order_by mapping for different fields
         #  DB Name unification allows to use the same order_by `key:value` for different models
-        return await paginate(db_session, query)
+        return await apaginate(db_session, query)
 
     @classmethod
     async def find_one_or_none(cls, db_session, filter_by: dict) -> list:
