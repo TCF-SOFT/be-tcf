@@ -108,18 +108,29 @@ async def full_text_search_products(
     return await ProductDAO.full_text_search(db_session, search_term)
 
 
-# @router.get(
-#     "/products/vector_search",
-#     response_model=Page[ProductSchema],
-#     summary="Semantic/Vector search products by name",
-#     status_code=status.HTTP_200_OK,
-# )
-# @cache(expire=60, coder=ORJsonCoder)
-# async def semantic_search_products(
-#     search_term: str,
-#     db_session: AsyncSession = Depends(db_helper.session_getter),
-# ):
-#     return await ProductDAO.vector_search(db_session, search_term)
+@router.get(
+    "/meta/facets/categories",
+    response_model=dict[str, int],
+    summary="Get product counts per category",
+    status_code=status.HTTP_200_OK,
+)
+async def get_product_counts_per_category(
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await ProductDAO.get_product_counts_per_category(db_session)
+
+
+@router.get(
+    "/meta/facets/sub-categories",
+    response_model=dict[str, int],
+    summary="Get product counts per sub-category",
+    status_code=status.HTTP_200_OK,
+)
+async def get_product_counts_per_sub_category(
+    category_id: UUID,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await ProductDAO.get_product_counts_per_sub_category(db_session, category_id)
 
 
 @router.post(

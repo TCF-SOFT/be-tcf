@@ -51,7 +51,7 @@ class ProductPostSchema(_ProductBase):
     @computed_field
     @property
     def slug(self) -> str:
-        return slugify(self.name, word_boundary=True, lowercase=False)
+        return slugify(self.name, word_boundary=True, lowercase=True)
 
     @classmethod
     def as_form(
@@ -71,7 +71,7 @@ class ProductPatchSchema(_ProductBase):
     @computed_field
     @property
     def slug(self) -> str:
-        return slugify(self.name, word_boundary=True, lowercase=False)
+        return slugify(self.name, word_boundary=True, lowercase=True)
 
     @classmethod
     def as_form(

@@ -3,26 +3,16 @@ from uuid import UUID
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.base import BaseDAO
-from src.models import Product
+from src.models import Category, Product, SubCategory
 from src.schemas.product_schema import ProductSchema
 
 
 class ProductDAO(BaseDAO):
     model = Product
     schema = ProductSchema
-
-    @classmethod
-    async def find_by_id(cls, db_session, _id: UUID) -> ProductSchema:
-        """
-        Базовый метод DAO должен проходить через model_validate()
-         для преобразования в нужную схему с последующей сериализацией.
-        """
-        query = select(cls.model).filter_by(id=_id)
-        result = await db_session.execute(query)
-        res = result.scalar_one_or_none()
-        return ProductSchema.model_validate(res)
 
     @classmethod
     async def wildcard_search(
@@ -64,36 +54,33 @@ class ProductDAO(BaseDAO):
         )
         return await paginate(db_session, query)
 
-    # @classmethod
-    # async def vector_search(
-    #     cls,
-    #     db_session,
-    #     search_term: str,
-    # ) -> Page[ProductSchema]:
-    #     """
-    #     Perform a vector search on the product.
-    #     Show the most similar products to the search term.
-    #
-    #     library: https://github.com/pgvector/pgvector-python?tab=readme-ov-file#sqlalchemy
-    #     """
-    #     # TODO:
-    #     #  - использование собственного векторизатора (размер векторов)
-    #     #  - автоматическое обновление векторов при изменении товара
-    #     #  - install extension pgvector в postgres при тестах
-    #
-    #     # 1. Получить embedding поискового запроса
-    #     query_vector: list[float] = await get_embedding(search_term)
-    #
-    #     # 2. order_by method - all results (vol. 1)
-    #     # query = (
-    #     #     select(cls.model).order_by(cls.model.embedding.l2_distance(query_vector))
-    #     #     .limit(100)
-    #     # )
-    #     # filter method - limited (vol. 2)
-    #     query = (
-    #         select(cls.model)
-    #         .filter(cls.model.embedding.l2_distance(query_vector) < 1.1)
-    #         .order_by(cls.model.embedding.l2_distance(query_vector))
-    #     )
-    #
-    #     return await paginate(db_session, query)
+    @classmethod
+    async def get_product_counts_per_category(cls, db_session: AsyncSession):
+        query = (
+            select(Category.name, func.count(Product.id))
+            .join(SubCategory, SubCategory.category_id == Category.id)
+            .join(Product, Product.sub_category_id == SubCategory.id)
+            .group_by(Category.name)
+        )
+
+        result = await db_session.execute(query)
+        rows = result.all()
+        return dict(rows)
+
+    @classmethod
+    async def get_product_counts_per_sub_category(
+        cls,
+        db_session: AsyncSession,
+        category_id: UUID,
+    ):
+        query = (
+            select(SubCategory.name, func.count(Product.id))
+            .join(Category, Category.id == SubCategory.category_id)
+            .join(Product, Product.sub_category_id == SubCategory.id)
+            .where(Category.id == category_id)
+            .group_by(SubCategory.name)
+        )
+
+        result = await db_session.execute(query)
+        rows = result.all()
+        return dict(rows)
