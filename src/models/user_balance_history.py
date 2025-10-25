@@ -8,7 +8,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from schemas.common.enums import Currency, UserBalanceReason
+from src.schemas.common.enums import Currency, UserBalanceChangeReason
 from src.models.base import Base, uuid_pk
 
 if TYPE_CHECKING:
@@ -26,7 +26,7 @@ class UserBalanceHistory(Base):
     currency: Mapped[str | Currency] = mapped_column(String(3), nullable=False)
     balance_before: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
     balance_after: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
-    reason: Mapped[str | UserBalanceReason] = mapped_column(String, nullable=False)
+    reason: Mapped[str | UserBalanceChangeReason] = mapped_column(String, nullable=False)
 
     # Relationships
     user: Mapped["User"] = relationship(

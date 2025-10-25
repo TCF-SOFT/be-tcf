@@ -70,7 +70,7 @@ class OfferDAO(BaseDAO):
         o = cls.model
         p = Product
 
-        similarity_threshold = 0.8
+        similarity_threshold = 0.15
 
         query = (
             select(o)
@@ -97,7 +97,7 @@ class OfferDAO(BaseDAO):
         return await paginate(db_session, query)
 
     @classmethod
-    async def count_all(cls, db_session, filter_by: dict) -> dict[str:int]:
+    async def count_all(cls, db_session, filter_by: dict) -> dict[str, int]:
         """
         Count all objects in the database
         :param db_session:

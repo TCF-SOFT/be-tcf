@@ -1,4 +1,4 @@
-from schemas.user_schema import UserSchema
+from src.schemas.user_schema import UserSchema
 from src.tasks.mailing.send_email import send_email
 
 

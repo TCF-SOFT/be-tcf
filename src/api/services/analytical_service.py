@@ -1,7 +1,7 @@
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from schemas.analytical_schema import (
+from src.schemas.analytical_schema import (
     CategoryFacet,
     ProductFacetsSchema,
     SubCategoryFacet,

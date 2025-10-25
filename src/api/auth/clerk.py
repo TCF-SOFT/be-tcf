@@ -4,8 +4,8 @@ from clerk_backend_api.security.types import AuthenticateRequestOptions, Request
 from fastapi import Depends, HTTPException, Request, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.core.audit_log import save_log_entry
-from api.di.db_helper import db_helper
+from src.api.core.audit_log import save_log_entry
+from src.api.di.db_helper import db_helper
 from src.config import ServerEnv, settings
 from src.schemas.common.enums import ROLE_HIERARCHY, Role
 from src.schemas.webhooks.common import PublicMetadata
@@ -78,7 +78,8 @@ def require_role(
                     detail=f"Access denied: role {user_role} is not allowed.",
                 )
 
-            await save_log_entry(db_session, user_id, request)
+            if user_role == Role.EMPLOYEE or user_role == Role.ADMIN:
+                await save_log_entry(db_session, user_id, request)
 
             return user_id
 

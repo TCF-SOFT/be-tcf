@@ -9,7 +9,7 @@ from typing import cast
 import loguru
 import stackprinter
 
-from schemas.common.json_logs import BaseJsonLogSchema
+from src.schemas.common.json_logs import BaseJsonLogSchema
 from src.config import settings
 
 # Set stackprinter as the default exception printer

@@ -11,8 +11,8 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
 
-from api.di.db_helper import db_helper
-from api.routes import router
+from src.api.di.db_helper import db_helper
+from src.api.routes import router
 from common.services.telemetry import setup_telemetry
 from config.config import ServerEnv
 from src.api.di.di import ResourceModule

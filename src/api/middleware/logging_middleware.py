@@ -10,7 +10,7 @@ from fastapi import Request, Response
 from starlette.middleware.base import RequestResponseEndpoint
 from starlette.types import Receive
 
-from schemas.common.json_logs import RequestJsonLogSchema
+from src.schemas.common.json_logs import RequestJsonLogSchema
 from src.utils.logging import logger
 
 EMPTY_VALUE = ""

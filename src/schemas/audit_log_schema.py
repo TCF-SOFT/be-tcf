@@ -4,7 +4,7 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, HttpUrl
 
-from schemas.user_schema import UserSchema
+from src.schemas.user_schema import UserSchema
 
 
 class Method(StrEnum):

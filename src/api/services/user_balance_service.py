@@ -2,11 +2,11 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from api.dao.user_balance_history_dao import UserBalanceHistoryDAO
-from api.dao.user_dao import UserDAO
-from schemas.user_balance_history import UserBalanceHistoryPostSchema
+from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
+from src.api.dao.user_dao import UserDAO
+from src.schemas.user_balance_history import UserBalanceHistoryPostSchema
 from src.models import User
-from src.schemas.common.enums import Currency, UserBalanceReason
+from src.schemas.common.enums import Currency, UserBalanceChangeReason
 
 
 class UserBalanceService:
@@ -15,7 +15,7 @@ class UserBalanceService:
         db_session: AsyncSession,
         user_id: UUID,
         delta: float,
-        reason: UserBalanceReason,
+        reason: UserBalanceChangeReason,
         currency: Currency = Currency.RUB,
         waybill_id: UUID | None = None,
     ) -> None:
@@ -29,6 +29,8 @@ class UserBalanceService:
         before = user.balance_rub
         after = before + delta
         user.balance_rub = after
+
+        db_session.add(user) # add user update to session
 
         history = UserBalanceHistoryPostSchema(
             user_id=user_id,

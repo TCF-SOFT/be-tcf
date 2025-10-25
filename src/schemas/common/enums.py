@@ -34,7 +34,7 @@ class WaybillType(StrEnum):
     WAYBILL_RETURN = "WAYBILL_RETURN"
 
 
-class UserBalanceReason(StrEnum):
+class UserBalanceChangeReason(StrEnum):
     WAYBILL_PAYMENT = "WAYBILL_PAYMENT"
     ADMIN_ADJUSTMENT = "ADMIN_ADJUSTMENT"
     PROMOTION_CREDIT = "PROMOTION_CREDIT"

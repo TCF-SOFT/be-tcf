@@ -18,6 +18,7 @@ from src.schemas.product_schema import ProductSchema
 
 class _OfferBase(BaseModel):
     sku: str | None = Field(None, examples=["AA-TEST"])
+    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
     brand: str = Field(..., examples=["MARKON"])
     manufacturer_number: str = Field(..., examples=["6000180"])
 
@@ -27,8 +28,6 @@ class _OfferBase(BaseModel):
 
     price_rub: float = Field(..., examples=[1000])
     super_wholesale_price_rub: float = Field(..., examples=[500])
-
-    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
 
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
 
@@ -61,12 +60,12 @@ class OfferPostSchema(_OfferBase):
     def as_form(
         cls,
         sku: Annotated[str | None, Form(...)],
+        product_id: Annotated[UUID, Form(...)],
         brand: Annotated[str, Form(...)],
         manufacturer_number: Annotated[str, Form(...)],
         internal_description: Annotated[str | None, Form(...)],
         price_rub: Annotated[float, Form(...)],
         super_wholesale_price_rub: Annotated[float, Form(...)],
-        product_id: Annotated[UUID, Form(...)],
     ) -> "OfferPostSchema":
         return cls(
             sku=sku,

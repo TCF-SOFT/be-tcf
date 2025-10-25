@@ -189,5 +189,4 @@ jobs:
             --namespace ${{ env.NAMESPACE }} \
             --values chart/values-${{ env.NAMESPACE }}.yaml \
             --set image.tag="$IMAGE_TAG" \
-            --set deployment.annotations."deployment\.kubernetes\.io/revision"="$(date +%s)" \
-            --force
+            --set appVersion="$IMAGE_TAG"

@@ -3,9 +3,9 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict
 
-from schemas.common.enums import Currency, UserBalanceReason
-from schemas.user_schema import UserSchema
-from schemas.waybill_schema import WaybillSchema
+from src.schemas.common.enums import Currency, UserBalanceChangeReason
+from src.schemas.user_schema import UserSchema
+from src.schemas.waybill_schema import WaybillSchema
 
 
 class _UserBalanceHistoryBaseSchema(BaseModel):
@@ -15,14 +15,13 @@ class _UserBalanceHistoryBaseSchema(BaseModel):
     currency: Currency = Currency.RUB
     balance_before: float
     balance_after: float
-    reason: UserBalanceReason
+    reason: UserBalanceChangeReason
 
     model_config = ConfigDict(from_attributes=True)
 
 
 class UserBalanceHistorySchema(_UserBalanceHistoryBaseSchema):
     id: UUID
-    user: UserSchema
     waybill: WaybillSchema | None
     created_at: datetime
     updated_at: datetime
