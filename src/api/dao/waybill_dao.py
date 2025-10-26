@@ -5,9 +5,9 @@ from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.schemas.common.enums import WaybillType
 from src.api.dao.base import BaseDAO
 from src.models import Offer, User, Waybill
+from src.schemas.common.enums import WaybillType
 from src.schemas.waybill_schema import WaybillSchema
 
 

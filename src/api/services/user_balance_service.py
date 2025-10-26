@@ -4,9 +4,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
 from src.api.dao.user_dao import UserDAO
-from src.schemas.user_balance_history import UserBalanceHistoryPostSchema
 from src.models import User
 from src.schemas.common.enums import Currency, UserBalanceChangeReason
+from src.schemas.user_balance_history import UserBalanceHistoryPostSchema
 
 
 class UserBalanceService:
@@ -30,7 +30,7 @@ class UserBalanceService:
         after = before + delta
         user.balance_rub = after
 
-        db_session.add(user) # add user update to session
+        db_session.add(user)  # add user update to session
 
         history = UserBalanceHistoryPostSchema(
             user_id=user_id,

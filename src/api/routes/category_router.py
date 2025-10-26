@@ -6,7 +6,6 @@ from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.schemas.common.enums import Role
 from src.api.auth.clerk import require_role
 from src.api.core.create_entity import create_entity_with_image
 from src.api.core.update_entity import (
@@ -21,6 +20,7 @@ from src.schemas.category_schema import (
     CategoryPutSchema,
     CategorySchema,
 )
+from src.schemas.common.enums import Role
 
 router = APIRouter(tags=["Categories"], prefix="/categories")
 

@@ -1,15 +1,14 @@
 from uuid import UUID
 
-from fastapi import APIRouter, status, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from fastapi.params import Depends
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.services.user_balance_service import UserBalanceService
-from src.api.auth.clerk import require_role
 from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
 from src.api.di.db_helper import db_helper
-from src.schemas.common.enums import Role, UserBalanceChangeReason
+from src.api.services.user_balance_service import UserBalanceService
+from src.schemas.common.enums import UserBalanceChangeReason
 from src.schemas.user_balance_history import UserBalanceHistorySchema
 
 router = APIRouter(
@@ -34,6 +33,7 @@ async def get_user_balance_history(
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 
+
 @router.post(
     "/adjust/{user_id}",
     response_model=UserBalanceHistorySchema,
@@ -48,6 +48,8 @@ async def adjust_user_balance(
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     try:
-        return await UserBalanceService.change_balance(db_session, user_id, delta, reason)
+        return await UserBalanceService.change_balance(
+            db_session, user_id, delta, reason
+        )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

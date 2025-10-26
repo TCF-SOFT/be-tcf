@@ -1,12 +1,12 @@
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.models import Category, Offer, Product, SubCategory, Waybill, WaybillOffer
 from src.schemas.analytical_schema import (
     CategoryFacet,
     ProductFacetsSchema,
     SubCategoryFacet,
 )
-from src.models import Category, Offer, Product, SubCategory, Waybill, WaybillOffer
 from src.schemas.common.enums import WaybillType
 
 

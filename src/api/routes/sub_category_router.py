@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.api.auth.clerk import require_role
-from src.schemas.common.enums import Role
 from src.api.core.create_entity import create_entity_with_image
 from src.api.core.update_entity import (
     update_entity_with_optional_image,
@@ -19,6 +18,7 @@ from src.api.di.db_helper import db_helper
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
 from src.schemas.category_schema import CategorySchema
+from src.schemas.common.enums import Role
 from src.schemas.sub_category_schema import (
     SubCategoryPostSchema,
     SubCategoryPutSchema,

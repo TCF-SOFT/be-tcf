@@ -2,14 +2,13 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.services.user_balance_service import UserBalanceService
-from src.schemas.common.enums import WaybillType
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.user_dao import UserDAO
 from src.api.dao.waybill_dao import WaybillDAO
 from src.api.dao.waybill_offer_dao import WaybillOfferDAO
+from src.api.services.user_balance_service import UserBalanceService
 from src.models import Offer, Waybill, WaybillOffer
-from src.schemas.common.enums import CustomerType, UserBalanceChangeReason
+from src.schemas.common.enums import CustomerType, UserBalanceChangeReason, WaybillType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.waybill_offer_schema import WaybillOfferPostSchema, WaybillOfferSchema
 from src.schemas.waybill_schema import (

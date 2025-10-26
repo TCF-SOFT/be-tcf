@@ -6,7 +6,6 @@ from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.clerk import require_role
-from src.schemas.common.enums import Role
 from src.api.core.create_entity import create_entity_with_image
 from src.api.core.update_entity import (
     update_entity_with_optional_image,
@@ -16,6 +15,7 @@ from src.api.dao.sub_category_dao import SubCategoryDAO
 from src.api.di.db_helper import db_helper
 from src.common.deps.s3_service import get_s3_service
 from src.common.services.s3_service import S3Service
+from src.schemas.common.enums import Role
 from src.schemas.product_schema import (
     ProductPatchSchema,
     ProductPostSchema,

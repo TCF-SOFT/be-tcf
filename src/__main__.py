@@ -11,12 +11,12 @@ from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_pagination import add_pagination
 
-from src.api.di.db_helper import db_helper
-from src.api.routes import router
 from common.services.telemetry import setup_telemetry
 from config.config import ServerEnv
+from src.api.di.db_helper import db_helper
 from src.api.di.di import ResourceModule
 from src.api.middleware.logging_middleware import LoggingMiddleware
+from src.api.routes import router
 from src.common.services.redis_service import RedisService
 from src.common.services.s3_service import S3Service
 from src.config.config import settings

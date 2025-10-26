@@ -4,7 +4,6 @@ from uuid import UUID
 from pydantic import BaseModel, ConfigDict
 
 from src.schemas.common.enums import Currency, UserBalanceChangeReason
-from src.schemas.user_schema import UserSchema
 from src.schemas.waybill_schema import WaybillSchema
 
 

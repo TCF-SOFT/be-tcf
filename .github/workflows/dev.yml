@@ -181,6 +181,12 @@ jobs:
       - name: Set up Kubeconfig
         run: echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
 
+      - name: Update Chart appVersion
+        env:
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          sed -i "s/appVersion:.*/appVersion: \"$IMAGE_TAG\"/" ./chart/Chart.yaml
+
       - name: Deploy with Helm
         env:
           IMAGE_TAG: ${{ github.sha }}
