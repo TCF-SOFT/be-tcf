@@ -91,7 +91,7 @@ class BaseDAO(Generic[T, S]):
     #            POST Methods
     # ---------------------------------------
     @classmethod
-    async def add(cls, db_session: AsyncSession, **values):
+    async def add(cls, db_session: AsyncSession, **values) -> model:
         """
         More: https://habr.com/ru/articles/828328/, 'Управление транзакциями'
         :param db_session:

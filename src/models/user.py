@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
 
 from sqlalchemy import (
+    BigInteger,
     Boolean,
-    Integer,
     String,
 )
 from sqlalchemy import (
@@ -34,7 +34,10 @@ class User(Base):
         nullable=False,
         default=Role.USER,
     )
-    balance_rub: Mapped[int | float] = mapped_column(Integer, nullable=False, default=0)
+    balance_rub: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
+    balance_usd: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
+    balance_eur: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
+    balance_try: Mapped[int] = mapped_column(BigInteger, nullable=False, default=0)
 
     # --------------------------------------------------
     #      Customer Only Fields - Public Metadata

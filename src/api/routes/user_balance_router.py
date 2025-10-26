@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.user_balance_service import UserBalanceService
-from src.schemas.common.enums import UserBalanceChangeReason
+from src.schemas.common.enums import Currency, UserBalanceChangeReason
 from src.schemas.user_balance_history import UserBalanceHistorySchema
 
 router = APIRouter(
@@ -43,13 +43,14 @@ async def get_user_balance_history(
 )
 async def adjust_user_balance(
     user_id: UUID,
-    delta: float,
+    delta: int,
     reason: UserBalanceChangeReason,
+    currency: Currency = Currency.RUB,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     try:
         return await UserBalanceService.change_balance(
-            db_session, user_id, delta, reason
+            db_session, user_id, delta, reason, currency
         )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))

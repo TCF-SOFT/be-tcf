@@ -18,6 +18,9 @@ class _BaseUser(BaseModel):
     is_active: bool = True
     role: Role = Field(Role.USER, examples=[Role.USER])
     balance_rub: int
+    balance_usd: int
+    balance_eur: int
+    balance_try: int
 
     # --------------------------------------------------
     #      Customer Only Fields - Public Metadata

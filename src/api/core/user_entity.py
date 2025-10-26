@@ -2,6 +2,7 @@ from clerk_backend_api import Clerk
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.user_dao import UserDAO
+from src.models import User
 from src.schemas.common.enums import CustomerType, Role
 from src.schemas.user_schema import UserCreate
 from src.schemas.webhooks.clerk_webhook_schema import UserWebhookSchema
@@ -43,12 +44,15 @@ async def create_user_entity(
         shipping_method=None,
         shipping_company=None,
         balance_rub=0,
+        balance_usd=0,
+        balance_eur=0,
+        balance_try=0,
     )
     logger.info(
         "[ClerkWebhook | POST] Creating user %s",
         user_data.email_addresses[0].email_address,
     )
-    internal_user = await UserDAO.add(db_session, **user_create.model_dump())
+    internal_user: User = await UserDAO.add(db_session, **user_create.model_dump())
     logger.info(
         "[ClerkWebhook | POST] User %s is created",
         user_data.email_addresses[0].email_address,

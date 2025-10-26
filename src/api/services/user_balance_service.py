@@ -4,9 +4,16 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
 from src.api.dao.user_dao import UserDAO
-from src.models import User
+from src.models import User, UserBalanceHistory
 from src.schemas.common.enums import Currency, UserBalanceChangeReason
 from src.schemas.user_balance_history import UserBalanceHistoryPostSchema
+
+BALANCE_FIELD_MAP = {
+    Currency.RUB: "balance_rub",
+    Currency.USD: "balance_usd",
+    Currency.EUR: "balance_eur",
+    Currency.TRY: "balance_try",
+}
 
 
 class UserBalanceService:
@@ -14,11 +21,11 @@ class UserBalanceService:
     async def change_balance(
         db_session: AsyncSession,
         user_id: UUID,
-        delta: float,
+        delta: int,
         reason: UserBalanceChangeReason,
         currency: Currency = Currency.RUB,
         waybill_id: UUID | None = None,
-    ) -> None:
+    ) -> UserBalanceHistory | None:
         """
         Change user balance and create history record.
         """
@@ -26,9 +33,11 @@ class UserBalanceService:
         if not user:
             raise ValueError(f"User {user_id} not found")
 
-        before = user.balance_rub
+        field = BALANCE_FIELD_MAP.get(currency)
+
+        before = getattr(user, field)
         after = before + delta
-        user.balance_rub = after
+        setattr(user, field, after)
 
         db_session.add(user)  # add user update to session
 

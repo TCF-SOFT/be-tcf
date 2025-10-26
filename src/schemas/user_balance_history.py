@@ -10,10 +10,10 @@ from src.schemas.waybill_schema import WaybillSchema
 class _UserBalanceHistoryBaseSchema(BaseModel):
     user_id: UUID
     waybill_id: UUID | None
-    delta: float
+    delta: int
     currency: Currency = Currency.RUB
-    balance_before: float
-    balance_after: float
+    balance_before: int
+    balance_after: int
     reason: UserBalanceChangeReason
 
     model_config = ConfigDict(from_attributes=True)
