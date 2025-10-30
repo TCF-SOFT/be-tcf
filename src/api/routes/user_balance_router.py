@@ -5,6 +5,7 @@ from fastapi.params import Depends
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.dao.helper import OrderByOption
 from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.user_balance_service import UserBalanceService
@@ -28,8 +29,9 @@ async def get_user_balance_history(
     user_id: UUID, db_session=Depends(db_helper.session_getter)
 ):
     filters = {"user_id": user_id}
+    order_by: OrderByOption  = {"field": "created_at", "direction": "desc"}
     try:
-        return await UserBalanceHistoryDAO.find_all_paginate(db_session, filters)
+        return await UserBalanceHistoryDAO.find_all_paginate(db_session, filters, order_by)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 

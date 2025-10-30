@@ -3,12 +3,15 @@ from uuid import UUID
 
 from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import apaginate
+from pydantic import BaseModel
 from sqlalchemy import delete as sa_delete
 from sqlalchemy import func, select
 from sqlalchemy import update as sqlalchemy_update
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import DeclarativeMeta
 
+from src.api.dao.helper import OrderByOption, get_order_by_clause
 from src.common.exceptions.exceptions import DuplicateNameError
 from src.utils.logging import logger
 
@@ -25,9 +28,9 @@ class BaseDAO(Generic[T, S]):
     # self.model (in instance method)
     # cls.model (in classmethod)
     """
-
-    model: Type[T] | None = None
-    schema: Type[S]
+    # TODO: how to add return with generic type T/S?
+    model: Type[T] | DeclarativeMeta | None = None
+    schema: Type[S] | BaseModel | None = None
 
     @classmethod
     async def find_all(
@@ -40,15 +43,18 @@ class BaseDAO(Generic[T, S]):
 
     @classmethod
     async def find_all_paginate(
-        cls, db_session, filter_by: dict = None, order_by: str = None
+        cls,
+        db_session,
+        filter_by: dict | None = None,
+        order_by: OrderByOption | None = None,
     ) -> Page[S]:
-        query = (
-            select(cls.model)
-            .filter_by(**filter_by if filter_by else {})
-            .order_by(cls.model.id.desc())
-        )
-        # TODO: add order_by mapping for different fields
-        #  DB Name unification allows to use the same order_by `key:value` for different models
+        query = select(cls.model).filter_by(**filter_by if filter_by else {})
+
+        if order_by:
+            query = query.order_by(get_order_by_clause(cls.model, order_by))
+        else:
+            query = query.order_by(cls.model.id.desc())
+
         return await apaginate(db_session, query)
 
     @classmethod
