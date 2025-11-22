@@ -29,9 +29,11 @@ async def get_user_balance_history(
     user_id: UUID, db_session=Depends(db_helper.session_getter)
 ):
     filters = {"user_id": user_id}
-    order_by: OrderByOption  = {"field": "created_at", "direction": "desc"}
+    order_by: OrderByOption = {"field": "created_at", "direction": "desc"}
     try:
-        return await UserBalanceHistoryDAO.find_all_paginate(db_session, filters, order_by)
+        return await UserBalanceHistoryDAO.find_all_paginate(
+            db_session, filters, order_by
+        )
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
 

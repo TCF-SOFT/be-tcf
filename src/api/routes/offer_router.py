@@ -137,7 +137,7 @@ async def post_offer(
     response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
-    dependencies=[Depends(require_role(Role.EMPLOYEE))],
+    # dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_offer(
     offer_id: UUID,

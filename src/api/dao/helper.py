@@ -1,9 +1,11 @@
-from typing import TypedDict, Literal
+from typing import Literal, TypedDict
+
 from sqlalchemy.sql import ColumnElement
 
 # reusable literal options
 OrderDirection = Literal["asc", "desc"]
 AvailableFields = Literal["id", "name", "created_at", "updated_at"] | str
+
 
 class OrderByOption(TypedDict):
     field: AvailableFields

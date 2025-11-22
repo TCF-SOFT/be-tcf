@@ -28,6 +28,7 @@ class BaseDAO(Generic[T, S]):
     # self.model (in instance method)
     # cls.model (in classmethod)
     """
+
     # TODO: how to add return with generic type T/S?
     model: Type[T] | DeclarativeMeta | None = None
     schema: Type[S] | BaseModel | None = None

@@ -57,8 +57,8 @@ class ProductPostSchema(_ProductBase):
     def as_form(
         cls,
         name: Annotated[str, Form(...)],
-        cross_number: Annotated[str | None, Form(...)],
         sub_category_id: Annotated[UUID, Form(...)],
+        cross_number: Annotated[str | None, Form(...)] = None,
     ) -> "ProductPostSchema":
         return cls(
             name=name,
@@ -77,8 +77,8 @@ class ProductPatchSchema(_ProductBase):
     def as_form(
         cls,
         name: Annotated[str, Form(...)],
-        cross_number: Annotated[str | None, Form(...)],
         sub_category_id: Annotated[UUID, Form(...)],
+        cross_number: Annotated[str | None, Form(...)] = None,
     ) -> "ProductPatchSchema":
         return cls(
             name=name,

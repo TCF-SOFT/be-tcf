@@ -59,13 +59,14 @@ class OfferPostSchema(_OfferBase):
     @classmethod
     def as_form(
         cls,
-        sku: Annotated[str | None, Form(...)],
         product_id: Annotated[UUID, Form(...)],
         brand: Annotated[str, Form(...)],
         manufacturer_number: Annotated[str, Form(...)],
-        internal_description: Annotated[str | None, Form(...)],
         price_rub: Annotated[float, Form(...)],
         super_wholesale_price_rub: Annotated[float, Form(...)],
+        sku: Annotated[str | None, Form(...)] = None,
+        internal_description: Annotated[str | None, Form(...)] = None,
+        # image: Annotated[UploadFile, File()] | None = None,
     ) -> "OfferPostSchema":
         return cls(
             sku=sku,
@@ -82,13 +83,13 @@ class OfferPatchSchema(_OfferBase):
     @classmethod
     def as_form(
         cls,
-        sku: Annotated[str | None, Form(...)],
         brand: Annotated[str, Form(...)],
         manufacturer_number: Annotated[str, Form(...)],
-        internal_description: Annotated[str | None, Form(...)],
         price_rub: Annotated[float, Form(...)],
         super_wholesale_price_rub: Annotated[float, Form(...)],
         product_id: Annotated[UUID, Form(...)],
+        sku: Annotated[str | None, Form(...)] = None,
+        internal_description: Annotated[str | None, Form(...)] = None,
     ) -> "OfferPatchSchema":
         return cls(
             sku=sku,
