@@ -1,5 +1,7 @@
 from typing import Literal, TypedDict
 
+from sqlalchemy import asc, desc
+from sqlalchemy.orm import DeclarativeMeta
 from sqlalchemy.sql import ColumnElement
 
 # reusable literal options
@@ -10,10 +12,6 @@ AvailableFields = Literal["id", "name", "created_at", "updated_at"] | str
 class OrderByOption(TypedDict):
     field: AvailableFields
     direction: OrderDirection
-
-
-from sqlalchemy import asc, desc
-from sqlalchemy.orm import DeclarativeMeta
 
 
 def get_order_by_clause(model: DeclarativeMeta, order: OrderByOption) -> ColumnElement:

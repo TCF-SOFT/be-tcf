@@ -109,6 +109,24 @@ async def full_text_search_products(
 
 
 @router.get(
+    "/meta/count",
+    response_model=dict[str, int],
+    summary="Return count of products",
+    status_code=status.HTTP_200_OK,
+)
+async def count_products(
+    sub_category_id: UUID | None = None,
+    is_deleted: bool = False,
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    filters: dict[str, bool | UUID] = {"is_deleted": is_deleted}
+    if sub_category_id:
+        filters["sub_category_id"] = sub_category_id
+
+    return await ProductDAO.count_all(db_session, filter_by=filters)
+
+
+@router.get(
     "/meta/facets/categories",
     response_model=dict[str, int],
     summary="Get product counts per category",
