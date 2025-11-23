@@ -1,5 +1,5 @@
-import datetime
-import tempfile
+from datetime import datetime
+from tempfile import NamedTemporaryFile
 
 from fastapi import APIRouter, Depends, Response
 from fastapi.responses import FileResponse
@@ -30,11 +30,11 @@ async def export_yml(db: AsyncSession = Depends(db_helper.session_getter)):
 async def export_yml_file(db: AsyncSession = Depends(db_helper.session_getter)):
     xml = await build_yml(db)
 
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".xml") as tmp:
+    with NamedTemporaryFile(delete=False, suffix=".xml") as tmp:
         tmp.write(xml.encode("utf-8"))
 
     return FileResponse(
         tmp.name,
         media_type="application/xml",
-        filename=f"yml_feed_{datetime.datetime.now().date()}.xml",
+        filename=f"yml_feed_{datetime.now().date()}.xml",
     )

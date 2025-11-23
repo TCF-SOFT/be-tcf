@@ -37,17 +37,6 @@ async def build_yml(db: AsyncSession) -> str:
 
         # товар недоступен
         if offer.quantity <= 0:
-            offers_xml_list.append(
-                f'<offer id="{offer.id}" available="false">'
-                f"<name>{escape(product.name)}</name>"
-                f"<vendor>{escape(offer.brand)}</vendor>"
-                f"<vendorCode>{escape(offer.manufacturer_number)}</vendorCode>"
-                f"<categoryId>{sub.id}</categoryId>"
-                f"<picture>{offer.image_url}</picture>"
-                f"<barcode>{offer.sku or ''}</barcode>"
-                f"<description><![CDATA[{escape(offer.internal_description or '')}]]></description>"
-                f"</offer>"
-            )
             continue
 
         # товар в наличии
