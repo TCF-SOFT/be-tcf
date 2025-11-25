@@ -83,7 +83,7 @@ async def get_product_by_slug(
 
 
 @router.get(
-    "/search",
+    "/search/wildcard",
     response_model=Page[ProductSchema],
     summary="Search products by name",
     status_code=status.HTTP_200_OK,
@@ -96,9 +96,9 @@ async def search_products_by_name(
 
 
 @router.get(
-    "/text_search",
+    "/search/fts",
     response_model=Page[ProductSchema],
-    summary="Full text search products",
+    summary="Full text search",
     status_code=status.HTTP_200_OK,
 )
 async def full_text_search_products(

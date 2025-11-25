@@ -18,7 +18,7 @@ from src.schemas.category_schema import CategorySchema
 
 class _SubCategoryBase(BaseModel):
     name: str = Field(..., examples=["Свечи зажигания"])
-    category_id: UUID = Field(..., examples=["2b3fb1a9-f13b-430f-a78e-94041fb0ed44"])
+    category_id: UUID
 
     model_config = ConfigDict(from_attributes=True)
 

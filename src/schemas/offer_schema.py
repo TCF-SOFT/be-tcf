@@ -18,7 +18,7 @@ from src.schemas.product_schema import ProductSchema
 
 class _OfferBase(BaseModel):
     sku: str | None = Field(None, examples=["AA-TEST"])
-    product_id: UUID = Field(..., examples=["b41f51ed-1969-461e-a966-7dd7d0752c9e"])
+    product_id: UUID
     brand: str = Field(..., examples=["MARKON"])
     manufacturer_number: str = Field(..., examples=["6000180"])
 
@@ -34,7 +34,6 @@ class _OfferBase(BaseModel):
 
 class OfferSchema(_OfferBase):
     id: UUID
-    offer_bitrix_id: str | None = Field(None, examples=["278495"])
     quantity: int = Field(..., examples=[2])
     product: ProductSchema
     is_deleted: bool = Field(..., examples=[False])

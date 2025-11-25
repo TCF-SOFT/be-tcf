@@ -5,11 +5,12 @@ from fastapi.params import Depends
 from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.api.auth.clerk import require_role
 from src.api.dao.helper import OrderByOption
 from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
 from src.api.di.db_helper import db_helper
 from src.api.services.user_balance_service import UserBalanceService
-from src.schemas.common.enums import Currency, UserBalanceChangeReason
+from src.schemas.common.enums import Currency, Role, UserBalanceChangeReason
 from src.schemas.user_balance_history import UserBalanceHistorySchema
 
 router = APIRouter(
@@ -43,7 +44,7 @@ async def get_user_balance_history(
     response_model=UserBalanceHistorySchema,
     summary="Adjust user balance (Admin only)",
     status_code=status.HTTP_201_CREATED,
-    # dependencies=[Depends(require_role(Role.ADMIN))],
+    dependencies=[Depends(require_role(Role.ADMIN))],
 )
 async def adjust_user_balance(
     user_id: UUID,

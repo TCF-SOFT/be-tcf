@@ -17,23 +17,6 @@ class OfferDAO(BaseDAO):
     @classmethod
     async def wildcard_search(
         cls,
-        db_session,
-        search_term: str,
-    ) -> Page[OfferSchema]:
-        search_term = f"%{search_term}%"
-
-        query = select(cls.model).where(
-            or_(
-                cls.model.brand.ilike(search_term),
-                cls.model.manufacturer_number.ilike(search_term),
-            )
-        )
-
-        return await paginate(db_session, query)
-
-    @classmethod
-    async def smart_offer_search(
-        cls,
         db_session: AsyncSession,
         search_term: str,
     ) -> Page[OfferSchema]:

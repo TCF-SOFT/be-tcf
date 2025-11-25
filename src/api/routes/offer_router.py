@@ -62,9 +62,6 @@ async def get_offer(
     status_code=status.HTTP_200_OK,
 )
 async def count_offers(
-    # TODO: add counts by categories
-    # category_slug: str | None = None,
-    # sub_category_slug: str | None = None,
     product_id: UUID | None = None,
     in_stock: bool | None = None,
     is_image: bool | None = None,
@@ -92,11 +89,11 @@ async def search_offers(
     search_term: str,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
-    return await OfferDAO.smart_offer_search(db_session, search_term)
+    return await OfferDAO.wildcard_search(db_session, search_term)
 
 
 @router.get(
-    "/search/text_search",
+    "/search/fts",
     response_model=Page[OfferSchema],
     summary="Search offers by product name, cross_number, brand and manufacturer_number",
     status_code=status.HTTP_200_OK,
@@ -137,7 +134,7 @@ async def post_offer(
     response_model=OfferSchema,
     summary="Update offer by id",
     status_code=status.HTTP_200_OK,
-    # dependencies=[Depends(require_role(Role.EMPLOYEE))],
+    dependencies=[Depends(require_role(Role.EMPLOYEE))],
 )
 async def patch_offer(
     offer_id: UUID,
