@@ -2,7 +2,6 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.clerk import require_role
@@ -10,6 +9,7 @@ from src.api.core.create_entity import create_entity_with_image
 from src.api.core.update_entity import (
     update_entity_with_optional_image,
 )
+from src.api.dao.helper import OrderByOption
 from src.api.dao.product_dao import ProductDAO
 from src.api.dao.sub_category_dao import SubCategoryDAO
 from src.api.di.db_helper import db_helper
@@ -21,6 +21,7 @@ from src.schemas.product_schema import (
     ProductPostSchema,
     ProductSchema,
 )
+from src.utils.pagination import Page
 
 router = APIRouter(tags=["Products"], prefix="/products")
 
@@ -38,16 +39,21 @@ async def get_products(
     sub_category_slug: str | None = None,
     is_deleted: bool = False,
 ):
+    order_by: OrderByOption = {"field": "name", "direction": "asc"}
+
     filters: dict[str, bool | UUID | str] = {"is_deleted": is_deleted}
     if sub_category_slug:
         sub_category = await SubCategoryDAO.find_by_slug(db_session, sub_category_slug)
-        if sub_category:
-            filters["sub_category_id"] = sub_category.id
+        if not sub_category:
+            raise HTTPException(status_code=404, detail="SubCategory not found")
+        filters["sub_category_id"] = sub_category.id
 
     if sub_category_id:
         filters["sub_category_id"] = sub_category_id
 
-    return await ProductDAO.find_all_paginate(db_session, filter_by=filters)
+    return await ProductDAO.find_all_paginate(
+        db_session, filter_by=filters, order_by=order_by
+    )
 
 
 @router.get(

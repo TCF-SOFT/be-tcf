@@ -11,12 +11,12 @@
 - SMTP - email service (aiosmtplib)
 
 ### API Layer
-`dao` - data access objects, used to interact with the database.
-`services` - business logic, used to interact with the `dao` layer and perform operations on the data.
-`common/deps` - common dependencies, used to inject dependencies into the API endpoints.
-`common/services` - common services: redis, S3, etc. Used in `deps` layer.
-`common/microservices` - common microservices: openai
-
+* `dao` - data access objects, used to interact with the database.
+* `services` - business logic, used to interact with the `dao` layer and perform operations on the data.
+* `common/deps` - common dependencies, used to inject dependencies into the API endpoints.
+* `common/services` - common services: redis, S3, etc. Used in `deps` layer.
+* `common/microservices` - common microservices: openai
+* `pagination` - using ``fastapi_pagination`` for paginated responses, modified in `utils/pagination`.
 ### API Endpoints
 Endpoints such as `/categories`, `/sub-categories`, `/products`, `/offers` are using the same flow:
 ```mermaid

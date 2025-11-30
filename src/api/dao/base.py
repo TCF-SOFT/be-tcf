@@ -1,7 +1,6 @@
-from typing import Any, Generic, Type, TypeVar
+from typing import Any, Generic, Sequence, Type, TypeVar
 from uuid import UUID
 
-from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import apaginate
 from pydantic import BaseModel
 from sqlalchemy import delete as sa_delete
@@ -14,6 +13,7 @@ from sqlalchemy.orm import DeclarativeMeta
 from src.api.dao.helper import OrderByOption, get_order_by_clause
 from src.common.exceptions.exceptions import DuplicateNameError
 from src.utils.logging import logger
+from src.utils.pagination import Page
 
 T = TypeVar("T")
 S = TypeVar("S")
@@ -36,7 +36,7 @@ class BaseDAO(Generic[T, S]):
     @classmethod
     async def find_all(
         cls, db_session: AsyncSession, filter_by: dict, order_by: str = None
-    ) -> list:
+    ) -> Sequence[T]:
         query = select(cls.model).filter_by(**filter_by).order_by(order_by)
         result = await db_session.execute(query)
         res = result.unique().scalars().all()

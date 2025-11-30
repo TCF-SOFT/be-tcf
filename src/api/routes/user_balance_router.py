@@ -2,7 +2,6 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi.params import Depends
-from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.clerk import require_role
@@ -12,6 +11,7 @@ from src.api.di.db_helper import db_helper
 from src.api.services.user_balance_service import UserBalanceService
 from src.schemas.common.enums import Currency, Role, UserBalanceChangeReason
 from src.schemas.user_balance_history import UserBalanceHistorySchema
+from src.utils.pagination import Page
 
 router = APIRouter(
     tags=["User Balance"],

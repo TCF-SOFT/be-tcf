@@ -3,7 +3,6 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi_cache.decorator import cache
-from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -13,6 +12,7 @@ from src.api.core.update_entity import (
     update_entity_with_optional_image,
 )
 from src.api.dao.category_dao import CategoryDAO
+from src.api.dao.helper import OrderByOption
 from src.api.dao.sub_category_dao import SubCategoryDAO
 from src.api.di.db_helper import db_helper
 from src.common.deps.s3_service import get_s3_service
@@ -25,6 +25,7 @@ from src.schemas.sub_category_schema import (
     SubCategorySchema,
 )
 from src.utils.cache_coder import ORJsonCoder
+from src.utils.pagination import Page
 
 router = APIRouter(tags=["Sub-Categories"], prefix="/sub-categories")
 
@@ -41,6 +42,8 @@ async def get_sub_categories(
     category_id: UUID | None = None,
     category_slug: str | None = None,
 ):
+    order_by: OrderByOption = {"field": "name", "direction": "asc"}
+
     filters = {}
     if category_slug:
         category: CategorySchema | None = await CategoryDAO.find_by_slug(
@@ -56,7 +59,9 @@ async def get_sub_categories(
     if category_id:
         filters["category_id"] = category_id
 
-    return await SubCategoryDAO.find_all_paginate(db_session, filter_by=filters)
+    return await SubCategoryDAO.find_all_paginate(
+        db_session, filter_by=filters, order_by=order_by
+    )
 
 
 @router.get(

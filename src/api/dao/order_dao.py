@@ -1,10 +1,10 @@
-from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import or_, select
 
 from src.api.dao.base import BaseDAO
 from src.models import Order, User
 from src.schemas.order_schema import OrderSchema
+from src.utils.pagination import Page
 
 
 class OrderDAO(BaseDAO):

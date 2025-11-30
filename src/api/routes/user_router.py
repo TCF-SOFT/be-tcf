@@ -2,7 +2,6 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.params import Query
-from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.clerk import clerkClient, require_role
@@ -12,6 +11,7 @@ from src.api.di.db_helper import db_helper
 from src.schemas.common.enums import CustomerType, Role
 from src.schemas.user_schema import UserSchema, UserUpdate
 from src.utils.logging import logger
+from src.utils.pagination import Page
 
 # Create the router
 router = APIRouter(

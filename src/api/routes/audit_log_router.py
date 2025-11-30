@@ -1,12 +1,12 @@
 from fastapi import APIRouter, status
 from fastapi.params import Depends
-from fastapi_pagination import Page
 
 from src.api.auth.clerk import require_role
 from src.api.dao.audit_log_dao import AuditLogDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.audit_log_schema import AuditLogSchema
 from src.schemas.common.enums import Role
+from src.utils.pagination import Page
 
 router = APIRouter(
     tags=["Audit Log"],

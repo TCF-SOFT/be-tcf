@@ -1,7 +1,6 @@
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.api.auth.clerk import require_role
@@ -24,6 +23,7 @@ from src.schemas.order_schema import (
     OrderWithOffersPostSchema,
 )
 from src.schemas.waybill_schema import WaybillSchema
+from src.utils.pagination import Page
 
 # Flow:
 # 1. Create a cart

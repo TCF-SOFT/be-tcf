@@ -2,10 +2,10 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
-from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
+from api.dao.helper import OrderByOption
 from src.api.auth.clerk import require_role
 from src.api.core.create_entity import create_entity_with_image
 from src.api.core.update_entity import (
@@ -21,6 +21,7 @@ from src.schemas.category_schema import (
     CategorySchema,
 )
 from src.schemas.common.enums import Role
+from src.utils.pagination import Page
 
 router = APIRouter(tags=["Categories"], prefix="/categories")
 
@@ -34,9 +35,9 @@ router = APIRouter(tags=["Categories"], prefix="/categories")
 # @cache(expire=60 * 10, coder=ORJsonCoder)
 async def get_categories(
     db_session: AsyncSession = Depends(db_helper.session_getter),
-    order_by: str = None,
 ):
-    return await CategoryDAO.find_all_paginate(db_session)
+    order_by: OrderByOption = {"field": "name", "direction": "asc"}
+    return await CategoryDAO.find_all_paginate(db_session, order_by=order_by)
 
 
 @router.get(

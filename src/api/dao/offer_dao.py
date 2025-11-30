@@ -1,4 +1,3 @@
-from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +7,7 @@ from src.api.dao.base import BaseDAO
 from src.config import settings
 from src.models import Offer, Product
 from src.schemas.offer_schema import OfferSchema
+from src.utils.pagination import Page
 
 
 class OfferDAO(BaseDAO):

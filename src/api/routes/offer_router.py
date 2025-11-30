@@ -2,11 +2,8 @@ from typing import Annotated
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
-from fastapi_pagination import Page
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from common.deps.s3_service import get_s3_service
-from common.services.s3_service import S3Service
 from src.api.auth.clerk import require_role
 from src.api.core.create_entity import (
     create_entity_with_optional_image,
@@ -15,9 +12,13 @@ from src.api.core.update_entity import (
     update_entity_with_optional_image,
 )
 from src.api.dao.offer_dao import OfferDAO
+from src.api.dao.product_dao import ProductDAO
 from src.api.di.db_helper import db_helper
+from src.common.deps.s3_service import get_s3_service
+from src.common.services.s3_service import S3Service
 from src.schemas.common.enums import Role
 from src.schemas.offer_schema import OfferPatchSchema, OfferPostSchema, OfferSchema
+from src.utils.pagination import Page
 
 router = APIRouter(tags=["Offers"], prefix="/offers")
 
@@ -32,9 +33,16 @@ router = APIRouter(tags=["Offers"], prefix="/offers")
 async def get_offers(
     db_session: AsyncSession = Depends(db_helper.session_getter),
     product_id: UUID | None = None,
+    product_slug: str | None = None,
     is_deleted: bool = False,
 ):
-    filters = {"is_deleted": is_deleted}
+    filters: dict[str, str | bool | UUID] = {"is_deleted": is_deleted}
+
+    if product_slug:
+        product = await ProductDAO.find_by_slug(db_session, product_slug)
+        if not product:
+            raise HTTPException(status_code=404, detail="Product not found")
+        filters["product_id"] = product.id
 
     if product_id:
         filters["product_id"] = product_id
@@ -63,11 +71,18 @@ async def get_offer(
 )
 async def count_offers(
     product_id: UUID | None = None,
+    product_slug: str | None = None,
     in_stock: bool | None = None,
     is_image: bool | None = None,
     db_session: AsyncSession = Depends(db_helper.session_getter),
 ):
     filters = {}
+
+    if product_slug:
+        product = await ProductDAO.find_by_slug(db_session, product_slug)
+        if not product:
+            raise HTTPException(status_code=404, detail="Product not found")
+        filters["product_id"] = product.id
 
     if product_id:
         filters["product_id"] = product_id

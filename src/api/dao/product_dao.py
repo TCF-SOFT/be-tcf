@@ -1,6 +1,5 @@
 from uuid import UUID
 
-from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.dao.base import BaseDAO
 from src.models import Category, Product, SubCategory
 from src.schemas.product_schema import ProductSchema
+from src.utils.pagination import Page
 
 
 class ProductDAO(BaseDAO):

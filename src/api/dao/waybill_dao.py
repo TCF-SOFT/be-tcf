@@ -1,6 +1,5 @@
 from uuid import UUID
 
-from fastapi_pagination import Page
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -9,6 +8,7 @@ from src.api.dao.base import BaseDAO
 from src.models import Offer, User, Waybill
 from src.schemas.common.enums import WaybillType
 from src.schemas.waybill_schema import WaybillSchema
+from src.utils.pagination import Page
 
 
 class WaybillDAO(BaseDAO):
