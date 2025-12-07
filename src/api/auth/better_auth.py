@@ -78,7 +78,9 @@ def verify_better_auth_jwt(token: str) -> dict:
             token,
             key=public_key,
             algorithms=["EdDSA"],
-            options={"require": ["exp", "iat"]},
+            audience=settings.AUTH.BETTER_AUTH_URL,
+            issuer=settings.AUTH.BETTER_AUTH_URL,
+            options={"require": ["exp", "iat", "sub"]},
         )
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
