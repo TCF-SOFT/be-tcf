@@ -1,11 +1,12 @@
 from clerk_backend_api import Clerk
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas.webhooks import BetterAuthWebhookSchema
 from src.api.dao.user_dao import UserDAO
 from src.models import User
 from src.schemas.common.enums import CustomerType, Role
 from src.schemas.user_schema import UserCreate
-from src.schemas.webhooks.clerk_webhook_schema import UserWebhookSchema
+from src.schemas.webhooks import UserWebhookSchema
 from src.schemas.webhooks.common import UserWebhookData
 from src.utils.logging import logger
 
@@ -106,3 +107,70 @@ async def delete_user_entity(
         user_data.clerk_id,
     )
     return await UserDAO.delete_by_clerk_id(db_session, user_data.clerk_id)
+
+
+
+async def create_user_entity_better_auth(
+    payload: BetterAuthWebhookSchema, db_session: AsyncSession
+):
+    data = payload.data
+
+    user = UserCreate(
+        id=data.id,
+        clerk_id=str(data.id),
+        email=data.email,
+        first_name=data.first_name,
+        last_name=data.last_name,
+        is_active=True,
+        role=Role.USER,
+        customer_type=CustomerType.USER_RETAIL,
+        mailing=False,
+        phone=None,
+        city=None,
+        note=None,
+        shipping_method=None,
+        shipping_company=None,
+        balance_rub=0,
+        balance_usd=0,
+        balance_eur=0,
+        balance_try=0,
+    )
+
+    logger.info(
+        "[Webhook] Creating user %s",
+        user.email
+    )
+    try:
+        await UserDAO.add(db_session, **user.model_dump())
+        logger.info(
+            "[Webhook] User %s is created",
+            user.email
+        )
+    except Exception as e:
+        logger.error(
+            "[Webhook] Error creating user %s: %s",
+            user.email,
+            str(e)
+        )
+
+
+async def update_user_entity_better_auth(payload: BetterAuthWebhookSchema, db_session: AsyncSession):
+    data = payload.data
+    logger.info(
+        "[Webhook] Updating user ID %s",
+        data.id,
+    )
+    try:
+        await UserDAO.update(
+            db_session,
+            {"id": data.id},
+            email=data.email,
+            first_name=data.first_name,
+            last_name=data.last_name,
+        )
+    except Exception as e:
+        logger.error(
+            "[Webhook] Error updating user ID %s: %s",
+            data.id,
+            str(e)
+        )

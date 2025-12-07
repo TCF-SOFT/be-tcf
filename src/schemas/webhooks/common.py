@@ -1,7 +1,13 @@
+from enum import StrEnum
+
 from pydantic import BaseModel, Field, computed_field
 
 from src.schemas.common.enums import CustomerType, Role
 
+class EventType(StrEnum):
+    USER_CREATED = "user.created"
+    USER_UPDATED = "user.updated"
+    USER_DELETED = "user.deleted"
 
 class Verification(BaseModel):
     attempts: int

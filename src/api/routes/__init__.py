@@ -5,10 +5,10 @@ from .address_router import router as address_router
 from .analytical_router import router as analytical_router
 from .audit_log_router import router as audit_log_router
 from .category_router import router as category_router
-from .documents_router import router as documents_router
-from .health_check_router import router as health_check_router
-from .integration_router import router as integration_router
-from .mail_router import router as mail_router
+from api.routes.integrations.documents_router import router as documents_router
+from api.routes.utils.health_check_router import router as health_check_router
+from api.routes.integrations.integration_router import router as integration_router
+from api.routes.integrations.mail_router import router as mail_router
 from .offer_router import router as offer_router
 from .order_offers_router import router as order_offers_router
 from .order_router import router as order_router
@@ -16,10 +16,10 @@ from .product_router import router as product_router
 from .sub_category_router import router as sub_category_router
 from .user_balance_router import router as user_balance_history_router
 from .user_router import router as user_router
-from .version_router import router as version_router
+from api.routes.utils.version_router import router as version_router
 from .waybill_offers_router import router as waybill_offers_router
 from .waybill_router import router as waybill_router
-from .webhook_router import router as webhook_router
+from api.routes.integrations.webhook_router import router as webhook_router
 
 # TODO: add v1 prefix
 

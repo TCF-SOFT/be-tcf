@@ -1,8 +1,7 @@
-from enum import StrEnum
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from src.schemas.webhooks.common import UserWebhookData
+from src.schemas.webhooks.common import UserWebhookData, EventType
 
 
 class DeleteUserWebhookData(BaseModel):
@@ -14,11 +13,6 @@ class DeleteUserWebhookData(BaseModel):
     clerk_id: str = Field(..., alias="id")
     object: str
 
-
-class EventType(StrEnum):
-    USER_CREATED = "user.created"
-    USER_UPDATED = "user.updated"
-    USER_DELETED = "user.deleted"
 
 
 class HttpRequest(BaseModel):

@@ -1,4 +1,4 @@
-import uuid
+from uuid import UUID
 
 from pydantic import (
     BaseModel,
@@ -11,6 +11,7 @@ from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 
 class _BaseUser(BaseModel):
+    id: UUID
     clerk_id: str | None
     email: EmailStr | str
     first_name: str = Field(..., examples=["Vasilii"])
@@ -39,9 +40,8 @@ class _BaseUser(BaseModel):
 
 
 class UserSchema(_BaseUser):
-    id: uuid.UUID
     # addresses: list[AddressSchema] = Field(default_factory=list)
-
+    pass
 
 class UserCreate(_BaseUser):
     pass
