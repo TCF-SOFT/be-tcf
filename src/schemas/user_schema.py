@@ -2,9 +2,9 @@ from uuid import UUID
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     EmailStr,
     Field,
-    ConfigDict,
 )
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
@@ -47,6 +47,7 @@ class _BaseUser(BaseModel):
 class UserSchema(_BaseUser):
     # addresses: list[AddressSchema] = Field(default_factory=list)
     pass
+
 
 class UserCreate(_BaseUser):
     pass

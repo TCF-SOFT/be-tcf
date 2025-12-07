@@ -3,7 +3,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_role
+from src.api.auth.better_auth import require_role
 from src.api.core.update_entity import update_entity
 from src.api.dao.order_offer_dao import OrderOfferDAO
 from src.api.di.db_helper import db_helper

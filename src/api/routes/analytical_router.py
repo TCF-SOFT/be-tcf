@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 from fastapi_cache.decorator import cache
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_role
+from src.api.auth.better_auth import require_role
 from src.api.di.db_helper import db_helper
 from src.api.services.analytical_service import AnalyticalService
 from src.schemas.analytical_schema import ProductFacetsSchema

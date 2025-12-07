@@ -97,20 +97,11 @@ class SMTPConfig(BaseModel):
 
 
 class AuthConfig(BaseModel):
-    CLERK_SECRET_KEY: str = env.str("CLERK_SECRET_KEY")
-    CLERK_SIGNING_SECRET: str = env.str("CLERK_SIGNING_SECRET")
-    AUTHORIZED_PARTIES: list[str] = [
-        "http://localhost:3000",
-        "https://tcf.eucalytics.uk",
-        "https://tcf-dev.eucalytics.uk",
-        "http://testserver",
-    ]
-    TEST_EMPLOYEE_CLERK_ID: str = env.str("TEST_EMPLOYEE_CLERK_ID", "")
-
     # API key to secure certain endpoints
     API_KEY: str = env.str("API_KEY")
     BETTER_AUTH_WEBHOOK_SECRET: str = env.str("BETTER_AUTH_WEBHOOK_SECRET")
     BETTER_AUTH_URL: str = env.str("BETTER_AUTH_URL")
+    JWKS_URL: str = f"{BETTER_AUTH_URL}/api/auth/jwks"
 
 
 class ServerConfig(BaseModel):

@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from schemas.webhooks.common import EventType
+from src.schemas.webhooks.common import EventType
 
 
 class BetterAuthUserData(BaseModel):

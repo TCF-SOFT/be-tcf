@@ -1,16 +1,20 @@
+import base64
 import json
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import AsyncGenerator
 from unittest import mock
 
+import jwt
 import pytest
 from asgi_lifespan import LifespanManager
+from cryptography.hazmat.primitives import serialization
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import insert
-from src.api.auth.clerk import clerkClient
 from src.common.services.s3_service import S3Service
 from src.config import settings
-from src.models import Category, Offer, Product, SubCategory
+from src.models import Category, Offer, Product, SubCategory, User
 from src.models.base import Base
 
 
@@ -23,6 +27,71 @@ async def patch_db(monkeypatch):
     monkeypatch.setattr("src.api.di.db_helper.db_helper", test_helper)
     yield
     await test_helper.dispose()
+
+
+# Один и тот же ключ — на весь тестовый ран
+TEST_PRIVATE_KEY = Ed25519PrivateKey.generate()
+TEST_PUBLIC_KEY = TEST_PRIVATE_KEY.public_key()
+
+
+def base64url_encode(data: bytes) -> str:
+    return base64.urlsafe_b64encode(data).rstrip(b"=").decode("ascii")
+
+
+@pytest.fixture(autouse=True)
+def mock_jwks(monkeypatch):
+    x = base64url_encode(
+        TEST_PUBLIC_KEY.public_bytes(
+            encoding=serialization.Encoding.Raw,
+            format=serialization.PublicFormat.Raw,
+        )
+    )
+
+    keys = [
+        {
+            "kty": "OKP",
+            "crv": "Ed25519",
+            "alg": "EdDSA",
+            "kid": "test-key",
+            "x": x,
+        }
+    ]
+
+    # sync-функция, а не async
+    def fake_load_jwks():
+        # важно: вернуть тот же тип, который возвращает реальный load_jwks
+        # если у тебя в better_auth.py:
+        #   return resp.json()["keys"]
+        # то здесь тоже нужно вернуть список keys
+        return keys
+
+    monkeypatch.setattr(
+        "src.api.auth.better_auth.load_jwks",
+        fake_load_jwks,
+    )
+
+
+def create_test_jwt(user_id: str) -> str:
+    payload = {
+        "sub": user_id,
+        "email": "test@example.com",
+        "iat": int(datetime.now().timestamp()),
+        "exp": int((datetime.now() + timedelta(hours=1)).timestamp()),
+        "iss": "http://testserver",
+        "aud": "http://testserver",
+        "name": "Test User",
+        "first_name": "Test",
+        "last_name": "User",
+    }
+
+    token = jwt.encode(
+        payload,
+        TEST_PRIVATE_KEY,
+        algorithm="EdDSA",
+        headers={"kid": "test-key"},
+    )
+
+    return token
 
 
 # -------------------------------
@@ -48,7 +117,7 @@ async def setup_test_db(patch_db):
         valid_keys = {col.name for col in _model.__table__.columns}
         return [{k: v for k, v in row.items() if k in valid_keys} for row in _data]
 
-    mock_files = ["categories", "sub_categories", "products", "offers"]
+    mock_files = ["categories", "sub_categories", "products", "offers", "users"]
     mocks = {name: load_json(name) for name in mock_files}
 
     model_map = {
@@ -56,6 +125,7 @@ async def setup_test_db(patch_db):
         "sub_categories": SubCategory,
         "products": Product,
         "offers": Offer,
+        "users": User,
     }
 
     async with db_helper.AsyncSessionFactory() as session:
@@ -64,17 +134,6 @@ async def setup_test_db(patch_db):
                 data = filter_insertable_fields(raw_data, model)
                 await session.execute(insert(model).values(data))
         await session.commit()
-
-
-async def _issue_session_token(
-    user_id: str = settings.AUTH.TEST_EMPLOYEE_CLERK_ID,
-) -> str:
-    """
-    Helper function to issue a session token for a user.
-    """
-    session = await clerkClient.sessions.create_async(request={"user_id": user_id})
-    token_res = await clerkClient.sessions.create_token_async(session_id=session.id)
-    return token_res.jwt
 
 
 # -------------------------------
@@ -109,17 +168,7 @@ async def client() -> AsyncGenerator[AsyncClient, None]:
 
 
 @pytest.fixture
-async def employee_token() -> str:
-    """
-    Future-idea:
-    1. Create a user with    clerkClient.users.create()
-    2. Delete it after test  clerkClient.users.delete_async()
-    Blocked-by: creation would trigger Clerk Webhook and create a user in the target database
-    """
-    return await _issue_session_token()
-
-
-@pytest.fixture
-async def auth_client(client: AsyncClient, employee_token: str) -> AsyncClient:
-    client.headers["Authorization"] = f"Bearer {employee_token}"
+async def auth_client(client: AsyncClient) -> AsyncClient:
+    token = create_test_jwt(user_id="afd4fafb-86b3-4280-a829-f2fcdd9c203d")
+    client.headers["Authorization"] = f"Bearer {token}"
     return client
