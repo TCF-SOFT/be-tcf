@@ -4,6 +4,7 @@ from pydantic import (
     BaseModel,
     EmailStr,
     Field,
+    ConfigDict,
 )
 from pydantic_extra_types.phone_numbers import PhoneNumber
 
@@ -37,6 +38,10 @@ class _BaseUser(BaseModel):
         None, examples=[ShippingMethod.CARGO]
     )
     shipping_company: str | None = Field(None, examples=["КИТ"])
+
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
 
 
 class UserSchema(_BaseUser):

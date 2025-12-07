@@ -13,7 +13,7 @@ from src.schemas.common.enums import ROLE_HIERARCHY, Role
 import jwt
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 import base64
-
+from fastapi import status
 JWKS_URL = f"{settings.AUTH.BETTER_AUTH_URL}/api/auth/jwks"
 
 @lru_cache()
@@ -52,20 +52,20 @@ def get_ed25519_key(jwk_dict: dict) -> Ed25519PublicKey:
     return Ed25519PublicKey.from_public_bytes(x_bytes)
 
 def verify_better_auth_jwt(token: str) -> dict:
-    # получаем kid из заголовка без проверки подписи
+    # Get unverified header to extract kid
     try:
         header = jwt.get_unverified_header(token)
     except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Malformed JWT header")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Malformed JWT header")
     kid = header.get("kid")
     if not kid:
-        raise HTTPException(status_code=401, detail="Missing kid in JWT")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing kid in JWT")
 
-    # ищем ключ с этим kid
+    # search JWK by kid
     jwks = load_jwks()
     jwk_dict = next((k for k in jwks if k.get("kid") == kid), None)
     if jwk_dict is None:
-        raise HTTPException(status_code=401, detail="Unknown signing key")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Unknown signing key")
 
     # строим Ed25519 public key
     public_key = get_ed25519_key(jwk_dict)
@@ -73,7 +73,6 @@ def verify_better_auth_jwt(token: str) -> dict:
     try:
         # декодируем и проверяем подпись;
         # явно указываем допустимый алгоритм EdDSA:contentReference[oaicite:4]{index=4}
-        # и можно потребовать наличие exp/iat claim
         payload = jwt.decode(
             token,
             key=public_key,
@@ -83,11 +82,11 @@ def verify_better_auth_jwt(token: str) -> dict:
             options={"require": ["exp", "iat", "sub"]},
         )
     except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail="Token expired")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expired")
     except jwt.InvalidSignatureError:
-        raise HTTPException(status_code=401, detail="Invalid signature")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid signature")
     except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Invalid JWT")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid JWT")
 
     return payload
 
@@ -96,7 +95,7 @@ async def require_better_auth_session(
     authorization: str | None = Header(None),
 ) -> dict:
     if not authorization or not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=401, detail="Missing Authorization header")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing Authorization header")
     token = authorization.split(" ", 1)[1]
     return verify_better_auth_jwt(token)
 
@@ -115,7 +114,7 @@ def require_role(
         db_session: AsyncSession = Depends(db_helper.session_getter),
         state: dict = Depends(require_better_auth_session),
     ) -> str:
-        user_raw = UserDAO.find_by_id(db_session, state["sub"])
+        user_raw = await UserDAO.find_by_id(db_session, state["sub"])
         user = UserSchema.model_validate(user_raw)
 
         if ROLE_HIERARCHY.get(Role(user.role), 0) < min_required:
