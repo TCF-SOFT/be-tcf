@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from api.dao.helper import OrderByOption
-from src.api.auth.clerk import require_role
+from src.api.auth.better_auth import require_role
 from src.api.core.create_entity import create_entity_with_image
 from src.api.core.update_entity import (
     update_entity_with_optional_image,

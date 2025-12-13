@@ -1,20 +1,21 @@
 [
-    {
-        "id": "f5cf89aa-caf9-42df-bf01-abd9d2b3b49f",
-        "email": "user1@example.com",
-        "hashed_password": "hashedpassword1",
-        "is_active": true,
-        "is_superuser": false,
-        "is_verified": true,
-        "role": "customer"
-    },
-    {
-        "id": "d1914d1c-a8ef-439b-8aa1-f7c577f53a90",
-        "email": "user2@example.com",
-        "hashed_password": "hashedpassword2",
-        "is_active": true,
-        "is_superuser": false,
-        "is_verified": false,
-        "role": "admin"
-    }
+  {
+    "id": "afd4fafb-86b3-4280-a829-f2fcdd9c203d",
+    "email": "xxxx@gmail.com",
+    "first_name": "XXX",
+    "last_name": "XXX",
+    "is_active": true,
+    "role": "ADMIN",
+    "balance_rub": 0,
+    "customer_type": "USER_RETAIL",
+    "mailing": false,
+    "phone": null,
+    "city": null,
+    "note": null,
+    "shipping_method": null,
+    "shipping_company": null,
+    "balance_usd": 0,
+    "balance_eur": 0,
+    "balance_try": 0
+  }
 ]

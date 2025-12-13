@@ -4,13 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.params import Query
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import clerkClient, require_role
+from src.api.auth.better_auth import require_role
 from src.api.core.update_entity import update_entity
 from src.api.dao.user_dao import UserDAO
 from src.api.di.db_helper import db_helper
 from src.schemas.common.enums import CustomerType, Role
 from src.schemas.user_schema import UserSchema, UserUpdate
-from src.utils.logging import logger
 from src.utils.pagination import Page
 
 # Create the router
@@ -59,26 +58,6 @@ async def get_user_by_id(
 
 
 @router.get(
-    "/clerk/{clerk_id}",
-    response_model=UserSchema,
-    status_code=status.HTTP_200_OK,
-    summary="Return a single user by id",
-    dependencies=[Depends(require_role(Role.USER))],
-)
-async def get_user_by_clerk_id(
-    clerk_id: str,
-    db_session: AsyncSession = Depends(db_helper.session_getter),
-):
-    res = await UserDAO.find_by_clerk_id(db_session, clerk_id)
-    if not res:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User with clerk_id {clerk_id} not found.",
-        )
-    return res
-
-
-@router.get(
     "/meta/count",
     response_model=dict[str, int],
     status_code=status.HTTP_200_OK,
@@ -112,13 +91,4 @@ async def patch_user(
     internal_user = await update_entity(
         entity_id=user_id, payload=payload, dao=UserDAO, db_session=db_session
     )
-    await clerkClient.users.update_metadata_async(
-        user_id=payload.clerk_id,
-        public_metadata={
-            "_id": internal_user.id,
-            "_role": internal_user.role,
-            "_customer_type": internal_user.customer_type,
-        },
-    )
-    logger.info("[ClerkWebhook | PATCH] User metadata updated in Clerk")
     return internal_user

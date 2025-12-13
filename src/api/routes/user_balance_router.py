@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.params import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.api.auth.clerk import require_role
+from src.api.auth.better_auth import require_role
 from src.api.dao.helper import OrderByOption
 from src.api.dao.user_balance_history_dao import UserBalanceHistoryDAO
 from src.api.di.db_helper import db_helper

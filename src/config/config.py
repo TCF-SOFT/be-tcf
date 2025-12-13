@@ -97,18 +97,13 @@ class SMTPConfig(BaseModel):
 
 
 class AuthConfig(BaseModel):
-    CLERK_SECRET_KEY: str = env.str("CLERK_SECRET_KEY")
-    CLERK_SIGNING_SECRET: str = env.str("CLERK_SIGNING_SECRET")
-    AUTHORIZED_PARTIES: list[str] = [
-        "http://localhost:3000",
-        "https://tcf.eucalytics.uk",
-        "https://tcf-dev.eucalytics.uk",
-        "http://testserver",
-    ]
-    TEST_EMPLOYEE_CLERK_ID: str = env.str("TEST_EMPLOYEE_CLERK_ID", "")
-
     # API key to secure certain endpoints
     API_KEY: str = env.str("API_KEY")
+    BETTER_AUTH_WEBHOOK_SECRET: str = env.str("BETTER_AUTH_WEBHOOK_SECRET")
+    BETTER_AUTH_URL: str = env.str("BETTER_AUTH_URL")
+    BETTER_AUTH_ISSUER: str = BETTER_AUTH_URL
+    BETTER_AUTH_AUDIENCE: str = BETTER_AUTH_URL
+    JWKS_URL: str = f"{BETTER_AUTH_URL}/api/auth/jwks"
 
 
 class ServerConfig(BaseModel):
@@ -158,7 +153,7 @@ class Settings(BaseSettings):
     DEBUG: bool = env.bool("DEBUG", False)
     PROJECT_NAME: str = env.str("PROJECT_NAME", "be-tcf")
 
-    DOCX3R_URL: str = env.str("DOCX3R_URL", "https://api.eucalytics.uk/docx3r")
+    DOCX3R_URL: str = env.str("DOCX3R_URL")
 
     # OpenAI (Not used yet)
     OPENAI_API_KEY: str = env.str("OPENAI_API_KEY", "")

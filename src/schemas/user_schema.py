@@ -1,7 +1,8 @@
-import uuid
+from uuid import UUID
 
 from pydantic import (
     BaseModel,
+    ConfigDict,
     EmailStr,
     Field,
 )
@@ -11,7 +12,7 @@ from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 
 class _BaseUser(BaseModel):
-    clerk_id: str | None
+    id: UUID
     email: EmailStr | str
     first_name: str = Field(..., examples=["Vasilii"])
     last_name: str = Field(..., examples=["Pinov"])
@@ -37,10 +38,14 @@ class _BaseUser(BaseModel):
     )
     shipping_company: str | None = Field(None, examples=["КИТ"])
 
+    model_config = ConfigDict(
+        from_attributes=True,
+    )
+
 
 class UserSchema(_BaseUser):
-    id: uuid.UUID
     # addresses: list[AddressSchema] = Field(default_factory=list)
+    pass
 
 
 class UserCreate(_BaseUser):

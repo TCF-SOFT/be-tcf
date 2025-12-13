@@ -14,14 +14,20 @@ from src.models.base import Base, str_uniq, uuid_pk
 from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 if TYPE_CHECKING:
-    from src.models import Address, AuditLog, Cart, Order, UserBalanceHistory, Waybill
+    from src.models import (
+        Address,
+        AuditLog,
+        Cart,
+        Order,
+        UserBalanceHistory,
+        Waybill,
+    )
 
 
 class User(Base):
     __tablename__ = "users"
 
     id: Mapped[uuid_pk]
-    clerk_id: Mapped[str] = mapped_column(String, nullable=True, unique=True)
     email: Mapped[str_uniq]
 
     first_name: Mapped[str] = mapped_column(String, nullable=False)
