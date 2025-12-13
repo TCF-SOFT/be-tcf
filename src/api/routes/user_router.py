@@ -58,26 +58,6 @@ async def get_user_by_id(
 
 
 @router.get(
-    "/clerk/{clerk_id}",
-    response_model=UserSchema,
-    status_code=status.HTTP_200_OK,
-    summary="Return a single user by id",
-    dependencies=[Depends(require_role(Role.USER))],
-)
-async def get_user_by_clerk_id(
-    clerk_id: str,
-    db_session: AsyncSession = Depends(db_helper.session_getter),
-):
-    res = await UserDAO.find_by_clerk_id(db_session, clerk_id)
-    if not res:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User with clerk_id {clerk_id} not found.",
-        )
-    return res
-
-
-@router.get(
     "/meta/count",
     response_model=dict[str, int],
     status_code=status.HTTP_200_OK,

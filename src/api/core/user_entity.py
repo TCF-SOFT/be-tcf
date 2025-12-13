@@ -20,7 +20,6 @@ async def create_user_entity(
 
     user = UserCreate(
         id=data.id,
-        clerk_id=str(data.id),
         email=data.email,
         first_name=data.first_name,
         last_name=data.last_name,

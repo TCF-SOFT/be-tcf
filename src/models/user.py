@@ -28,7 +28,6 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[uuid_pk]
-    clerk_id: Mapped[str] = mapped_column(String, nullable=True, unique=True)
     email: Mapped[str_uniq]
 
     first_name: Mapped[str] = mapped_column(String, nullable=False)

@@ -1,8 +1,14 @@
+from enum import StrEnum
 from uuid import UUID
 
 from pydantic import BaseModel
 
-from src.schemas.webhooks.common import EventType
+
+class EventType(StrEnum):
+    USER_CREATED = "user.created"
+    USER_UPDATED = "user.updated"
+    USER_DELETED = "user.deleted"
+
 
 
 class BetterAuthUserData(BaseModel):

@@ -101,6 +101,8 @@ class AuthConfig(BaseModel):
     API_KEY: str = env.str("API_KEY")
     BETTER_AUTH_WEBHOOK_SECRET: str = env.str("BETTER_AUTH_WEBHOOK_SECRET")
     BETTER_AUTH_URL: str = env.str("BETTER_AUTH_URL")
+    BETTER_AUTH_ISSUER: str = BETTER_AUTH_URL
+    BETTER_AUTH_AUDIENCE: str = BETTER_AUTH_URL
     JWKS_URL: str = f"{BETTER_AUTH_URL}/api/auth/jwks"
 
 
@@ -151,7 +153,7 @@ class Settings(BaseSettings):
     DEBUG: bool = env.bool("DEBUG", False)
     PROJECT_NAME: str = env.str("PROJECT_NAME", "be-tcf")
 
-    DOCX3R_URL: str = env.str("DOCX3R_URL", "https://api.eucalytics.uk/docx3r")
+    DOCX3R_URL: str = env.str("DOCX3R_URL")
 
     # OpenAI (Not used yet)
     OPENAI_API_KEY: str = env.str("OPENAI_API_KEY", "")
