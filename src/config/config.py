@@ -101,7 +101,7 @@ class AuthConfig(BaseModel):
     API_KEY: str = env.str("API_KEY")
     BETTER_AUTH_WEBHOOK_SECRET: str = env.str("BETTER_AUTH_WEBHOOK_SECRET")
     BETTER_AUTH_URL: str = env.str("BETTER_AUTH_URL")
-    BETTER_AUTH_AUDIENCE: str = BETTER_AUTH_URL
+    BETTER_AUTH_AUDIENCE: str = env.str("BETTER_AUTH_AUDIENCE")
     JWKS_URL: str = f"{BETTER_AUTH_URL}/api/auth/jwks"
 
     BETTER_AUTH_ISSUERS: list[str] = [

@@ -20,6 +20,7 @@ from src.api.di.db_helper import db_helper
 from src.config import ServerEnv, settings
 from src.schemas.common.enums import ROLE_HIERARCHY, Role
 from src.schemas.user_schema import UserSchema
+from utils.logging import logger
 
 
 @lru_cache()
@@ -104,6 +105,7 @@ def verify_better_auth_jwt(token: str) -> dict:
             "verify_iss": False,
         }
     try:
+        logger.info(f"Verifying JWT token: {token}")
         payload = jwt.decode(token, **decode_kwargs)
         iss = payload.get("iss")
         if not iss or iss not in settings.AUTH.BETTER_AUTH_ISSUERS:
