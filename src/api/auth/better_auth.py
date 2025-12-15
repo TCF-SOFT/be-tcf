@@ -98,14 +98,17 @@ def verify_better_auth_jwt(token: str) -> dict:
             "verify_iss": False,
         }
     else:
-        # В бою проверяем и aud/iss
         decode_kwargs["audience"] = settings.AUTH.BETTER_AUTH_AUDIENCE
-        decode_kwargs["issuer"] = settings.AUTH.BETTER_AUTH_ISSUER
-        decode_kwargs["options"] = {"require": ["sub", "iat", "exp"]}
-
-        # 4. Декод и нормальные ошибки
+        decode_kwargs["options"] = {
+            "require": ["sub", "iat", "exp"],
+            "verify_iss": False,
+        }
     try:
         payload = jwt.decode(token, **decode_kwargs)
+        iss = payload.get("iss")
+        if not iss or iss not in settings.AUTH.BETTER_AUTH_ISSUERS:
+            raise HTTPException(status_code=401, detail="Invalid issuer")
+
     except ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
     except InvalidAudienceError:
