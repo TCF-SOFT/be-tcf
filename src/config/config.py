@@ -101,9 +101,15 @@ class AuthConfig(BaseModel):
     API_KEY: str = env.str("API_KEY")
     BETTER_AUTH_WEBHOOK_SECRET: str = env.str("BETTER_AUTH_WEBHOOK_SECRET")
     BETTER_AUTH_URL: str = env.str("BETTER_AUTH_URL")
-    BETTER_AUTH_AUDIENCE: str = env.str("BETTER_AUTH_AUDIENCE")
     JWKS_URL: str = f"{BETTER_AUTH_URL}/api/auth/jwks"
 
+    # ! They are the same because BetterAuth issues and consumes tokens simultaneously.
+    BETTER_AUTH_AUDIENCES: list[str] = [
+        "http://localhost:3000",
+        "https://tcf.eucalytics.uk",
+        "https://tcf-dev.eucalytics.uk",
+        "http://testserver",
+    ]
     BETTER_AUTH_ISSUERS: list[str] = [
         "http://localhost:3000",
         "https://tcf.eucalytics.uk",

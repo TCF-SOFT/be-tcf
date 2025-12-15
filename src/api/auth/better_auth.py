@@ -8,8 +8,6 @@ from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 from fastapi import Depends, Header, HTTPException, Request, status
 from jwt import (
     ExpiredSignatureError,
-    InvalidAudienceError,
-    InvalidIssuerError,
     PyJWTError,
 )
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,10 +15,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.api.core.audit_log import save_log_entry
 from src.api.dao.user_dao import UserDAO
 from src.api.di.db_helper import db_helper
-from src.config import ServerEnv, settings
+from src.config import settings
 from src.schemas.common.enums import ROLE_HIERARCHY, Role
 from src.schemas.user_schema import UserSchema
-from utils.logging import logger
 
 
 @lru_cache()
@@ -85,40 +82,30 @@ def verify_better_auth_jwt(token: str) -> dict:
     # строим Ed25519 public key
     public_key = get_ed25519_key(jwk_dict)
 
-    # 3. разные правила для PROD / TEST
     decode_kwargs: dict = {
         "key": public_key,
         "algorithms": ["EdDSA"],
+        "options": {
+            "require": ["sub", "iat", "exp"],
+            "verify_iss": False,
+            "verify_aud": False,
+        },
     }
 
-    if settings.SERVER.ENV == ServerEnv.TEST:
-        # В тестах проверяем только подпись + срок действия
-        decode_kwargs["options"] = {
-            "require": ["sub", "iat", "exp"],
-            "verify_aud": False,
-            "verify_iss": False,
-        }
-    else:
-        decode_kwargs["audience"] = settings.AUTH.BETTER_AUTH_AUDIENCE
-        decode_kwargs["options"] = {
-            "require": ["sub", "iat", "exp"],
-            "verify_iss": False,
-        }
     try:
-        logger.info(f"Verifying JWT token: {token}")
+        # logger.info(f"Verifying JWT token: {token}")
         payload = jwt.decode(token, **decode_kwargs)
         iss = payload.get("iss")
+        aud = payload.get("aud")
+
         if not iss or iss not in settings.AUTH.BETTER_AUTH_ISSUERS:
             raise HTTPException(status_code=401, detail="Invalid issuer")
+        if not aud or aud not in settings.AUTH.BETTER_AUTH_AUDIENCES:
+            raise HTTPException(status_code=401, detail="Invalid audience")
 
     except ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token expired")
-    except InvalidAudienceError:
-        raise HTTPException(status_code=401, detail="Invalid audience")
-    except InvalidIssuerError:
-        raise HTTPException(status_code=401, detail="Invalid issuer")
     except PyJWTError:
-        # сюда попадают все остальные кривые кейсы
         raise HTTPException(status_code=401, detail="Invalid JWT")
 
     return payload
