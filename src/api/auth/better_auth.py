@@ -1,5 +1,6 @@
 import base64
 from functools import lru_cache
+from uuid import UUID
 
 import httpx
 import jwt
@@ -144,7 +145,7 @@ def require_role(
         db_session: AsyncSession = Depends(db_helper.session_getter),
         state: dict = Depends(require_better_auth_session),
     ) -> str:
-        user_raw = await UserDAO.find_by_id(db_session, state["sub"])
+        user_raw = await UserDAO.find_by_id(db_session, UUID(state["sub"]))
 
         if not user_raw:
             raise HTTPException(

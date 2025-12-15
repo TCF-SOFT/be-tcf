@@ -10,7 +10,6 @@ class EventType(StrEnum):
     USER_DELETED = "user.deleted"
 
 
-
 class BetterAuthUserData(BaseModel):
     id: UUID
     email: str
