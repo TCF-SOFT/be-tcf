@@ -63,6 +63,19 @@ async def get_offer(
     return await OfferDAO.find_by_id(db_session, offer_id)
 
 
+@router.post(
+    "/by-ids",
+    response_model=Page[OfferSchema],
+    summary="Return offers by ids",
+    status_code=status.HTTP_200_OK,
+)
+async def get_offers_by_ids(
+    payload: list[UUID],
+    db_session: AsyncSession = Depends(db_helper.session_getter),
+):
+    return await OfferDAO.find_by_ids(db_session, payload)
+
+
 @router.get(
     "/meta/count",
     response_model=dict[str, int],

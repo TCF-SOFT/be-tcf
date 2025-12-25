@@ -1,3 +1,6 @@
+from typing import Sequence
+from uuid import UUID
+
 from fastapi_pagination.ext.sqlalchemy import paginate
 from sqlalchemy import and_, func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -77,6 +80,15 @@ class OfferDAO(BaseDAO):
                 o.id.desc(),  # Ensure consistent ordering - no duplicates in Pagination
             )
         )
+        return await paginate(db_session, query)
+
+    @classmethod
+    async def find_by_ids(
+        cls,
+        db_session: AsyncSession,
+        ids: Sequence[UUID],
+    ) -> Page[OfferSchema]:
+        query = select(cls.model).where(cls.model.id.in_(ids)).order_by(cls.model.id)
         return await paginate(db_session, query)
 
     @classmethod
