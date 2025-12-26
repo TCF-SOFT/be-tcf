@@ -8,7 +8,6 @@ from api.routes.integrations.webhook_router import router as webhook_router
 from api.routes.utils.health_check_router import router as health_check_router
 from api.routes.utils.version_router import router as version_router
 
-from .address_router import router as address_router
 from .analytical_router import router as analytical_router
 from .audit_log_router import router as audit_log_router
 from .category_router import router as category_router
@@ -39,7 +38,6 @@ router.include_router(waybill_offers_router)
 router.include_router(order_router)
 router.include_router(order_offers_router)
 router.include_router(analytical_router)
-router.include_router(address_router)
 router.include_router(webhook_router)
 router.include_router(health_check_router)
 router.include_router(version_router)

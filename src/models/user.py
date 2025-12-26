@@ -15,9 +15,7 @@ from src.schemas.common.enums import CustomerType, Role, ShippingMethod
 
 if TYPE_CHECKING:
     from src.models import (
-        Address,
         AuditLog,
-        Cart,
         Order,
         UserBalanceHistory,
         Waybill,
@@ -73,14 +71,8 @@ class User(Base):
     received_waybills: Mapped[list["Waybill"]] = relationship(
         "Waybill", foreign_keys="Waybill.customer_id", back_populates="customer"
     )
-    addresses: Mapped[list["Address"]] = relationship(
-        "Address", back_populates="user", lazy="select"
-    )
     orders: Mapped[list["Order"]] = relationship(
         "Order", back_populates="user", lazy="select"
-    )
-    carts: Mapped[list["Cart"]] = relationship(
-        "Cart", back_populates="user", lazy="select"
     )
     audit_log: Mapped[list["AuditLog"]] = relationship(
         "AuditLog", back_populates="user", lazy="noload"

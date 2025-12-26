@@ -2,9 +2,9 @@ from datetime import datetime
 from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field
+from pydantic_extra_types.phone_numbers import PhoneNumber
 
-from src.schemas.address_schema import AddressSchema
-from src.schemas.common.enums import OrderStatus
+from src.schemas.common.enums import OrderStatus, ShippingMethod
 from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
 from src.schemas.user_schema import UserSchema
 from src.schemas.waybill_schema import WaybillSchema
@@ -15,13 +15,24 @@ class _OrderBaseSchema(BaseModel):
     status: OrderStatus
     note: str | None = None
 
+    country: str | None
+    city: str | None
+    street: str | None
+    house: str | None
+    postal_code: str | None
+    shipping_company: str | None
+    shipping_method: ShippingMethod
+
+    first_name: str
+    last_name: str
+    phone: PhoneNumber
+
     model_config = ConfigDict(from_attributes=True)
 
 
 class OrderSchema(_OrderBaseSchema):
     id: UUID
     user: UserSchema
-    address: AddressSchema
     waybill: WaybillSchema | None = None
     order_offers: list[OrderOfferSchema]
     total_sum: float
