@@ -11,7 +11,6 @@ from src.schemas.waybill_schema import WaybillSchema
 
 
 class _OrderBaseSchema(BaseModel):
-    address_id: UUID = Field(..., examples=["356f1d6f-0514-4e40-aad5-d59b91674320"])
     status: OrderStatus
     note: str | None = None
 

@@ -27,7 +27,7 @@ from src.utils.pagination import Page
 
 # Flow:
 # 1. Create a cart
-# 2. Add offers to the cart
+# 2. Add offers to the cart (zustand)
 # 3. Create an order from the cart with order_offers for cart_offers
 # 4. Flush the cart and cart items
 # 5. Convert order to waybill

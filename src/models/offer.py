@@ -16,7 +16,6 @@ from src.models.order_offer import OrderOffer
 
 if TYPE_CHECKING:
     from src.models import Product
-    from src.models.cart_offer import CartOffer
     from src.models.waybill_offer import WaybillOffer
 
 
@@ -49,7 +48,4 @@ class Offer(Base):
     )
     order_offers: Mapped[list["OrderOffer"]] = relationship(
         "OrderOffer", back_populates="offer", lazy="select"
-    )
-    cart_offers: Mapped[list["CartOffer"]] = relationship(
-        "CartOffer", back_populates="offer", lazy="select"
     )
