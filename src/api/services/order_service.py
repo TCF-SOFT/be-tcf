@@ -2,6 +2,7 @@ from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from schemas.order_schema import OrderWithOffersInternalPostSchema
 from src.api.dao.offer_dao import OfferDAO
 from src.api.dao.order_dao import OrderDAO
 from src.api.dao.order_offer_dao import OrderOfferDAO
@@ -11,9 +12,6 @@ from src.models import Offer, Order, OrderOffer, Waybill, WaybillOffer
 from src.schemas.common.enums import CustomerType, WaybillType
 from src.schemas.offer_schema import OfferSchema
 from src.schemas.order_offer_schema import OrderOfferPostSchema, OrderOfferSchema
-from src.schemas.order_schema import (
-    OrderWithOffersInternalPostSchema,
-)
 from src.schemas.waybill_schema import WaybillPostSchema
 
 

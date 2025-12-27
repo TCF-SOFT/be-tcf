@@ -34,6 +34,7 @@ class Order(Base):
 
     first_name: Mapped[str]
     last_name: Mapped[str]
+    email: Mapped[str]
     phone: Mapped[str]
 
     # Relationships
