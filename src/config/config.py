@@ -108,12 +108,14 @@ class AuthConfig(BaseModel):
         "http://localhost:3000",
         "https://tcf.eucalytics.uk",
         "https://tcf-dev.eucalytics.uk",
+        "https://fe-tcf.vercel.app",
         "http://testserver",
     ]
     BETTER_AUTH_ISSUERS: list[str] = [
         "http://localhost:3000",
         "https://tcf.eucalytics.uk",
         "https://tcf-dev.eucalytics.uk",
+        "https://fe-tcf.vercel.app",
         "http://testserver",
     ]
 

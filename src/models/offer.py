@@ -30,10 +30,8 @@ class Offer(Base):
     internal_description: Mapped[str | None] = mapped_column(Text, nullable=True)
     image_url: Mapped[str] = mapped_column(String, nullable=True)
 
-    price_rub: Mapped[float] = mapped_column(Numeric(12, 4), nullable=False)
-    super_wholesale_price_rub: Mapped[float] = mapped_column(
-        Numeric(12, 4), nullable=False
-    )
+    price_rub: Mapped[int]
+    super_wholesale_price_rub: Mapped[int]
     quantity: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
 
     # Soft delete field
